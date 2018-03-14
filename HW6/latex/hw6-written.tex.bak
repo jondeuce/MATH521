@@ -1,0 +1,186 @@
+% Modified Template by Jonathan Doucette and Kevin Multani
+% Original Template by Jonathan Ward
+
+\input{preamble.tex}
+
+\begin{document}
+
+\begin{titlingpage}
+	\titleGM
+\end{titlingpage}
+\clearpage
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% ----- PROBLEM 1 ----- %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{1}
+Given three points $a,b,c \in \RR^2$ that are not collinear (not all on one line) and that are sorted in anticlockwise order, we define
+%
+\begin{align*}
+T &= \Delta (a,b,c) \\
+P &= P_2(T) \\
+L &= \left\{ \vphantom{\pd{p}{n}\left(\frac{a+b}{2}\right)} \right.
+p \mapsto p(a),
+p \mapsto p(b),
+p \mapsto p(c), \\
+&\qquad\quad
+p \mapsto \pd{p}{n}\left(\frac{a+b}{2}\right),
+p \mapsto \pd{p}{n}\left(\frac{b+c}{2}\right),
+\left. p \mapsto \pd{p}{n}\left(\frac{c+a}{2}\right) \right\}
+\subset P*
+\end{align*}
+
+% ----- Problem 1(a) ----- %
+\begin{itemize}
+	\item[(a)]  Show that prescribed data for
+	$$p \mapsto p(a),
+	p \mapsto p(b),
+	p \mapsto p(c),
+	p \mapsto \pd{p}{n}\left(\frac{a+b}{2}\right),
+	p \mapsto \pd{p}{n}\left(\frac{b+c}{2}\right),
+	p \mapsto \pd{p}{n}\left(\frac{c+a}{2}\right)$$
+	uniquely determines any $p \in P$. You don't have to show that such a $p$ always exists.
+
+\end{itemize}
+
+% ----- Problem 1(a): Solution ----- %
+\begin{solution}
+A general second order polynomial in two-dimensions takes the form
+$$p(x) = Ax_1^2 + Bx_1x_2 + Cx_2^2 + Dx_1 + Ex_2 + F,$$
+where $x = (x_1,x_2) \in \RR^2$.
+Since this polynomial has 6 unknown coefficients, the polynomial should be determined by 6 conditions on it's coefficients, assuming non-degeneracy of the prescribed conditions.
+
+In particular, prescribing the conditions $L$ leads to 6 \textit{linear} equations in 6 unknowns.
+Again, if we assume non-degeneracy of these equations (where in this case, we assume that non-collinear $a,b,c$ is sufficient), then this linear system will be uniquely solvable for the coefficients $A,B,C,D,E$, and $F$.
+
+
+
+\end{solution}
+\pagebreak
+
+% ----- Problem 1(b) ----- %
+\begin{itemize}
+	\item[(b)] Now let $\Omega^h$ be a domain with a regular triangulation $T^h$ such that
+	$$\bar{\Omega}^h = \bigcup_{T\in T^h} T.$$
+	Is the space
+	\begin{gather*}
+	V^h = \left\{ \vphantom{\pd{v^h}{n}}
+	v^h \colon \bar{\Omega}^h \rightarrow \RR \:\middle|\:
+	v^h\!\mid_T\, \in P_2(T), v^h\,\text{is continuous in all vertices},
+	\right. \\ \left.
+	\pd{v^h}{n}\,\text{is continuous in all edge midpoints}
+	\right\}
+	\end{gather*}	 
+	$H^1$-conforming, i.e. is $V^h \subset H^1(\Omega^h)$?
+	\textit{Hint:} Check if there may be any jumps of $v^h$ across triangle edges.
+\end{itemize}
+
+% ----- Problem 1(b): Solution ----- %
+\begin{solution}
+\TODO{}
+\end{solution}
+\pagebreak
+
+\end{problem} % END PROBLEM 1
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% ----- PROBLEM 2 ----- %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{2}
+We will now complete our finite-element solver for the linear elasticity problem
+\begin{align}\label{LinElast_Strong}
+\begin{split}
+    -c \Laplacian u + au &= f \quad \text{in } \Omega \\
+    u &= g \quad \text{on } \partial \Omega
+\end{split}
+\end{align}
+
+% ----- Problem 2 ----- %
+\begin{itemize}
+	\item[(a)] Remove lines 1-10 from \code{discretiseLinearElasticity.m} and uncomment the sections of code that are currently commented out.
+	Complete the missing commands, including the subfunction \code{assembleStiffness}. Also inspect the \code{assembleLoad} subfunction.
+
+% ----- Problem 2(a) Solution ----- %
+\begin{solution}
+The finished function \code{discretiseLinearElasticity.m} and subfunction \code{assembleStiffness} is included in Appendix\ref{discLinElastCode}.
+\end{solution}
+\pagebreak
+
+	\item[(b)] Write a script \code{hw6.m} which
+	\begin{itemize}
+		\renewcommand{\labelitemii}{$\bullet$}
+	    \item Solves the linear elasticity problem on $\Omega^h$, which you may choose from kiwi.mat, maple.mat, pi.mat, ubc.mat.
+	    You may also select your own data for $f(x_1,x_2)$, $g(x_1,x_2)$, $a$ and $c$.
+	    \textit{Hint:} You have to set \code{GammaD = @(x1,x2) true(size(x1))}.
+	    For debugging, you might want to use \code{video10.mat} and check the sparsity patterns of the various matrices.
+	    \item Calculates the $L^2$, $H^1$, and $B$ energy norms of the solution, where $B$ is the bilinear form corresponding to the elliptic operator.
+	    \item Creates undistorted plots of the mesh, the force $f$, and the solution $u^h$.
+
+% ----- Problem 2(b) Solution ----- %
+\begin{solution}
+The script \code{hw6.m} is included in Appendix~\ref{hw6Code}.
+
+\includegraphics[scale=0.1]{../maple-mesh}
+
+\end{solution}
+\pagebreak
+
+	\end{itemize}
+	\item[(c)] What problem do you solve numerically when you set \code{GammaD = @(x1,x2) false(size(x1))}?
+	Analyse the code to infer its weak formulation.
+\end{itemize}
+
+% ----- Problem 2: Solution ----- %
+\begin{solution} 
+\TODO{}
+\end{solution}
+\pagebreak
+
+\end{problem} % END PROBLEM 2
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% ----- WRITTEN ----- %
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{afterword}[Your Learning Progress]{}
+What is the one most important thing that you have learnt in this assignment?
+\vspace{0.2cm}
+
+\TODO{}
+
+\vspace{0.8cm}
+Any new discoveries or achievements towards the objectives of your course?
+\vspace{0.2cm}
+
+\TODO{}
+
+\vspace{0.8cm}
+What is the most substantial new insight that you have gained from this course this week? Any \textit{aha moment}?
+\vspace{0.2cm}
+
+\TODO{}
+
+\end{afterword}
+
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%
+% ----- CODE ----- %
+%%%%%%%%%%%%%%%%%%%%
+\begin{appendices}
+\lhead{}
+
+\section{}\label{discLinElastCode}
+The \code{discretiseLinearElasticity.m} function:
+\includecode{../../Library/discretiseLinearElasticity.m}
+\pagebreak
+\section{}\label{hw6Code}
+The \code{hw6.m} script:
+\includecode{../hw6.m}
+
+\end{appendices}
+
+\end{document}

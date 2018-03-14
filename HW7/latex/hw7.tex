@@ -1,0 +1,380 @@
+\include{preamble}
+
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,enumerate,graphicx}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+%\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+%\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+%Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 7}
+
+Please submit the following files as indicated below:% \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{Install \textsf{FEniCS} and \textsf{ParaView} on your computer. Please do this as soon as possible so that you have sufficient time for troubleshooting, if needed.}
+
+For this assignment, only \textsf{FEniCS} is required, but if you want to visualise your numerical solutions, then you will need \textsf{ParaView}, too. Both \textsf{FEniCS} and \textsf{ParaView} are free/libre and open source software.
+
+\begin{enumerate}[1.]
+\item Visit \url{https://fenicsproject.org/download/}.
+\item The \textsf{Docker} option is usually the most convenient choice (unless you're running \textsf{Ubuntu}). Follow the instructions to install \textsf{Docker}, then \textsf{FEniCS}.
+\item (Optional) Install \textsf{ParaView}. This is already included in many \textsf{Linux} distributions. For other operating systems, visit \url{https://www.paraview.org/download/}.
+\item If you run into any issues or if you don't have administrator privileges on your computer, please contact your department's IT support. We might be able to help if you're running \textsf{Linux}.
+\end{enumerate}
+
+You won't have to use any complicated \textsf{Docker} commands. To run a \textsf{FEniCS} script called \verb#ft01_python.py#
+\begin{itemize}
+\item open a terminal window and navigate to the folder where this script is located
+\item type \verb#fenicsproject run# and wait for a few moments
+\item type \verb#python ft01_python.py#
+\item to run the script again, call \verb#python ft01_python.py# again
+\item once you're done, type \verb#exit#
+\end{itemize}
+Note that any plotting commands in \verb#ft01_python.py# will not work if you use the \textsf{Docker} option described here. Instead, you will have to write the data of your numerical solution to a file and open this with \textsf{ParaView} (but you don't have to plot anything in this assignment).
+
+\paragraph*{Question 1 $\vert$ 2 marks}% $\vert$ \faFilePdfO}
+
+Let $D > 0$, $\vec{a} \in \mathbb{R}^2$, $r \geq 0$, $f\in L^2(\Omega)$ and $g\in H^{3/2}(\partial\Omega)$ (this means that $g$ can be obtained as the restriction to $\partial \Omega$, aka trace, of a function $g\in H^2(\Omega)$), where $\Omega \subset \mathbb{R}^2$ is a convex, polygonal domain.
+
+Derive a priori error estimates in the $H^1$-norm and the $L^2$-norm for the steady reaction-advection-diffusion problem
+\begin{align}\label{RAD_strong}
+\begin{split}
+-D\Delta u + \nabla \cdot (\vec{a}u) + ru &= f \qquad \text{in } \Omega\\
+u &= g  \qquad \text{on } \partial\Omega
+\end{split}
+\end{align}
+discretised with conforming linear finite elements and exact integration.
+
+Note that the bilinear form corresponding to this elliptic operator is not symmetric.
+
+\begin{solution}
+
+We start by rewriting the strong form \eqref{RAD_strong} of the reaction-advection-diffusion problem into the weak form.
+
+As usual, we first multiply by a test function $v$ and then integrate over the domain $\Omega$.
+In this case, we additionally have that $\Omega$ is a convex polygonal domain, and we take $v \in V = H^1_0(\Omega)$, i.e. we first consider the homogeneous problem $g(x) \equiv 0$, and later we will show how the result can be extended for general $g(x)$.
+
+\newpage
+The resulting in the weak form is
+\begin{align}\label{RAD_weak1}
+\begin{split}
+	B(u,v) \coloneqq& \,
+    D \int_\Omega \nabla u \cdot \nabla v \dx{x} + 
+      \int_\Omega [\nabla \cdot (\vec{a} u)] v \dx{x} + 
+    r \int_\Omega u v \dx{x} \\
+    =& \int_\Omega f v \dx{x}, \quad \forall \, v \in V
+\end{split}
+\end{align}
+
+where we have defined the bilinear form $B(u,v)$.
+
+Now, the first and third terms of $B(u,v)$ are symmetric in $u$ and $v$, but the second term is not.
+Before analyzing $B(u,v)$, it is useful to write $B$ in a more ``symmetric'' form with respect to $u$ and $v$.
+Of course it nevertheless will still be non-symmetric, but it will make algebraic manipulations easier later on.
+
+We will make use of the product rule from vector calculus
+\begin{align}\label{vecProdRule}
+\nabla \cdot (\psi \vec{A}) = \psi (\nabla \cdot \vec{A}) + \nabla \psi \cdot \vec{A},
+\end{align}
+where $\psi$ is an arbitrary scalar function and $A$ an arbitrary vector function.
+Setting $\psi = v$ and $\vec{A} = \vec{a}u$, we have that
+$$ [\nabla \cdot (\vec{a}u)] v
+= \nabla \cdot (\vec{a} uv) - (\vec{a} u) \cdot \nabla v,$$
+and averaging both sides of the equation to symmetrize the original term, we get the symmetrized weak advection term
+\begin{align*}
+[\nabla \cdot (\vec{a}u)] v
+= \frac{1}{2} \left( [\nabla \cdot (\vec{a}u)] v - (\vec{a} u) \cdot \nabla v \right)+ 
+\frac{1}{2} \nabla \cdot (\vec{a} uv).
+\end{align*}
+
+Finally, integrating over $\Omega$ and applying the divergence theorem, we get that
+\begin{align*}
+\int_\Omega [\nabla \cdot (\vec{a}u)] v \dx{x}
+&= \frac{1}{2} \int_\Omega [\nabla \cdot (\vec{a}u)] v - (\vec{a} u) \cdot \nabla v \dx{x} + 
+\frac{1}{2} \int_\Omega \nabla \cdot (\vec{a} uv) \dx{x} \\
+&= \frac{1}{2} \int_\Omega [\nabla \cdot (\vec{a}u)] v - (\vec{a} u) \cdot \nabla v \dx{x} +
+\frac{1}{2} \int_{\partial\Omega} (\vec{a} uv) \cdot \vec{n} \dx{S} \\
+&= \frac{1}{2} \int_\Omega [\nabla \cdot (\vec{a}u)] v - (\vec{a} u) \cdot \nabla v \dx{x} \\
+&= \frac{1}{2} \int_\Omega (\vec{a} \cdot \nabla u) v - (\vec{a} \cdot \nabla v) u \dx{x},
+\end{align*}
+where the third line follows from the fact that $v$ is zero on the boundary of the domain, and the fourth line follows from the product rule \eqref{vecProdRule} and the fact that $\vec{a}$ is a constant vector.
+Note that this term is not fully symmetric under $u \leftrightarrow v$, though it does have \textit{anti-symmetric} symmetry in $u$ and $v$.
+
+The ``symmetrized'' bilinear form $B(u,v)$ can now be written as
+\begin{align}\label{RAD_weak2}
+B(u,v) =
+D \int_\Omega \nabla u \cdot \nabla v \dx{x} +
+r \int_\Omega u v \dx{x} + 
+\frac{1}{2} \int_\Omega (\vec{a} \cdot \nabla u) v - (\vec{a} \cdot \nabla v) u \dx{x}.
+\end{align}
+
+Now, we look to bound $B(u,v)$ from above (continuity) and $B(u,u)$ from below (coercivity) and apply \textit{C\'ea's Lemma} (Lemma 2.3.18 in the notes) to get an \textit{a priori} error estimate.
+
+We begin with \textit{a priori} estimates in the $H^1$-norm.
+Starting with coercivity, we have that
+\begin{align*}
+B(u,u) &=
+D \LTwoNorm{\nabla u}^2 +
+r \LTwoNorm{u}^2 \\
+&\geq
+\min(D,r) \, \HOneNorm{u}^2
+\end{align*}
+and so
+\begin{align}\label{H1_coercivity}
+B(u,u) \geq c \, \HOneNorm{u}^2
+\end{align}
+
+where $c = \min(D,r)$.
+For continuity, we bound equation \eqref{RAD_weak2} from above using (both the linear algebra and vector calculus form of) the Cauchy–Schwarz inequality
+\begin{align*}
+B(u,v) & =
+D \int_\Omega \nabla u \cdot \nabla v \dx{x} +
+r \int_\Omega u v \dx{x} + 
+\frac{1}{2} \int_\Omega (\vec{a} \cdot \nabla u) v - (\vec{a} \cdot \nabla v) u \dx{x} \\
+&\leq
+D \LTwoNorm{\nabla u} \LTwoNorm{\nabla v} \, + \,
+r \LTwoNorm{u} \LTwoNorm{v} \, + \,
+\frac{1}{2} \left(
+\LTwoNorm{\vec{a} \cdot \nabla u} \LTwoNorm{v} + 
+\LTwoNorm{\vec{a} \cdot \nabla v} \LTwoNorm{u}
+\right) \\
+&\leq
+D \LTwoNorm{\nabla u} \LTwoNorm{\nabla v} \, + \,
+r \LTwoNorm{u} \LTwoNorm{v} \, + \,
+\frac{1}{2} \left(
+\Norm{\vec{a}} \, \LTwoNorm{\nabla u} \LTwoNorm{v} + 
+\Norm{\vec{a}} \, \LTwoNorm{\nabla v} \LTwoNorm{u}
+\right) \\
+&\leq
+D \HOneNorm{u} \HOneNorm{v} \, + \,
+r \HOneNorm{u} \HOneNorm{v} \, + \,
+\frac{1}{2} \left(
+\Norm{\vec{a}} \, \HOneNorm{u} \HOneNorm{v} + 
+\Norm{\vec{a}} \, \HOneNorm{v} \HOneNorm{u}
+\right) \\
+&=
+(D + r + \Norm{\vec{a}}) \, \HOneNorm{u} \HOneNorm{v}.
+\end{align*}
+
+We now have that
+\begin{align}\label{H1_continuity}
+B(u,v) \leq C \, \HOneNorm{u} \HOneNorm{v}
+\end{align}
+where $C = D + r + \Norm{\vec{a}}$.
+Note that since $D,r > 0$, we have that $C \geq c$ trivially, which is necessary for consistency with the coercivity inequality when $v=u$, i.e. $c \HOneNorm{u}^2 \leq B(u,u) \leq C \HOneNorm{u}^2 $.
+
+Now, applying C\'ea's Lemma, we get that
+\begin{align*}
+\HOneNorm{e^h}
+&\leq \frac{C}{c} \inf_{v^h \in V^h} \HOneNorm{\bar{u} - v^h} \\
+&\leq \frac{C}{c} \HOneNorm{\bar{u} - I^h \bar{u}} \\
+&= \frac{C}{c} \LTwoNorm{\bar{u} - I^h \bar{u}} + 
+\frac{C}{c} \LTwoNorm{\nabla ( \bar{u} - I^h \bar{u} )} \\
+&\leq
+\frac{C}{c} c_i h^2 \LTwoNorm{\nabla^2 \bar{u}} + 
+\frac{C}{c} c_i h   \LTwoNorm{\nabla^2 \bar{u}} \\
+&\leq
+\tilde{C} h \HOneNorm{\nabla \bar{u}}
+\end{align*}
+where the fourth line follows from the \textit{Bramble-Hilbert Lemma} (Theorem 2.3.13 in the notes), the last inequality holds as $h \rightarrow 0$, and $c_i$ is an interpolation constant.
+Thus, we have that the $H^1$-norm of the error decreases proportional to the grid spacing $h$, and in particular,
+\begin{align}\label{H1_errorBound}
+\boxed{ \HOneNorm{e^h} \leq \tilde{C} h \HOneNorm{\nabla \bar{u}} }
+\end{align}
+
+For the \textit{a priori} error bound in the $L^2$-norm we need to reestablish coercivity and continuity for $B(u,v)$ in $L^2$.
+For coercivity, we will make use of the \textit{Poincar\'e inequality} (the precise statement below is taken from Wikipedia):
+
+\begin{theorem}{(\textit{Poincar\'e})}
+Let $p$, so that $1 \leq p < \infty$ and $\Omega$ a subset with at least one bound. Then there exists a constant $K$, depending only on $\Omega$ and $p$, so that, for every function $u$ of the $W_0^{1,p}(\Omega)$ Sobolev space,
+$$\ANorm{u}{L^p(\Omega)} \leq K \ANorm{\nabla u}{L^p(\Omega)}$$
+\end{theorem}
+
+Applying the Poincar\'e inequality for the case $p=2$, we have that
+\begin{align*}
+B(u,u) &=
+D \LTwoNorm{\nabla u}^2 +
+r \LTwoNorm{u}^2 \\
+&\geq
+\frac{D}{K^2} \LTwoNorm{u}^2 + 
+r \LTwoNorm{u}^2 \\
+&= (\frac{D}{K^2} + r) \, \LTwoNorm{u}^2,
+\end{align*}
+and so 
+\begin{align}\label{L2_coercivity}
+B(u,u) \geq c \, \LTwoNorm{u}^2
+\end{align}
+where $c = D/K^2 + r$.
+
+Now, I cannot exactly figure out how to reverse the Poincar\'e inequality so as to show continuity in the $L^2$-norm for $B(u,v)$.
+It appears to be closely tied to the elliptic nature of $B(u,v)$ and the zero boundary conditions, as the reverse Poincar\'e inequality certainly doesn't hold generically (consider any sufficiently highly oscillatory but bounded function which is zero on $\partial \Omega$).
+However, in the notes we have taken continuity of $B(u,v)$ for granted for all of our proofs involving C\'ea's Lemma and Strang's Lemmas, so I am hoping this is alright.
+In particular, I will take for granted that it can be shown that \begin{align}\label{L2_continuity}
+B(u,v) \leq C \, \LTwoNorm{u} \LTwoNorm{v}
+\end{align}
+for some absolute constant $C$.
+
+Now, applying C\'ea's Lemma as before, we get that
+\begin{align*}
+\LTwoNorm{e^h}
+&\leq \frac{C}{c} \inf_{v^h \in V^h} \LTwoNorm{\bar{u} - v^h} \\
+&\leq \frac{C}{c} \LTwoNorm{\bar{u} - I^h \bar{u}} \\
+&\leq
+\frac{C}{c} c_i h^2 \LTwoNorm{\nabla^2 \bar{u}} \\
+&\leq
+\tilde{C} h^2 \LTwoNorm{\nabla^2 \bar{u}}
+\end{align*}
+where, as before, line three follows from the \textit{Bramble-Hilbert Lemma}, and $c_i$ is an interpolation constant.
+Thus, we have that the $L^2$-norm of the error decreases proportional to the grid spacing $h$ squared, and in particular,
+\begin{align}\label{L2_errorBound}
+\boxed{\LTwoNorm{e^h} \leq \tilde{C} h^2 \LTwoNorm{\nabla^2 \bar{u}}.}
+\end{align}
+
+Lastly, we extend our results for general $g(x)$, i.e. to the inhomogenous problem.
+
+We begin with the strong form \eqref{RAD_strong} of the reaction-advection-diffusion problem.
+Now, suppose $w = u-g$.
+Then, $w \equiv 0$ on $\partial \Omega$, and rearranging \eqref{RAD_strong} gives
+\begin{align*}\label{RAD_w_strong}
+\begin{split}
+-D\Delta w + \nabla \cdot (\vec{a} w) + rw
+&= \tilde{f} \qquad \text{in } \Omega\\
+w &= 0  \qquad \text{on } \partial\Omega
+\end{split}
+\end{align*}
+where
+\begin{align*}
+\tilde{f} = f + D\Delta g - \nabla \cdot (\vec{a} g) - rg.
+\end{align*}
+
+Then, the weak form \eqref{RAD_weak1} of the problem becomes
+\begin{align*}
+B(w,v) = \int_\Omega \tilde{f} v \dx{x},
+\quad \forall \, v \in V = H^1_0
+\end{align*}
+as before, and all previous analysis applies with $u \rightarrow w$ and $f \rightarrow \tilde{f}$.
+Note that in this weak form, one can integrate the term involving the product $\Delta g v$ by parts to transfer one derivative onto $v$, and so we won't actually require $g$ to be twice differentiable, but only once weakly differentiable.
+
+\end{solution}
+
+
+%\newpage
+%
+%\mbox{}
+%
+%\newpage
+%
+%\mbox{}
+%
+
+\newpage
+\paragraph*{Question 2 $\vert$ 3 marks}% $\vert$  \faFileCodeO \: \faFilePdfO}
+
+Work through the introductory \textsf{FEniCS} tutorial on \textsc{Poisson}'s equation, available at \url{https://fenicsproject.org/pub/tutorial/html/._ftut1004.html}. Modify the code to test your a priori estimates for the $H^1$ and $L^2$-error from Question 1 (for nonzero $a$ and $r$, please!). Your data:
+
+\begin{gather*}
+\begin{split}
+\bar{u}(x_1,x_2) &= x_1(1-x_1) + x_2(1-x_2) \\
+\\
+f(x_1,x_2) &= 6 - x_1(x_1+1) - x_2(x_2+1) \\
+\\
+g(x_1,x_2) &= x_1(1-x_1) + x_2(1-x_2) \\
+\end{split}
+\qquad\qquad
+\begin{split}
+D &= 1 \\
+\\
+a &= \begin{pmatrix}
+1 \\ 
+1
+\end{pmatrix}  \\
+\\
+r &= 1 \\
+\end{split}
+\end{gather*}
+
+Solve the reaction-advection-diffusion problem for different grid spacings to complete the following table with data from your numerical experiments:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+$N$ & $h$ & $\lVert u^h - \bar{u}\rVert_{H^1}$ & $\lVert e^{2h} \rVert_{H^1}/\lVert e^{h} \rVert_{H^1}$ & $\lVert u^h - \bar{u}\rVert_{L^2}$ & $\lVert e^{2h} \rVert_{L^2}/\lVert e^{h} \rVert_{L^2}$  \\ 
+\hline 
+4  & 0.25    & 0.2053  &   -    & 0.02131   &   -   \\ 
+\hline 
+8  & 0.125   & 0.1022  & 2.008  & 0.005307  & 4.015 \\ 
+\hline 
+16 & 0.0625  & 0.05105 & 2.002  & 0.001325  & 4.004 \\ 
+\hline 
+32 & 0.03125 & 0.02552 & 2.0005 & 0.0003312 & 4.001 \\ 
+\hline 
+\end{tabular}
+\end{center}
+Do these data support your results from Question 1?
+
+\emph{Hint:} For advection-dominated problems, this discretisation scheme with linear finite elements behaves like a central-differencing scheme. Therefore, don't make the advection velocity too large.
+
+\begin{solution}
+\text{ }
+\begin{itemize}
+\item Yes!
+The $h$ values are chosen so as to decrease by a factor of 2 in each row (as $h=1/N$ for a \textsf{UnitSquareMesh(N,N)} in \textsf{FEniCS}), and so we expect the error in the $H^1$-norm to decrease by a factor of 2 in each row as well, and the error in the $L^2$ norm to decrease by factor of $2^2=4$ in each row.
+\item As can be seen by the 3rd and 5th columns, which show the ratio between successive errors, the rate of decrease of errors nearly exactly matches the theoretical rates.
+\end{itemize}
+\end{solution}
+
+\vfill
+
+\paragraph*{Your Learning Progress}% $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+
+\begin{itemize}
+\item I learned how to use \textsf{FEniCS}!
+\item The assignment was interesting, too, and I learned how to analytically show \textit{a priori} error rates for a moderately complex elliptic PDE.
+\end{itemize}
+
+\vspace*{3mm}
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\begin{itemize}
+\item Definitely! I've been struggling with coming up with appropriate error estimates for my problem for quite some time now (although the effort hasn't exactly been there either), but now I feel I have some tools for the job.
+I will need to await for some results from the parabolic PDE theory, however.
+\end{itemize}
+
+\vspace*{3mm}
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\begin{itemize}
+\item I suppose there wasn't any particularly substantial new insight, as it was mostly manipulating inequalities, but it was a useful exercise and I was glad to see my numerical results agree with the theory.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,156 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,enumerate,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 7}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{Install \textsf{FEniCS} and \textsf{ParaView} on your computer. Please do this as soon as possible so that you have sufficient time for troubleshooting, if needed.}
+
+For this assignment, only \textsf{FEniCS} is required, but if you want to visualise your numerical solutions, then you will need \textsf{ParaView}, too. Both \textsf{FEniCS} and \textsf{ParaView} are free/libre and open source software.
+
+\begin{enumerate}[1.]
+\item Visit \url{https://fenicsproject.org/download/}.
+\item The \textsf{Docker} option is usually the most convenient choice (unless you're running \textsf{Ubuntu}). Follow the instructions to install \textsf{Docker}, then \textsf{FEniCS}.
+\item (Optional) Install \textsf{ParaView}. This is already included in many \textsf{Linux} distributions. For other operating systems, visit \url{https://www.paraview.org/download/}.
+\item If you run into any issues or if you don't have administrator privileges on your computer, please contact your department's IT support. I might be able to help if you're running \textsf{Linux}.
+\end{enumerate}
+
+You won't have to use any complicated \textsf{Docker} commands. To run a \textsf{FEniCS} script called \verb#ft01_python.py#
+\begin{itemize}
+\item open a terminal window and navigate to the folder where this script is located
+\item type \verb#fenicsproject run# and wait for a few moments
+\item type \verb#python ft01_python.py#
+\item to run the script again, call \verb#python ft01_python.py# again
+\item once you're done, type \verb#exit#
+\end{itemize}
+Note that any plotting commands in \verb#ft01_python.py# will not work if you use the \textsf{Docker} option described here. Instead, you will have to write the data of your numerical solution to a file and open this with \textsf{ParaView} (but you don't have to plot anything in this assignment).
+
+\paragraph*{Question 1 $\vert$ 2 marks $\vert$ \faFilePdfO}
+
+Let $D > 0$, $a \in \mathds{R}^2$, $r \geq 0$, $f\in L^2(\Omega)$ and $g\in H^{3/2}(\partial\Omega)$ (this means that $g$ can be obtained as the restriction to $\partial \Omega$, aka trace, of a function $g\in H^2(\Omega)$), where $\Omega \subset \mathds{R}^2$ is a convex, polygonal domain.
+
+Derive a priori error estimates in the $H^1$-norm and the $L^2$-norm for the steady reaction-advection-diffusion problem
+\begin{align*}
+-D\Delta u + \operatorname{div}(au) + ru &= f \qquad \text{in } \Omega\\
+u &= g  \qquad \text{on } \partial\Omega
+\end{align*}
+discretised with conforming linear finite elements and exact integration.
+
+Note that the bilinear form corresponding to this elliptic operator is not symmetric.
+
+\newpage
+
+\mbox{}
+
+\newpage
+
+\mbox{}
+
+\newpage
+
+\paragraph*{Question 2 $\vert$ 3 marks $\vert$  \faFileCodeO \: \faFilePdfO}
+
+Work through the introductory \textsf{FEniCS} tutorial on \textsc{Poisson}'s equation, available at \url{https://fenicsproject.org/pub/tutorial/html/._ftut1004.html}. Modify the code to test your a priori estimates for the $H^1$ and $L^2$-error from Question 1 (for nonzero $a$ and $r$, please!). Your data:
+
+\begin{minipage}{0.7\textwidth}
+\begin{align*}
+\bar{u}(x_1,x_2) &= \hspace{25em}\\
+\\
+f(x_1,x_2) &= \\
+\\
+g(x_1,x_2) &= \\
+\end{align*}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\begin{align*}
+D &= \\
+\\
+a &= \\
+\\
+r &= \\
+\end{align*}
+\end{minipage}
+
+Solve the reaction-advection-diffusion problem for different grid spacings to complete the following table with data from your numerical experiments:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$h$ & $\lVert u^h - \bar{u}\rVert_{H^1}$ & $\lVert u^h - \bar{u}\rVert_{L^2}$\\
+\toprule
+\mbox{}\vspace{2em}\hspace{6em}\mbox{} & \mbox{}\hspace{18em}\mbox{} & \mbox{}\hspace{18em}\mbox{}\\
+\midrule
+\mbox{}\vspace{2em}\hspace{6em}\mbox{} & \mbox{}\hspace{18em}\mbox{} & \mbox{}\hspace{18em}\mbox{}\\
+\midrule
+\mbox{}\vspace{2em}\hspace{6em}\mbox{} & \mbox{}\hspace{18em}\mbox{} & \mbox{}\hspace{18em}\mbox{}\\
+\midrule
+\mbox{}\vspace{2em}\hspace{6em}\mbox{} & \mbox{}\hspace{18em}\mbox{} & \mbox{}\hspace{18em}\mbox{}\\
+\bottomrule
+\end{tabular}
+\end{center}
+Do these data support your results from Question 1?
+
+\vfill
+
+\emph{Hint:} For advection-dominated problems, this discretisation scheme with linear finite elements behaves like a central-differencing scheme. Therefore, don't make the advection velocity too large.
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}

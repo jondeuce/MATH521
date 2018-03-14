@@ -1,0 +1,174 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 8}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{If you haven't done so already, install \textsf{ParaView} on your computer.}
+
+This is already included in many \textsf{Linux} distributions. For other operating systems, visit \url{https://www.paraview.org/download/}.
+
+\paragraph*{Question 1 $\vert$ 1 mark $\vert$ \faFilePdfO}
+
+This assignment is dedicated to a posteriori error estimates for the problem
+\begin{equation}\tag{P}\label{eq:primal}
+\begin{aligned}
+-\Delta u &= f \qquad \text{in } \Omega\\
+u &= 0 \qquad \text{on } \partial\Omega
+\end{aligned}
+\end{equation}
+where $\Omega$ is the unit square $\left]0,1\right[^2$.
+
+We want to solve this problem because we are interested in the average of $u$ over the set $R = \left]\frac{1}{2},1\right[ \times \left] 0,\frac{1}{2}\right[$.
+
+Following the dual weighted residual method, what is the dual problem that you have to solve for $z$? Write down its weak formulation, then its strong formulation. Don't forget to specify what space the solution and the test functions belong to for the weak formulation.
+
+\emph{Hint:} Indicator function.
+
+\newpage
+
+\paragraph*{Question 2 $\vert$ 4 marks $\vert$  \faFileCodeO \: \faFilePdfO}
+
+If the source term in Problem \eqref{eq:primal} is given as
+\begin{equation*}
+f(x) = a(a+1)x_1^{a-1}x_2(1-x_2) +  2x_1(1-x_1^a)
+\end{equation*}
+for $a \geq 1$, then the analytical solution is
+\begin{equation*}
+\bar{u}(x) = x_1(1-x_1^a)x_2(1-x_2)
+\end{equation*}
+which has an average of
+\begin{equation*}
+\frac{3a-2+2^{1-a}}{24a+48}
+\end{equation*}
+over the set $R$.
+
+For large $a$, this problem is numerically challenging: observe that $f$ becomes very large near the right boundary, while it remains comparatively small elsewhere in the domain. As a result, the solution $\bar{u}$ exhibits a sharp boundary layer near $x_1 = 1$.
+
+\includegraphics[width=.5\textwidth]{f.pdf}
+\includegraphics[width=.5\textwidth]{u.pdf}
+\begin{center}
+\footnotesize Source term $f$ (left) and analytical solution $\bar{u}$ (right) for $a=50$.
+\end{center}
+
+\begin{enumerate}[(a)]
+\item Download the \textsf{FEniCS} script \texttt{hw8.py} and complete the missing commands. This script should evaluate the a posteriori estimator $\eta_{L^2}\approx \lVert u^h - \bar{u} \rVert_{L^2} = \lVert e^h \rVert_{L^2}$ as derived in class (or on \textsf{Canvas}, under modules). Solve Problem \eqref{eq:primal} on the given grids to complete the following table:
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$h$ & $\lVert e^h\rVert_{L^2}$ & $\eta_{L^2}$ & $\eta_{L^2} / \lVert e^h \rVert_{L^2}$\\
+\toprule
+$\frac{1}{64}\sqrt{2}$ & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{}\\
+($64\times 64$ grid)\\
+\midrule
+$\frac{1}{128}\sqrt{2}$ & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{}\\
+($128\times 128$ grid)\\
+\midrule
+$\frac{1}{256}\sqrt{2}$ & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{} & \mbox{}\hspace{12em}\mbox{}\\
+($256\times 256$ grid)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Is the error overestimated or underestimated by $\eta_{L^2}$? By what factor, approximately?
+
+\vspace{3em}
+
+\item Compute a posteriori estimators $\eta_{J}\approx \lvert J(u^h) - J(\bar{u}) \rvert = \lvert J(e^h) \rvert$ for the error in the average solution value on $R$, using both the expensive Strategy 1 and the cheap Strategy 2 to approximate the dual weights (cf p 55 in the notes). Complete the following table:
+
+\begin{center}
+\begin{tabular}{cccccc}
+\toprule
+$h$ & $\lvert J(e^h) \rvert$ & $\lvert \eta_{J,1} \rvert$ & $\lvert \eta_{J,2} \rvert$ & $\lvert \eta_{J,1} / J(e^h) \rvert$ & $\lvert \eta_{J,2} / J(e^h) \rvert$\\
+\toprule
+$\frac{1}{64}\sqrt{2}$ & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{}\\
+($64\times 64$ grid)\\
+\midrule
+$\frac{1}{128}\sqrt{2}$ & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{}\\
+($128\times 128$ grid)\\
+\midrule
+$\frac{1}{256}\sqrt{2}$ & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{} & \mbox{}\hspace{7em}\mbox{}\\
+($256\times 256$ grid)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Is the error overestimated or underestimated? By what factor, approximately?
+
+\vfill
+
+\item \faFilePictureO \: For the convergence studies above we have refined the entire mesh from $64 \times 64$ to $128 \times 128$ to $256 \times 256$. The second mesh is four times larger, the third mesh even 16 times larger than the coarsest one. This makes uniform mesh refinement very expensive. We can probably compute a solution that is just as accurate as the solution on the $256 \times 256$ mesh, by refining only those triangles on the $64 \times 64$ mesh with a noteworthy contribution to the overall error.
+
+Solve Problem \eqref{eq:primal} on the $64 \times 64$ mesh and plot the numerical solutions $u^h$ and $z^h$, the cell residuals $\lVert r_T \rVert_{L^2}$, the dual weights $\lVert w_T \rVert_{L^2}$ (approximated with either the expensive or the cheap strategy) and the local error indicators $\eta_T$. What triangles of the $64 \times 64$ mesh would you refine to compute the average of $u$ over $R$ more accurately? A rough description like `near the left boundary' will do. Also give a brief reason for your answer:
+
+\vfill
+\end{enumerate}
+
+\paragraph*{(Optional) Bonus Question $\vert$ 1 bonus mark $\vert$ \faFilePdfO}
+
+Derive an a priori estimate for the error in the above quantity of interest. Does it agree with the numerical results from Q2(b)?
+
+\vfill
+\vfill
+
+\newpage
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}

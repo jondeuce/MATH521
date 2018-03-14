@@ -1,0 +1,176 @@
+% Modified Template by Jonathan Doucette and Kevin Multani, original by: Jonathan Ward
+
+\documentclass[10pt,letterpaper]{scrartcl}
+%\documentclass[12pt]{article} 
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath} % AMS Math Package
+\usepackage{amsthm} % Theorem Formatting
+\usepackage{esint} % for contour integrals
+\usepackage{amssymb} % Math symbols such as \mathbb
+\usepackage{graphicx} % Allows for eps images
+\usepackage{multicol} % Allows for multiple columns
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+%\usepackage[dvips,letterpaper,margin=1in,bottom=1in]{geometry}
+%\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip} % Removes indentation from paragraphs
+\usepackage{xcolor,xspace,soul} % Colour, spacing, and highlighting
+\usepackage{mathrsfs}
+\usepackage{bm} % For bold math symbols
+\usepackage{amscd}
+\usepackage[all,cmtip]{xy}
+%\usepackage{bbm}
+\usepackage{titling}
+\usepackage{listing} % for code snippets
+%\usepackage{minted} % for code snippets
+\usepackage{enumerate}
+\usepackage{breqn} % for breaking long equations over lines
+\usepackage{fancyhdr}
+\usepackage[]{physics}
+\usepackage[makeroom]{cancel}
+\usepackage{pdfpages}
+\usepackage[]{mcode}
+\usepackage[title]{appendix}
+\usepackage{tikz}
+
+% ***********************************************************
+% ********************** BEGIN TITLE PAGE *******************
+% ***********************************************************
+\newcommand*{\titleGM}{\begingroup % Create the command for including the title page in the document
+\hbox{ % Horizontal box
+\hspace*{0.2\textwidth} % Whitespace to the left of the title page
+\rule{1pt}{\textheight} % Vertical line
+\hspace*{0.05\textwidth} % Whitespace between the vertical line and title page text
+\parbox[b]{0.75\textwidth}{ % Paragraph box which restricts text to less than the width of the page
+
+{\noindent\Huge\bfseries MATH 521}\\[2\baselineskip] % Title
+{\large \textit{Assignment 5}}\\[4\baselineskip]
+%{\large \textsc{ Jonathan Doucette }} % Author name
+
+\vspace{0.5\textheight} % Whitespace between the title block and the publisher
+{\noindent \today }\\[\baselineskip]
+%{\noindent Student Number: 35298124 }\\[\baselineskip] 
+%{\noindent \footnotesize All problems below are \textit{Copyright \copyright \space 2018 Timm Treskatis. All Rights Reserved.} }\\[\baselineskip]
+} % end parbox
+} % end hbox
+\endgroup}
+
+ % Sets margins and page size
+\pagestyle{fancy} 
+
+%\lhead{Jonathan Doucette}
+\rhead{\today}
+\rfoot{Page \thepage}
+\cfoot{}
+
+\makeatletter % Need for anything that contains an @ command 
+\renewcommand{\maketitle} % Redefine maketitle to conserve space
+{ \begingroup \vskip 10pt \begin{center} \Huge {\bf \@title}
+\vskip 10pt \large \@author \hskip 20pt \@date \end{center}
+  \vskip 10pt \endgroup \setcounter{footnote}{0} }
+\makeatother % End of region containing @ commands
+
+% ***********************************************************
+% ********************** END TITLE PAGE *********************
+% ***********************************************************
+
+% ***********************************************************
+% ********************** BEGIN NEW COMMANDS *****************
+% ***********************************************************
+
+\renewcommand{\labelenumi}{(\alph{enumi})} % Use letters for enumerate
+\let\vaccent=\v % rename builtin command \v{} to \vaccent{}
+
+%% MISC
+\newcommand{\ab}[1]{\left| #1 \right|} % for absolute value
+\newcommand{\avg}[1]{\left< #1 \right>} % for average
+\let\underdot=\d % rename builtin command \d{} to \underdot{}
+\let\baraccent=\= % rename builtin command \= to \baraccent
+\renewcommand{\=}[1]{\stackrel{#1}{=}} % for putting numbers above =
+\providecommand{\fr}{\frac}
+\providecommand{\RR}{\mathbb{R}}
+\providecommand{\CC}{\mathbb{C}}
+\providecommand{\NN}{\mathbb{N}}
+\providecommand{\e}{\epsilon}
+\DeclareMathOperator{\di}{d\!}
+\newcommand*\ieval[3]{\left.#1\right\rvert_{#2}^{#3}}
+
+%% Vectors
+\renewcommand{\v}[1]{\ensuremath{\mathbf{#1}}} 
+\newcommand{\gv}[1]{\ensuremath{\mbox{\boldmath$ #1 $}}} % for vectors of Greek letters
+\newcommand{\uv}[1]{\ensuremath{\mathbf{\hat{#1}}}} % for unit vector
+\providecommand{\wave}[1]{\v{\tilde{#1}}}
+
+%% DERIVATIVES
+\renewcommand{\d}[2]{\frac{d #1}{d #2}} % for derivatives
+\newcommand{\dubd}[2]{\frac{d^2 #1}{d #2^2}} % for double derivatives
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}} % for partial derivatives
+\newcommand{\pdd}[2]{\frac{\partial^2 #1}{\partial #2^2}} % for double partial derivatives
+\newcommand{\dx}[1]{\ensuremath{\operatorname{d}\!{#1}}}
+
+%% Operators
+\newcommand{\Gradient}{\ensuremath{\mbox{\boldmath$\nabla$}}} % gradient
+\newcommand{\Laplacian}{\ensuremath{\mbox{$\Delta$}}} % laplacian
+
+%% Norms
+\newcommand{\Norm}[1]{\ensuremath{||#1||}} % generic norm
+\newcommand{\ANorm}[2]{\ensuremath{||#1||_{#2}}} % norm with respect to specified A
+\newcommand{\LTwoNorm}[1]{\ensuremath{||#1||_{L^2}}} % L2 norm
+\newcommand{\HOneNorm}[1]{\ensuremath{||#1||_{H^1}}} % H1 norm
+
+%% Math Operators
+\DeclareMathOperator{\spann}{span}
+
+%% Text
+\newcommand{\mathcolorbox}[2]{\colorbox{#1}{$\displaystyle #2$}}
+\newcommand{\hlfancy}[3]{\textcolor{#1}{\sethlcolor{#2}\hl{#3}}}
+\newcommand{\TODO}[1]{\hlfancy{red}{yellow}{\textbf{TODO: #1}}}
+
+%% Code
+%\newcommand{\code}[1]{\mintinline{C}{#1}}
+%\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\lstinline[columns=fixed]{#1}}
+\newcommand{\includecode}[1]{\lstinputlisting{#1}}
+
+% ***********************************************************
+% ********************** END NEW COMMANDS *******************
+% ***********************************************************
+
+% ***********************************************************
+% ********************** BEGIN NEW ENVS *********************
+% ***********************************************************
+
+% Theorem
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+% Lemma
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+% Corollary
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+% Exercise
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+% Problem
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+% Question
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+% Solution
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+% Afterword
+\newenvironment{afterword}[2][Appendix]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2}]}{\end{trivlist}}
+
+% ***********************************************************
+% ********************** END NEW ENVS ***********************
+% ***********************************************************
+
+% ***********************************************************
+% ********************** END TITLEPAGE **********************
+% ***********************************************************

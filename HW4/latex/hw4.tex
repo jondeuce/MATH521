@@ -1,0 +1,465 @@
+% Modified Template by Jonathan Doucette and Kevin Multani, original by: Jonathan Ward
+
+\input{preamble.tex}
+
+\begin{document}
+
+\begin{titlingpage}
+	\titleGM
+\end{titlingpage}
+\clearpage
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% ----- PROBLEM 1 ----- %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{1}
+Consider the steady advection-diffusion equation in 1D
+%
+\begin{align*}
+    a u' - D u'' &= 0 \qquad
+    \text{in } ]0,1[\\
+    u(0) &= 0 \\
+    u(1) &= 1
+\end{align*}
+%
+where the advection velocity $a \ge 0$ and the diffusivity 
+$D>0$ are constant throughout the domain.
+
+% ----- Problem 1(a) ----- %
+\begin{itemize}
+	\item[(a)] Discretise the advection-diffusion problem
+	using the $N+1$ grid points
+	$$x=0,\:h,\:2h,\:3h,\:\ldots,\:(N-1)h,\:1$$
+	(where $h=1/N$) with the second-order consistent central 
+	difference approximation
+	$$u^\prime(x)\approx\frac{u(x+h)-u(x-h)}{2h}.$$
+	Write down the 'big linear system' $L^h_{CD}u^h=f^h$
+	(the first two rows and the last row suffice).
+	
+	For what range of $h$-values does the matrix $L^h_{CD}$
+	satisfy the $M$-matrix criterion 'weakly chained
+	diagonally dominant \& $L$-matrix'?
+	
+	\textit{Hint:} The identity
+	$$\ab{\alpha + \beta} + \ab{\alpha - \beta} =
+	2\max\{\ab{\alpha},\ab{\beta}\}$$
+	may be useful.         
+\end{itemize}
+
+% ----- Problem 1(a): Solution ----- %
+\begin{solution}
+The matrix $L^h_{CD}$ in the 'big linear system' $L^h_{CD}u^h=f^h_{CD}$
+may be written as the sum of the advection matrix $A^h_{CD}$ and the
+(negative-)diffusion matrix $D^h$, where
+\begin{align*}
+    A^h_{CD} = \frac{a}{2h}
+    \begin{bmatrix}
+		0  &  1 &         &    \\
+	   -1  &  0 &  1      &    \\
+		   &    &  \ddots &    \\
+		   &    &      -1 &  0
+    \end{bmatrix}
+    \qquad\text{and}\qquad
+    D^h = \frac{D}{h^2}
+    \begin{bmatrix}
+	    2  & -1  &         &    \\
+	   -1  &  2  & -1      &    \\
+		   &     &  \ddots &    \\
+		   &     &      -1 &  2
+	\end{bmatrix}.
+\end{align*}
+%
+The vector $f^h_{CD}$ is given by all zeros except for the last entry,
+\begin{align*}
+	f^h_{CD} =
+    \begin{bmatrix}
+	    0, & 0, & \hdots, & 0, & -\frac{a}{2h} + \frac{D}{h^2}
+	\end{bmatrix}^T,
+\end{align*}
+and so the total linear system $L^h_{CD} u^h = f^h_{CD}$ is given by
+\begin{align*}
+    \begin{bmatrix}
+	    \frac{2D}{h^2} & \frac{a}{2h} - \frac{D}{h^2} &  & \\
+	   -\frac{a}{2h} - \frac{D}{h^2}  & \frac{2D}{h^2} & \frac{a}{2h} -\frac{D}{h^2} & \\
+	   & & \ddots & \\
+	   & & -\frac{a}{2h} - \frac{D}{h^2} & \frac{2D}{h^2}
+    \end{bmatrix}
+    \begin{bmatrix}
+        u_0 \\ u_1 \\ \vdots \\ u_{N-1}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+	    0 \\ 0 \\ \vdots \\ -\frac{a}{2h} + \frac{D}{h^2}
+	\end{bmatrix}.
+\end{align*}
+
+\pagebreak
+
+In order to check the requirements on $h$ for $L^h_{CD}$ to satisfy
+the $M$-matrix criteria, we first consider the range of $h$-values such
+that that $L^h_{CD}$ is weakly chained diagonally dominant.
+In order for this to hold, we 
+require that $L^h_{CD}$ has the following three properties:
+\begin{enumerate}[(i)]
+    \item $L^h_{CD}$ is weakly diagonally dominant in all rows
+    \item $L^h_{CD}$ is strongly diagonally dominant in at least one row
+    \item For all rows $i_0$ there exists a chain of indices $i_0
+    \rightarrow i_1 \rightarrow \cdots \rightarrow i_s$ to a strictly
+    diagonally dominant row $i_s$ such that all $a_{i_{l-1},i_l} \neq 0$
+    $(l = 1, ..., s)$
+\end{enumerate}
+
+We will check property (i) first. Let $\alpha = a/2h \geq 0$ and 
+$\beta = D/h^2 > 0$. For the intermediate rows, property (i) requires that
+\begin{align}\label{Lcd_MidRows}
+    2 \beta &\geq \ab{\alpha + \beta} + \ab{\alpha - \beta} \\
+            &= 2\max\{\ab{\alpha},\ab{\beta}\} \nonumber \\
+            &= 2\max\{\alpha,\beta\} \nonumber
+\end{align}
+Since $\beta > 0$ and $\alpha \geq 0$, it must be that 
+$\beta \geq \alpha$, or in terms of the original variables,
+\begin{align}\label{Lcd_Cond1}
+    \frac{D}{h^2} \geq \frac{a}{2h}.
+\end{align}
+In other words, \textit{diffusive effects must be at least as
+strong as advection effects}.
+Now, the conditions on the first and last rows respectively are
+\begin{gather}
+    2\beta \geq \ab{\alpha - \beta}\label{Lcd_FirstRow} \\
+    2\beta \geq \ab{-\alpha - \beta} = \ab{\alpha + \beta} = \alpha + \beta\label{Lcd_LastRow}
+\end{gather}
+The condition on the last row clearly follows from the fact that
+$\beta \geq \alpha $ (and that both $\alpha$ and $\beta$ are 
+non-negative). The condition on the first row follows afterwards
+from the fact that
+$$\ab{\alpha - \beta} \leq \ab{\alpha + \beta}
+= \alpha + \beta \leq 2\beta.$$
+Thus, condition \ref{Lcd_Cond1} is sufficient to satisfy (i).
+
+For condition (ii), we first note that the left-hand side of conditions
+\ref{Lcd_MidRows}, \ref{Lcd_FirstRow}, and \ref{Lcd_LastRow} are all
+the same, namely $2\beta$. It is easy to see then that since
+$$\abs{\alpha - \beta} \leq \alpha + \beta \leq 2\max\{\alpha,\beta\},$$
+the weakest requirement on $L^h_{CD}$ would be to require the first
+row to be strictly diagonally dominant, i.e. require
+$2\beta > \ab{\alpha - \beta}$. Since we additionally have that
+$\beta \geq \alpha \geq 0$, this is equivalent to 
+$2\beta > \beta - \alpha$, or
+$\beta > -\alpha$. Since $\alpha \geq 0$, this is trivially satisfied
+by the fact that $\beta > 0$. Thus, the first row of the matrix is
+strictly diagonally dominant, following condition \ref{Lcd_Cond1}.
+
+Condition (iii) is satisfied by the tridiagonal structure of $L^h_{CD}$ 
+if we further require that the first
+super-diagonal of each row is non zero. This is equivalent to 
+requiring that, in combination with condition \ref{Lcd_Cond1},
+$\beta > \alpha$.
+In terms of the original variables, we have that
+\begin{align}\label{Lcd_Cond2}
+    \boxed{\frac{D}{h^2} > \frac{a}{2h}}.
+\end{align}
+
+Similarly, $L^h_{CD}$ is clearly an $L$-matrix (positive diagonal
+entries and non-positive off-diagonal entries) by the fact that
+$\alpha < \beta$, $\beta > 0$, and $\alpha \geq 0$. Thus, condition
+\ref{Lcd_Cond2} is sufficient to make $L^h_{CD}$ satisfy the $M$-matrix
+criterion. Writing condition \ref{Lcd_Cond2} as a condition on $h$,
+we require that
+\begin{align}\label{Lcd_h_Cond}
+    \boxed{ h < \frac{2D}{a}}.
+\end{align}
+
+\end{solution}
+\pagebreak
+
+% ----- Problem 1(b) ----- %
+\begin{itemize}
+	\item[(b)] Leaving everything else unchanged, discretise the 
+	transport term with the first-order consistent upwind differencing
+	scheme
+	$$u'(x) \approx \frac{u(x)-u(x-h)}{h}$$
+	instead. Write down the 'big linear system' $L^h_{UD}u^h=f^h$.
+	
+	For what range of $h$-values does the matrix $L^h_{UD}$
+	satisfy the $M$-matrix criterion?
+\end{itemize}
+
+% ----- Problem 1(b): Solution ----- %
+\begin{solution}
+The advection matrix $A^h_{CD}$ has now been modified to the upwind
+advection matrix $A^h_{UD}$, given by
+\begin{align*}
+    A^h_{UD} = \frac{a}{h}
+    \begin{bmatrix}
+		1  &  0 &         &    \\
+	   -1  &  1 &  0      &    \\
+		   &    &  \ddots &    \\
+		   &    &      -1 &  1
+    \end{bmatrix}.
+\end{align*}
+The (negative-)diffusion matrix $D^h$ remains as before, but the
+right-hand side vector $f^h_{UD}$ no longer depends on the advection
+process at all, and is given by
+\begin{align*}
+	f^h_{UD} =
+    \begin{bmatrix}
+	    0, & 0, & \hdots, & 0, & \frac{D}{h^2}
+	\end{bmatrix}^T.
+\end{align*}
+Intuitively, this is because the advection process 'transfers 
+information from left to right', and so the right endpoint is only
+affected by it's neighbour through the diffusive process, as diffusion
+transfers information isotropically in both directions.
+
+The new 'big linear system' $L^h_{UD}u^h=f^h_{UD}$ is now given by
+\begin{align*}
+    \begin{bmatrix}
+	    \frac{2D}{h^2} + \frac{a}{h} & - \frac{D}{h^2} &  & \\
+	   -\frac{a}{h} - \frac{D}{h^2}  & \frac{2D}{h^2} + \frac{a}{h} & -\frac{D}{h^2} & \\
+	   & & \ddots & \\
+	   & & -\frac{a}{h} - \frac{D}{h^2} & \frac{2D}{h^2} + \frac{a}{h}
+    \end{bmatrix}
+    \begin{bmatrix}
+        u_0 \\ u_1 \\ \vdots \\ u_{N-1}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+	    0 \\ 0 \\ \vdots \\ \frac{D}{h^2}
+	\end{bmatrix}.
+\end{align*}
+
+Now, it is trivial to see that $L^h_{UD}$ is a $L$-matrix, as since
+$D>0$ and $a\geq 0$ we see that the diagonal is strictly positive
+and the off diagonals are strictly negative.
+
+Using the same notation as in problem 1(a), the condition on the middle
+rows to be weakly diagonally dominant is
+\begin{align}\label{Lud_MidRows}
+    2\beta + \alpha
+    \geq \ab{-\alpha -\beta} + \ab{-\beta}
+    = 2\beta + \alpha,
+\end{align}
+which is trivially satisfied.
+
+For the first and last row respectively, we have
+\begin{gather}
+    2\beta + \alpha \geq \ab{-\beta} = \beta\label{Lud_FirstRow} \\
+    2\beta + \alpha \geq \ab{-\alpha -\beta} = \alpha + \beta,\label{Lud_FirstRow}
+\end{gather}
+both of which are trivially satisfied by the non-negativity of 
+$\alpha$ and $\beta$. In fact, as $\beta > 0$, both the first and
+last rows are \textit{strictly} diagonally dominant.
+
+Therefore, we have that
+\begin{enumerate}[(i)]
+    \item $L^h_{UD}$ is weakly diagonally dominant in all rows
+    \item $L^h_{UD}$ is strongly diagonally dominant in at least one row (both the first and the last)
+    \item $L^h_{UD}$ is weakly chained, following the tridiagonal structure, the first row being strictly diagonally dominant, and all off-diagonal rows being non-zero (in fact, strictly negative)
+\end{enumerate}
+Therefore $L^h_{UD}$ is weakly chained diagonally dominant, and since
+$L^h_{UD}$ is also an $L$-matrix, it follows that $L^h_{UD}$ is an
+$M$-matrix.
+
+\boxed{\textbf{There is no restriction on the grid spacing \bm{$h$}}},
+as we have only assumed that $D>0$ and $a\geq 0$.
+
+\end{solution}
+\pagebreak
+
+
+% ----- Problem 1(c) ----- %
+\begin{itemize}
+	\item[(c)] Download the file \code{advection_diffusion.m} and
+	read the output of \code{help} \linebreak 
+	\code{advection_diffusion}.
+	Everything else is intentionally obfuscated so that
+	you still have to do
+	(a) and (b) yourself! You can however use this function to
+	check your answers for the admissible ranges of $h$ in (a)
+	and (b).
+	
+	What do you observe if the matrix $L^h$ is not an $M$-matrix?
+	Use your knowledge from lectures and the technical language
+	you have learnt so far to \textit{describe} and 
+	\textit{explain} your observations.
+\end{itemize}
+
+% ----- Problem 1(c): Solution ----- %
+\begin{solution}
+The expectation in the investigation of the behaviour of the solution
+is that if $L^h$ is an $M$-matrix, we have the monotonicity property
+(where $\succeq$ denotes entry-wise $\geq$):
+$$L^h u^h \succeq 0 \Rightarrow u^h \succeq 0. $$
+
+We have shown that the matrix $L^h_{UD}$ is an $M$-matrix for all $h$,
+and the matrix $L^h_{CD}$ is an $M$-matrix only for $h<2D/a$. Now,
+in considering the right-hand side vector $f^h_{CD}$ and $f^h_{UD}$,
+we note additionally that
+\begin{gather*}
+    f^h_{CD} \succeq 0 \Leftrightarrow h < \frac{2D}{a} \qquad
+    \text{and} \qquad
+    f^h_{UD} \succeq 0 \quad \forall h > 0.
+\end{gather*}
+Therefore, the solutions computed using the upwind differentiation scheme
+should be strictly positive for any grid size $h$. For the centred scheme,
+however, there is no such guarantee when $h \geq 2D/a$.
+This is due to neither the matrix $L^h_{CD}$ being an $M$-matrix in this
+case, nor the right-hand side vector $f^h_{CD}$ being non-negative.
+
+Thus, although we expect the $L^h_{CD}$ system to converge to the true
+solution faster as $h\rightarrow 0$ (second order in $h$ vs. first order),
+we have no guarantees that the solution will behave well for $h \geq 2D/a$.
+The solution will likely be erratic and non-physical.
+
+Lastly, we expect the elliptic operator $L^h$ to obey the elliptic
+maximum/minimum principle when $L^h$ is an $M$-matrix, but this is
+not guaranteed when $L^h$ is not an $M$-matrix.
+
+The script in Appendix \ref{q1c} was used to investigate the behaviour
+of the respective solutions for varying values of $h$ both above and
+below the critical value $2D/a$. As expected, the main results were as follows:
+\begin{itemize}
+    \item The solution to the upwind system $L^h_{UD} u^h = f^h_{UD}$
+    was strictly positive for all grid sizes
+    \item The solution to the centred system $L_h{CD} u^h = f^h_{CD}$
+    was positive only for $h<2D/a$, and was non-negative for $h\leq 2D/a$
+    \item The centered system solution was additionally highly erratic
+    for $h>2D/a$, while the upwind system was smooth for all $h$
+    \item As $h\rightarrow 0$, the centred system converged faster than
+    the upwind system
+    \item Both system obey the elliptic maximum/minimum principles when
+    the $L^h$ matrices satisfy the $M$-criterion, but as solutions to
+    to the centred system produce negative values for $h<2D/a$, the
+    elliptic minimum principle is clearly not satisfied in this case.
+\end{itemize}
+
+\end{solution}
+\pagebreak
+
+
+% ----- Problem 1(d) ----- %
+\begin{itemize}
+	\item[(d)] Even though the upwind differencing scheme is only
+	first-order consistent as an approximation of the equation
+	$$ a u' - D u'' = 0 $$
+	it is second-order consistent as an approximation of a slightly
+	different equation,
+	$$ a u' - (D + \tilde{D}) u'' = 0, $$
+	provided that $u \in C^4([0,1])$. Calculate this number
+	$\tilde{D}$.
+	
+	\textit{Hint:} Use Taylor expansions as done in class or
+	video \#7 to determine the truncation error
+	$$ a u'(x) \quad - \quad
+	(\text{upwind difference approximation of this term}).$$
+	
+	$\tilde{D}$ will depend on h.
+\end{itemize}
+
+% ----- Problem 1(d): Solution ----- %
+\begin{solution}
+Given $u \in C^4([0,1])$, we can expand $u(x\pm h)$ to third and
+fourth order taylor series in $h$ as
+\begin{gather}
+    u(x\pm h) = u(x) \pm h u'(x) + \frac{h^2}{2} u''(x) \pm 
+    \frac{h^3}{6} u'''(\zeta_\pm)\label{u_3rd} \\
+    u(x\pm h) = u(x) \pm h u'(x) + \frac{h^2}{2} u''(x) \pm 
+    \frac{h^3}{6} u'''(x) + \frac{h^4}{24}u''''(\xi_\pm)\label{u_4th}
+\end{gather}
+where $\xi_+$ and $\zeta_+$ are in $[x,x+h]$, and 
+$\xi_-$ and $\zeta_-$ are in $[x-h,x]$.
+
+Now, we consider the error between $au'-(D+\tilde{D})u''$
+and the upwind differencing scheme for $au' - Du''$.
+Namely, we have that
+\begin{gather*}
+    \ab{ au'(x)-(D+\tilde{D})u''(x) -
+    \bigg( a\frac{u(x)-u(x-h)}{h} -
+    D\frac{u(x-h) - 2u(x) + u(x+h)}{h^2} \bigg) } \\
+    = \ab{ a\bigg(u'(x) - \frac{u(x)-u(x-h)}{h}\bigg) -
+    D\bigg( u''(x) - \frac{u(x-h) - 2u(x) + u(x+h)}{h^2} \bigg) -
+    \tilde{D}u''(x) } \\
+    = \ab{ a \bigg( \frac{h}{2}u''(x) - \frac{h^2}{6}u'''(\zeta_-) 
+    \bigg) +
+    D \bigg( \frac{h^2}{24} (u''''(\xi_+) + u''''(\xi_-)) \bigg) -
+    \tilde{D} u''(x) } \\
+    = \ab{ \bigg( \frac{ah}{2} - \tilde{D} \bigg)u''(x) +
+    h^2 \bigg( \frac{D}{24}(u''''(\xi_+) + u''''(\xi_-)) -
+    \frac{a}{6}u'''(\zeta_-) \bigg) } \\
+    \leq h^2 \max_{[x-h,x+h]} \frac{a}{6}\ab{u'''} + 
+    \frac{D}{12}\ab{u''''}
+\end{gather*}
+where in the last line we have chosen $\tilde{D}=ah/2$ and used
+the triangle inequality to obtain an upper bound on the error in terms
+of the third and fourth derivatives on the whole interval.
+
+Thus, the upwind differencing scheme is second-order consistent
+for the equation $$au' - (D+\tilde{D})u''=0$$ if we choose
+$\boxed{\tilde{D} = \frac{ah}{2}}$.
+
+\end{solution}
+\pagebreak
+
+\end{problem} % END PROBLEM 1
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% ----- WRITTEN ----- %
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{afterword}[Your Primer Talk]{}
+Primer talk information:
+\begin{itemize}
+    \item \textbf{\underline{I do not plan on using the 
+    document camera}}, I plan on preparing a short slideshow
+    presentation.
+    \item By the end of this talk, the audience should understand
+    what the Bloch-Torrey equation is and how it's solution is both
+    useful to the MRI community in terms of modelling MR signals,
+    and that solving it in realistic geometries is difficult due to
+    the multiple scales of the problem.
+\end{itemize}
+\end{afterword}
+\vspace{1cm}
+
+\begin{afterword}[Your Learning Progress]{}
+\textit{What is the one most important thing that you have learnt in this
+assignment?}
+
+Question 1c was definitely the most illuminating part of this assignment.
+I knew intuitively that something like this must have been true, but
+I did not know before this the precise relation between stable 
+solutions and the $M$-matrix criterion of the linear system and how
+vital it is to having well behaved solutions.
+
+\vspace{0.5cm}
+
+\textit{What is the most substantial new insight that you have gained 
+from this course this week? Any aha moment?}
+
+The fact that first-order differencing schemes can be preferred over
+second order schemes on physical and mathematical grounds was definitely
+an \textit{aha moment}! I have heard about upwind differencing being
+extremely important for stability in things like fluid equations,
+but I never knew precisely why until now!
+\end{afterword}
+
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%
+% ----- CODE ----- %
+%%%%%%%%%%%%%%%%%%%%
+\begin{appendices}
+%\addcontentsline{toc}{section}{Appendix}
+%\part{Appendix}
+%\parttoc
+
+\section{}\label{q1c}
+\includecode{q1c.m}
+\pagebreak
+\section{}\label{advdiff}
+\includecode{advection_diffusion.m}
+
+\end{appendices}
+
+\end{document}

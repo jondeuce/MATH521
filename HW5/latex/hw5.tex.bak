@@ -1,0 +1,303 @@
+% Modified Template by Jonathan Doucette and Kevin Multani, original by: Jonathan Ward
+
+\input{preamble.tex}
+
+\begin{document}
+
+\begin{titlingpage}
+	\titleGM
+\end{titlingpage}
+\clearpage
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% ----- PROBLEM 1 ----- %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{1}
+In this assignment, we consider the linear elasticity problem
+\begin{align}\label{LinElast_Strong}
+\begin{split}
+    -c \Laplacian u + au &= f \quad \text{in } \Omega \\
+    u &= g \quad \text{on } \partial \Omega
+\end{split}
+\end{align}
+
+on a polygonal domain $\Omega$. The function $u$ can be interpreted
+as the elongation of a rubber membrane over the
+$x_1x_2$-plane. The boundary values $g$ prescribe the elongation on 
+$\partial\Omega$, e.g. by means of a wire frame construction
+in which the membrane has been fixed. The real number $c > 0$
+is the stiffness of the rubber material,
+$a > 0$ is a constant proportional to its mass density and the
+inhomogeneity $f$ models external forces that act on the membrane.
+
+% ----- Problem 1(a) ----- %
+\begin{itemize}
+	\item[(a)]  Show that under the assumption of homogeneous boundary
+	conditions, $g = 0$, the discretisation of \ref{LinElast_Strong}
+	with linear finite elements reads
+	$$(cK^h + aM^h)\vec{u}^h = \vec{f}^h$$
+	where
+	\begin{align*}
+	    k_{ij}^h &= \int_{\Omega} \nabla\phi_i^h \cdot
+	    \nabla\phi_j^h \dx{x} \\
+	    m_{ij}^h &= \int_{\Omega} \phi_i^h \phi_j^h \dx{x} \\
+	    f_i^h &= \int_{\Omega} f \phi_i^h \dx{x} \\
+	    \phi_i^h &= \text{hat function centred at the i-th vertex}
+	\end{align*}
+	for $i,j = 1,...,N$. $N$ is the number of effective
+	degrees of freedom,
+	i.e. the number of interior grid points
+	which are not located on the boundary $\partial\Omega$.
+	Note that since the domain is assumed to be a polygon,
+	we can cover it exactly with a triangulation $T^h$
+	such that $\Omega = \Omega^h$ (there is no mismatch on the boundary).    
+\end{itemize}
+
+% ----- Problem 1(a): Solution ----- %
+\begin{solution}
+We will transform the strong form \ref{LinElast_Strong} of the problem
+in to the weak form in several steps, as in class.
+\begin{itemize}
+\item We begin with the strong form \ref{LinElast_Strong} of the problem.
+Here, $u\in C^2(\Omega) \cap C(\partial \Omega)$.
+\item Next, as we are now looking for solutions to the weak form of the
+problem, we multiply by a test function
+$v \in H^1_0(\Omega)$ and
+integrate over the domain to obtain
+$$ -c \int_\Omega \Laplacian u v \dx{x} + a \int_\Omega u v \dx{x}
+= \int_\Omega f v \dx{x} $$.
+\item Now, we use Green's first identity
+\begin{align*}
+    \int_\Omega (\psi \Laplacian \varphi + 
+    \nabla \psi \cdot \nabla \varphi) \dx{x} =
+    \oint_{\partial\Omega} \psi (\nabla \varphi \cdot \hat{n}) \dx{x}
+\end{align*}
+to integrate the first term by parts. Using the fact that both $u$ and
+$v$ are zero on the boundary, we arrive at the weak form of the problem:
+\begin{align}\label{LinElast_Weak}
+c \int_\Omega \nabla u \cdot \nabla v \dx{x} + 
+a \int_\Omega u v \dx{x} = 
+\int_\Omega f v \dx{x}.
+\end{align}
+\item We aim to find solutions $u \in H^1_0(\Omega)$ to the weak
+problem \ref{LinElast_Weak}. We choose to project the true solution
+$u$ onto the subspace $V^h \subset H^1_0(\Omega)$,
+where $V^h$ is the space of functions parameterized
+by the linear "hat" basis functions $\phi_i^h(x)$ on the $i$th vertex.
+In order to do so, we expand $u$ in terms of $\phi_i^h$ as $u^h$,
+representing finite dimensional approximations to the infinite
+dimensional solutions $u$.
+\begin{align*}
+    u^h = \sum_{i=1}^N \phi_i^h u_i^h
+\end{align*}
+\item It is sufficient to assert that the weak form holds
+against every basis function $v=\phi_j^h \in V^h$ for $j = 1,...,N$.
+This leads to the system of equations
+\begin{align*}
+    \sum_{i=1}^N \bigg(
+    c \int_\Omega \nabla \phi_i^h \cdot \nabla \phi_j^h \dx{x} + 
+    a \int_\Omega \phi_i^h \phi_j^h \dx{x} 
+    \bigg) u_i^h = 
+    \int_\Omega f \phi_j^h \dx{x}
+\end{align*}
+\item Interpreting the left-hand side sum as a matrix multiplication,
+if we now write
+\begin{align*}
+    k_{ij}^h &= \int_{\Omega} \nabla\phi_i^h \cdot
+    \nabla\phi_j^h \dx{x} \\
+    m_{ij}^h &= \int_{\Omega} \phi_i^h \phi_j^h \dx{x} \\
+    f_j^h &= \int_{\Omega} f \phi_j^h \dx{x},
+\end{align*}
+we then obtain the desired linear system:
+\begin{align}
+    (cK^h + aM^h)\vec{u}^h = \vec{f}^h.
+\end{align}
+
+\end{itemize}
+
+\end{solution}
+\pagebreak
+
+% ----- Problem 1(b) ----- %
+\begin{itemize}
+	\item[(b)] We can decompose the integrals that appear in the
+	definition of the mass matrix into contributions from each
+	triangle:
+	\begin{align*}
+	m_{ij}^h = \int_\Omega \phi_i^h \phi_j^h \dx{x} = 
+	\sum_{k=1}^{n_T} \int_{T_k} \phi_i^h \phi_j^h \dx{x}
+    \end{align*}
+    $n_T$ is the number of triangles in the triangulation $T^h$.
+    Let's look at one such triangle $T$, the vertices of which have the
+    indices 1, 2 and 3. Note that only the three hat functions
+    $\phi_1^h$, $\phi_2^h$, and $\phi_3^h$
+    are non-zero on this triangle.
+    
+    Show that the element mass matrix with entries
+    \begin{align*}
+	m_{ij,T}^h = \int_T \phi_i^h \phi_j^h \dx{x} \qquad (i,j = 1,2,3)
+	\end{align*}
+	is
+	\begin{align*}
+	M_T^h = \frac{\ab{T}}{12}
+	\begin{pmatrix}
+	2 & 1 & 1 \\ 
+	1 & 2 & 1 \\ 
+	1 & 1 & 2
+	\end{pmatrix}
+	\end{align*}
+	Hint: If you enjoy doing double integrals over triangles,
+	you could use equation (2.21) from the notes. However,
+	we don't want to mark endless calculations, so please use a
+	different approach instead, similar to the mass
+	matrix in 1D (Example 2.3.1, also available on Canvas under
+	'Pages' in the menu).
+	Your solution should fit on the remainder of this page.
+	    
+\end{itemize}
+
+% ----- Problem 1(b): Solution ----- %
+\begin{solution}
+Products of linear basis functions are trivial to integrate on the
+triangular domain if we use quadrature rules which are exact for
+curves of degree $\leq 2$. One such rule is the
+\textit{trapezoidal rule},
+in which equal weights of $w_i = 1/3$ for $i=1,2,3$ are used at the
+midpoint of the edges of the triangle $T$.
+
+Since by definition the value of the linear basis functions
+is linear from node to node, it is clear that the value at the
+midpoint of the edge
+is either $\frac{1}{2}$ i.e. the edge connects node values of
+$0$ and $1$,
+or the value at the midpoint of the edge is $0$ i.e. the edge
+connects nodes both of value $0$.
+
+Now, the integration is trivial. We consider two cases:
+\begin{itemize}
+\item[(i)] $i=j$, and so
+$m_{ii,T}^h = \int_T (\phi_i^h)^2 \dx{x} = 
+[ \frac{1}{3} (\frac{1}{2})^2 +
+\frac{1}{3} (\frac{1}{2})^2 +
+\frac{1}{3} (0)^2 ] \ab{T} = \frac{2}{12} \ab{T} $
+\item[(ii)] $i\neq j$, and so
+$m_{ij,T}^h = \int_T \phi_i^h \phi_j^h \dx{x} = 
+[ \frac{1}{3} (\frac{1}{2})(\frac{1}{2}) +
+\frac{1}{3} (\frac{1}{2})(0) +
+\frac{1}{3} (0)(\frac{1}{2}) ] \ab{T} = \frac{1}{12} \ab{T} $
+\end{itemize}
+
+The resulting element mass matrix is therefore
+\begin{align*}
+M_T^h = \frac{\ab{T}}{12}
+\begin{pmatrix}
+2 & 1 & 1 \\ 
+1 & 2 & 1 \\ 
+1 & 1 & 2
+\end{pmatrix},
+\end{align*}
+as desired.
+
+\end{solution}
+\pagebreak
+
+\end{problem} % END PROBLEM 1
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% ----- PROBLEM 1 ----- %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{2}
+Download the file \code{discretiseLinearElasticity.m}.
+We will turn this function into a
+finite-element solver for Problem (1) next week.
+Today we implement some core components.
+The files \code{video10.mat} and \code{kiwi.mat}
+contain arrays $P$, $E$ and $T$ which define a triangulation
+on a polygonal computational domain $\Omega^h$.
+Note that some versions of \textsc{MATLAB}'s
+plotting functions from the PDE Toolbox require extra
+rows in $E$ and $T$.
+If you are not using the PDE Toolbox, then you may delete all
+but the first two rows of $E$ and all
+but the first three rows of $T$,
+as described in video \#10.
+To import the variables from \code{video10.mat} or 
+\code{kiwi.mat} into a structure \code{msh},
+you may use the load command.
+
+% ----- Problem 2(a) ----- %
+\begin{itemize}
+	\item[(a)] Unlike the triangle in Question 1(b),
+	the actual vertices of the $k$-th triangle are probably
+	not 1, 2 and 3. For instance, the 5th triangle in video \#10
+	has the vertices 7, 10 and 9.
+	In general, the $k$-th triangle has the vertices
+	\code{T(1,k)}, \code{T(2,k)} and \code{T(3,k)}.
+	
+	Use Question 1(b) to complete the main function and the
+	\code{assembleMass} subfunction.
+	Can you do it without
+for loops?
+Hint: In GNU Octave / MATLAB, the command sparse may be helpful.
+\end{itemize}
+
+% ----- Problem 2(a): Solution ----- %
+\begin{solution}
+
+\end{solution}
+\pagebreak
+
+% ----- Problem 2(b) ----- %
+\begin{itemize}
+	\item[(b)] Problem 2(b)
+\end{itemize}
+
+% ----- Problem 2(b): Solution ----- %
+\begin{solution}
+
+\end{solution}
+\pagebreak
+
+\end{problem} % END PROBLEM 2
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% ----- WRITTEN ----- %
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{afterword}[Your Learning Progress]{}
+What is the one most important thing that you have learnt
+in this assignment?
+
+\TODO{}
+
+\vspace{0.5cm}
+
+What is the most substantial new insight that you have gained 
+from this course this week? Any aha moment?
+
+\TODO{}
+
+\end{afterword}
+
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%
+% ----- CODE ----- %
+%%%%%%%%%%%%%%%%%%%%
+\begin{appendices}
+%\addcontentsline{toc}{section}{Appendix}
+%\part{Appendix}
+%\parttoc
+
+%\section{}\label{q1c}
+%\includecode{q1c.m}
+%\pagebreak
+%\section{}\label{advdiff}
+%\includecode{advection_diffusion.m}
+
+\end{appendices}
+
+\end{document}

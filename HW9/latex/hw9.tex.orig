@@ -1,0 +1,144 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 9}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{Question 1 $\vert$ 1 mark $\vert$ \faFilePdfO}
+
+We consider the initial boundary value problem for the heat equation
+\begin{equation}\tag{H}\label{eq:heat}
+\begin{aligned}
+\partial_t u(t) - a \Delta u(t) &= f(t) && \text{in } Q = ]0,T[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+\frac{\partial u}{\partial n} &= 0 && \text{on } \Sigma = ]0,T[ \times \partial \Omega
+\end{aligned}
+\end{equation}
+where $u$ is a temperature field, $u_0$ an initial temperature distribution, the diffusion-like parameter $a > 0$ the heat conductivity of the material, $f$ a source term e.g. due to thermal radiation and $T>0$ a final time. The homogeneous \textsc{Neumann} boundary conditions mean that the domain $\Omega$ is perfectly insulated so that no thermal energy is radiated into the environment.
+
+The $\theta$-method is a class of \textsc{Runge-Kutta} schemes for integrating ODEs of the form
+\begin{equation*}
+\dot{U} = F(t,U)
+\end{equation*}
+by using the iteration
+\begin{equation*}
+U_+ = U_\circ + \Delta t \left( \theta F(t_+,U_+) + (1-\theta) F(t_\circ,U_\circ) \right).
+\end{equation*}
+The parameter $\theta \in [0,1]$ can be interpreted as the `degree of implicitness', since $\theta = 0$ gives the forward \textsc{Euler} method, $\theta = \frac{1}{2}$ the \textsc{Crank-Nicolson} method (aka implicit trapezium rule in the ODE context) and $\theta = 1$ the backward \textsc{Euler} method.
+
+For the discretisation in space, we apply linear finite elements. Both the time step size $\Delta t$ and the spatial triangulation $\mathcal{T}^h$ are fixed.
+
+Show that in this setting both the method of lines and \textsc{Rothe}'s method lead to the same discrete problems
+\begin{equation*}
+\left( M^h + \theta \Delta t a K^h\right) \vec{u}^h_+ = \left( M^h - (1-\theta)\Delta t a K^h\right) \vec{u}^h_\circ + \Delta t \left( \theta \vec{f}^h_+ + (1-\theta) \vec{f}^h_\circ \right).
+\end{equation*}
+
+You don't have to include any details about the components of the discrete vectors and matrices. We all know what they are!
+
+\newpage
+
+\mbox{}
+
+\vfill
+
+\paragraph*{Question 2 $\vert$ 4 marks}
+
+\begin{enumerate}[(a)]
+\item \faFileMovieO \: The \textsf{FEniCS} script \texttt{hw9.py} implements the backward \textsc{Euler} method for Problem \eqref{eq:heat}. Starting from room temperature ($u_0 \equiv 20$), the bottom left corner of a metal piece $\Omega$ with conductivity parameter $a=0.1$ is held over a flame for one second, then the flame is extinguished. This is modelled by
+\begin{equation*}
+f(t,x) =
+\begin{dcases}
+200e^{-5x_1^2 - 2x_2^2} & t \leq 1\\
+0 & t > 1
+\end{dcases}
+\end{equation*}
+Complete the missing commands to compute the evolution of the temperature field over the first five seconds using a time step size of $\Delta t = 10^{-2}$.
+
+Save your results as a video, using a frame rate such that the video time is equal to the physical time. You don't have to submit any other files for this part of Question 2.
+
+\emph{Hint:} Open the PVD-file in \textsf{ParaView}, click the `Apply'-button, select a reasonable colour map
+\begin{center}
+\includegraphics[scale=1]{colourmap.png}
+\end{center}
+and then re-scale the colour values
+\begin{center}
+\includegraphics[scale=1]{rescale.png}
+\end{center}
+to the range $[20,160]$. Use the same range for the following questions, too.
+\newpage
+\item \faFileCodeO \: Generalise this script to implement the $\theta$-method from Question 1. Check whether setting $\theta = 1$ still gives you the same results. Using the same parameters as in Question 2(a), solve the problem with the \textsc{Crank-Nicolson} method and the forward \textsc{Euler} method. What do you observe?
+
+\vspace{6cm}
+
+\item \faFilePdfO \: Solve the problem with the forward \textsc{Euler} method again up to time $T=0.1$, once with $\Delta t = 1.25 \times 10^{-4}$ and once with $\Delta t = 10^{-4}$. Explain your observations, using the relevant terminology.
+
+\vspace{6cm}
+
+\item \faFilePdfO \: If you could choose among the time-stepping schemes considered above and other time-discretisation schemes you know of, which one would you choose for this problem? First formulate some reasonable objectives for your simulation, then explain which method attains these to the greatest extent.
+\end{enumerate}
+\newpage
+
+\mbox{}
+
+\vfill
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}
