@@ -153,7 +153,7 @@ to the range $[20,160]$. Use the same range for the following questions, too.
 \vspace{0.5cm}
 \begin{solution}
 
-\TODO{see attached video}
+See attached video. Additionally, the code \texttt{hw9.py} in the Appendix \ref{hw9Code} is used for all subsequent parts of this question.
 
 \end{solution}
 
@@ -161,46 +161,118 @@ to the range $[20,160]$. Use the same range for the following questions, too.
 \item% \faFileCodeO \:
 Generalise this script to implement the $\theta$-method from Question 1. Check whether setting $\theta = 1$ still gives you the same results. Using the same parameters as in Question 2(a), solve the problem with the \textsc{Crank-Nicolson} method and the forward \textsc{Euler} method. What do you observe?
 
-\vspace{6cm}
+% ------------------------------------------------------------ %
+% Q2(b): Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
 
+First, I verified that the difference between the solution computed using the backward \textsc{Euler} method and the solution computed using the $\theta$-method with $\theta = 1$ were numerically identical by taking the norm of their difference, which yielded zero to within machine precision.
+
+Solving the problem with the \textsc{Crank-Nicolson} method (i.e. $\theta = 1/2$), the solution appears to be relatively close to the backward \textsc{Euler} solution, although it is certainly somewhat off.
+At time $t=5$, the $L^2$-norm difference between the backward \textsc{Euler} and \textsc{Crank-Nicolson} was approximately $10.786$.
+
+Solving the problem with the forward \textsc{Euler} method (i.e. $\theta = 0$), however, yielded a completely different solution: the maximum temperature at $t=5$ nearly doubles compared to the backward \textsc{Euler} solution, and the $L^2$-norm difference between the two solutions rose to approximately $28.075$.
+My interpretation would be that, since forward \textsc{Euler} time stepping is unstable, that the numerical solution has begun to diverge.
+
+\end{solution}
+
+\newpage
 \item% \faFilePdfO \:
 Solve the problem with the forward \textsc{Euler} method again up to time $T=0.1$, once with $\Delta t = 1.25 \times 10^{-4}$ and once with $\Delta t = 10^{-4}$. Explain your observations, using the relevant terminology.
 
-\vspace{6cm}
+% ------------------------------------------------------------ %
+% Q2(c): Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
 
+Firstly, from Example 3.2.5 in the notes (Stability and Dissipation of the forward \textsc{Euler} Method), we know that for the heat equation that for time steps $\Delta t = \mathcal{O}(h^2)$, it is possible for the forward \textsc{Euler} method may in fact be stable.
+
+Now, in our numerical simulations we have that $h \approx 1/50$, and so $h^2 \approx 1/2500 = 4 \times 10^{-4}$.
+Therefore, we indeed have that $\Delta t = \mathcal{O}(h^2)$ for $\Delta t = 1.25 \times 10^{-4}$ and $\Delta t = 10^{-4}$, and we should expect that the forward \textsc{Euler} solution should be stable, or at least not exceedingly unstable (since we don't know the proportionality constant, after all).
+
+Using $\Delta t = 1.25 \times 10^{-4}$ yielded fairly reasonable looking results.
+I compared with the backward \textsc{Euler} method for a sanity check, and they agree with within a fraction of a degree across the domain.
+
+After solving with $\Delta t = 10^{-4}$, however, the resulting temperature distributions were much smaller than the corresponding solution for $\Delta t = 1.25 \times 10^{-4}$.
+The solution heat distribution both didn't spread out as far across the domain and achieved lower values despite being exposed to the heat source for the same amount of time.
+With that being said, the backward \textsc{Euler} solution exhibited the same behaviour, and so it may be an artifact of the smaller time steps and not faults in the forward \textsc{Euler} method in particular.
+
+In conclusion, although it appears that the forward \textsc{Euler} method is stable for these smaller time steps $\Delta t$ and is fairly consistent with the backward \textsc{Euler} method, neither solutions seem trustworthy; completely different temperature distributions arise when only changing the time step $\Delta t$ and not the final time $T$, and this should not happen for a reasonable method.
+
+\end{solution}
+
+\newpage
 \item% \faFilePdfO \:
 If you could choose among the time-stepping schemes considered above and other time-discretisation schemes you know of, which one would you choose for this problem? First formulate some reasonable objectives for your simulation, then explain which method attains these to the greatest extent.
 \end{enumerate}
+
+% ------------------------------------------------------------ %
+% Q2(d): Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
+
+First, we consider reasonable objectives for the method used for the simulation of the heat equation:
+\begin{itemize}
+\item \textbf{Dissipation}. The heat equation is naturally dissipative (the negative laplacian has eigenvalues which are bounded from below above zero), and so the solution should be dissipative for all times, increasing in value only do to sources in the domain.
+\item \textbf{Stability}. The continuous heat equation decays all perturbations exponentially in time (Example 3.2.7, Theorem 3.1.7 in the notes), and so the numerical method of choice should match this requirement. For this reason, we require \textit{strongly} A-stable method. This will naturally satisfy the dissipation requirements for the heat equation as well since strongly A-stable methods are dissipative for the heat equation.
+\item \textbf{Consistency}. Since we have used a second order spatial discretization scheme, ideally we would choose a time-discretisation method that achieves the same order of consistency, namely $\mathcal{O}(\Delta t^2)$.
+\item \textbf{Discrete Parabolic Maximum Principle}. The heat equation satisfies the maximum principle, and an ideal time stepping scheme would adhere to this as well.
+\end{itemize}
+
+Taking these requirements into consideration, we make the following conclusions:
+\begin{itemize}
+\item Forward and backward \textsc{Euler} methods are ruled out based on consistency requirements, as we would prefer a second order accurate in time solution.
+\item The \textsc{Crank-Nicolson} method, while second order consistent, is only regularly A-stable and therefore is ruled out.
+\item Modifications to the \textsc{Crank-Nicolson} method, however, are promising. The $\theta$-method can only be made strictly A-stable, but both the $TR\text{-}BDF2$ method and the fractional step $\theta$ method are both strongly A-stable and second order accurate in both time and space.
+\end{itemize}
+
+Now, I have not shown that the discrete parabolic maximum principle holds for either of these latter two methods, but since it already does not hold generally for the backward \textsc{Euler} method and only hold for the forward \textsc{Euler} method when using mass lumping, these methods are already the best methods that I know of based on the listed requirements for the heat equation.
+
+As a tie-breaker, I will choose the method with lower computational cost, and use the $TR\text{-}BDF2$ method.
+
+\end{solution}
+
+% ------------------------------------------------------------ %
+% Learing progress
+% ------------------------------------------------------------ %
 \newpage
-
-\mbox{}
-
-\vfill
-
 \paragraph*{Your Learning Progress}% $\vert$ \faFilePdfO}
 
 What is the one most important thing that you have learnt from this assignment?
 
 \vspace*{3mm}
-\hrulefill
+\begin{itemize}
+\item I learned about the relative stability of different time stepping schemes can drastically effect the result of even a relatively simple simulation.
+\end{itemize}
 
-\vspace*{3mm}
-\hrulefill
+\vspace*{8mm}
 
 Any new discoveries or achievements towards the objectives of your course project?
 
 \vspace*{3mm}
-\hrulefill
+\begin{itemize}
+\item I wouldn't say that this in particular helps for my project, although I might have to try an implementation of something using \textsc{Fenics}, as it seems like quite a convenient tool.
+\end{itemize}
 
-\vspace*{3mm}
-\hrulefill
+\vspace*{8mm}
 
 What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
 
 \vspace*{3mm}
-\hrulefill
+\begin{itemize}
+\item Again, probably no \emph{aha moment}, but it was a good exercise and it was fun to play around with \textsc{Fenics}.
+\end{itemize}
 
-\vspace*{3mm}
-\hrulefill
+\newpage
+\begin{appendices}
+\lhead{}
+\section{}\label{hw9Code}
+\textbf{\Large\code{hw9.py}}
+\includecode{../fenics/hw9.py}
+
+\end{appendices}
 
 \end{document}
