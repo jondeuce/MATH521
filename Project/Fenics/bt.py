@@ -10,33 +10,39 @@ from mshr import *
 import time
 import numpy as np
 
-def create_bt_problem(loadmesh = False, savemesh = True):
+def create_bt_problem(loadmesh = True, savemesh = True):
     if loadmesh:
-        mesh = Mesh('bt/cylinder.xml.gz')
+        mesh = Mesh('bt/geom/cylinder.xml.gz')
     else:
         # Create a geometry and mesh it
         Nx, Ny, Nz = 30, 30, 30
         Lx, Ly, Lz = 3000, 3000, 3000
         meshsize = ((Lx*Ly*Lz)/(Nx*Ny*Nz))**(1.0/3.0) # h ~ ∛(CellVolume)
 
-        vesselrad = 100 # cylindrical vessel radius [um]
+        vesselrad = 250 # cylindrical vessel radius [um]
         vesselcircum = 2*np.pi*vesselrad
-        nslice = 20 # number of edges used to construct cylinder boundary
+        nslice = 32 # number of edges used to construct cylinder boundary
 
         # voxel = BoxMesh(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2), Nx, Ny, Nz)
         voxel = Box(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2))
-        vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2), vesselrad, nslice)
+        vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2), vesselrad, vesselrad, segments = nslice)
         domain = voxel - vessel
 
         mesh = generate_mesh(domain, meshsize)
 
         if savemesh:
-            File('bt/cylinder.xml.gz') << mesh
+            File('bt/geom/cylinder.xml.gz') << mesh
 
     # Define function space
-    # element = VectorElement('P', triangle, 1, dim=2)
+    # element = VectorElement('P', tetrahedron, 1, dim=2)
     # V = FunctionSpace(mesh, element)
-    V = VectorFunctionSpace(mesh, 'P', 1, dim=2)
+    # P1 = FiniteElement('P', tetrahedron, 1)
+    # element = MixedElement([P1, P1])
+    # V = FunctionSpace(mesh, element)
+    # V = VectorFunctionSpace(mesh, 'P', 1, dim=2)
+    P1 = FiniteElement('P', tetrahedron, 1)
+    element = P1 * P1 #vector element
+    V = FunctionSpace(mesh, element)
 
     # Initial condition
     # u0 = Expression(('0.0','1.0'), degree=0)
@@ -44,9 +50,9 @@ def create_bt_problem(loadmesh = False, savemesh = True):
     u0 = Constant((0.0, 1.0)) # π/2-pulse
     u0 = interpolate(u0, V)
 
-    return u0, V
+    return u0, V, mesh
 
-def create_bt_gamma(B0 = -3.0):
+def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
     # ------------------------------------------------------------------------ #
     # Calculate dephasing frequency ω
     # ------------------------------------------------------------------------ #
@@ -69,8 +75,19 @@ def create_bt_gamma(B0 = -3.0):
 
     # Dephasing frequency ω and decay rate R₂ (uniform cylinder):
     #   reference for ω: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2962550/
-    w = Expression("(chi*gamma*B0/6) * ((3.0*x[2]*x[2])/(x[0]*x[0]+x[1]*x[1]+x[2]*x[2]) - 1.0)",
-                    degree = 1, chi = dChi_Blood, gamma = gamma, B0 = B0)
+    theta_rad = (np.pi/180.0)*theta_deg
+    sinsqtheta = np.sin(theta_rad)**2
+    # outside vessel:
+    w = Expression("(0.5*gamma*B0*chi*sinsqtheta) * (a*a) * (x[1]*x[1]-x[0]*x[0]) / pow(x[0]*x[0]+x[1]*x[1],2.0)",
+                    degree = 1, gamma = gamma, B0 = B0, chi = dChi_Blood, sinsqtheta = sinsqtheta, a = a)
+    # inside vessel:
+    # w = Expression("(chi*gamma*B0/6) * ((3.0*x[2]*x[2])/(x[0]*x[0]+x[1]*x[1]+x[2]*x[2]) - 1.0)",
+    #             degree = 1, chi = dChi_Blood, gamma = gamma, B0 = B0)
+
+    # Vw = FunctionSpace(mesh, 'P', 1)
+    # w = interpolate(w, Vw)
+    # print('max(w) = ', w.vector().get_local().max())
+    # print('min(w) = ', w.vector().get_local().min())
 
     # ------------------------------------------------------------------------ #
     # Calculate relaxation rate r
@@ -86,22 +103,27 @@ def create_bt_gamma(B0 = -3.0):
 
     return w, r
 
-def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
-                prnt = True, save = False, foldname = 'bt'):
+def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
+                prnt = True, save = False, foldname = 'bt/tmp'):
     # Create geometry and initial condition
-    u0, V = create_bt_problem()
-    w, r = create_bt_gamma()
+    u0, V, mesh = create_bt_problem()
+    w, r = create_bt_gamma(V, mesh)
 
     # Define the variational problem for the Backward Euler scheme
-    u = TrialFunction(V)
-    u_1, u_2 = split(u)
-    v_1, v_2 = TestFunctions(V)
+    U = TrialFunction(V)
+    v = TestFunction(V)
+    U_1, U_2 = split(U)
+    v_1, v_2 = split(v)
 
     # Bloch-Torrey operator
-    B = (1+r*dt+w*dt)*u_1*v_1*dx + \
-        (1+r*dt-w*dt)*u_2*v_2*dx + \
-        D*dt*dot(grad(u_1),grad(v_1))*dx + \
-        D*dt*dot(grad(u_2),grad(v_2))*dx
+    # B = (1+r*dt+w*dt)*U_1*v_1*dx + \
+    #     (1+r*dt-w*dt)*U_2*v_2*dx + \
+    #     D*dt*dot(grad(U_1),grad(v_1))*dx + \
+    #     D*dt*dot(grad(U_2),grad(v_2))*dx
+    B = (U_1 + r*dt*U_1 - w*dt*U_2)*v_1*dx + \
+        (U_2 + r*dt*U_2 + w*dt*U_1)*v_2*dx + \
+        D*dt*inner(grad(U_1),grad(v_1))*dx + \
+        D*dt*inner(grad(U_2),grad(v_2))*dx
 
     # Export the initial data
     u = Function(V, name='Magnetization')
@@ -110,9 +132,9 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
         # Create VTK files for visualization output and save initial state
         vtkfile_u_1 = File(foldname + '/' + 'u_1.pvd')
         vtkfile_u_2 = File(foldname + '/' + 'u_2.pvd')
-        _u_1, _u_2 = u.split()
-        vtkfile_u_1 << (_u_1, t0)
-        vtkfile_u_2 << (_u_2, t0)
+        u_1, u_2 = u.split()
+        vtkfile_u_1 << (u_1, t0)
+        vtkfile_u_2 << (u_2, t0)
 
     # Time-stepping
     t = t0
@@ -120,24 +142,33 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
     for k in range(tsteps):
         # Current time
         t = t0 + (k+1)*dt
-        if prnt:
-            print('Step = ', k+1, '/', tsteps , 'Time =', t)
 
         # Assemble the right hand side
-        u0_1, u0_2 = u0.split()
-        L = u0_1*v_1*dx + u0_2*v_2*dx
+        u_1, u_2 = u.split()
+        L = u_1*v_1*dx + u_2*v_2*dx
+
+        if prnt:
+            print('Step = ', k+1, '/', tsteps , 'Time =', t)
+            _u_1, _u_2 = u.split(deepcopy=True)
+
+            _u_1, _u_2 = _u_1.vector().get_local(), _u_2.vector().get_local()
+            print('  u_1 range: [', _u_1.min(), ', ', _u_1.max(), ']')
+            print('  u_2 range: [', _u_2.min(), ', ', _u_2.max(), ']')
+
+            _u_magn = np.sqrt(np.square(_u_1) + np.square(_u_2))
+            print('||u|| range: [', np.min(_u_magn), ', ', np.max(_u_magn), ']')
+            print('||u|| mean:   ', np.mean(_u_magn))
 
         # Solve variational problem for time step
-        solve(B == L, u, solver_parameters={"linear_solver": "cg"})
+        solve(B == L, u, solver_parameters={"linear_solver": "bicgstab"})
 
         if save:
-            # Save solution to file (VTK)
-            _u_1, _u_2 = u.split()
-            vtkfile_u_1 << (_u_1, t)
-            vtkfile_u_2 << (_u_2, t)
+            u_1, u_2 = u.split()
+            vtkfile_u_1 << (u_1, t)
+            vtkfile_u_2 << (u_2, t)
 
         # Update previous solution
-        u0.assign(u)
+        # u0.assign(u)
 
         # Update progress bar
         # progress.update(t / T)
@@ -149,5 +180,4 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
 # Solve the Bloch-Torrey equation with linear finite elements, time-stepping
 # using the backward euler method
 # ---------------------------------------------------------------------------- #
-u = bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
-                prnt = True, save = True, foldname = 'bt')
+u = bt_bwdeuler(prnt = True, save = True)
