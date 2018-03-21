@@ -92,9 +92,10 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
     # ------------------------------------------------------------------------ #
     # Calculate relaxation rate r
     # ------------------------------------------------------------------------ #
+    T2_Tissue_Base = 69 # standard value [ms]
     if B0 == -3.0:
         T2_Tissue_Base = 69 # +/- 3 [ms]
-    elif B0 == -7.0:
+    if B0 == -7.0:
         T2_Tissue_Base = 45.9 # +/-1.9 [ms]
 
     R2_Tissue_Base = 1000/T2_Tissue_Base # [ms] -> [Hz]
@@ -103,11 +104,28 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
 
     return w, r
 
-def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
+def print_u(u):
+    # print the magnetization vector u = (u_1, u_2)
+    u_1, u_2 = u.split(deepcopy=True)
+    u_1, u_2 = u_1.vector().get_local(), u_2.vector().get_local()
+    u_magn = np.sqrt(np.square(u_1) + np.square(u_2))
+
+    print('  u_1 range: [', u_1.min(), ', ', u_1.max(), ']')
+    print('  u_2 range: [', u_2.min(), ', ', u_2.max(), ']')
+
+    print('||u|| range: [', np.min(u_magn), ', ', np.max(u_magn), ']')
+    print('||u|| mean:   ', np.mean(u_magn))
+
+    return
+
+def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
                 prnt = True, save = False, foldname = 'bt/tmp'):
+    # Number of timesteps
+    tsteps = int(round(T/dt))
+
     # Create geometry and initial condition
     u0, V, mesh = create_bt_problem()
-    w, r = create_bt_gamma(V, mesh)
+    w, r = create_bt_gamma(V, mesh, B0 = -3.0)
 
     # Define the variational problem for the Backward Euler scheme
     U = TrialFunction(V)
@@ -116,10 +134,6 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
     v_1, v_2 = split(v)
 
     # Bloch-Torrey operator
-    # B = (1+r*dt+w*dt)*U_1*v_1*dx + \
-    #     (1+r*dt-w*dt)*U_2*v_2*dx + \
-    #     D*dt*dot(grad(U_1),grad(v_1))*dx + \
-    #     D*dt*dot(grad(U_2),grad(v_2))*dx
     B = (U_1 + r*dt*U_1 - w*dt*U_2)*v_1*dx + \
         (U_2 + r*dt*U_2 + w*dt*U_1)*v_2*dx + \
         D*dt*inner(grad(U_1),grad(v_1))*dx + \
@@ -128,6 +142,11 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
     # Export the initial data
     u = Function(V, name='Magnetization')
     u.assign(u0)
+
+    if prnt:
+        print('Step = ', 0, '/', tsteps , 'Time =', t0)
+        print_u(u0)
+
     if save:
         # Create VTK files for visualization output and save initial state
         vtkfile_u_1 = File(foldname + '/' + 'u_1.pvd')
@@ -138,7 +157,6 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
 
     # Time-stepping
     t = t0
-    tsteps = int(round(T/dt))
     for k in range(tsteps):
         # Current time
         t = t0 + (k+1)*dt
@@ -147,20 +165,12 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 1e-6,#3037.0,
         u_1, u_2 = u.split()
         L = u_1*v_1*dx + u_2*v_2*dx
 
-        if prnt:
-            print('Step = ', k+1, '/', tsteps , 'Time =', t)
-            _u_1, _u_2 = u.split(deepcopy=True)
-
-            _u_1, _u_2 = _u_1.vector().get_local(), _u_2.vector().get_local()
-            print('  u_1 range: [', _u_1.min(), ', ', _u_1.max(), ']')
-            print('  u_2 range: [', _u_2.min(), ', ', _u_2.max(), ']')
-
-            _u_magn = np.sqrt(np.square(_u_1) + np.square(_u_2))
-            print('||u|| range: [', np.min(_u_magn), ', ', np.max(_u_magn), ']')
-            print('||u|| mean:   ', np.mean(_u_magn))
-
         # Solve variational problem for time step
         solve(B == L, u, solver_parameters={"linear_solver": "bicgstab"})
+
+        if prnt:
+            print('Step = ', k+1, '/', tsteps , 'Time =', t)
+            print_u(u)
 
         if save:
             u_1, u_2 = u.split()
