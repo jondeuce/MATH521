@@ -2,6 +2,7 @@
 ## MATLABTOOLS GITIGNORE ##
 ###########################
 HW9/fenics/heat
+Project/Fenics/bt/tmp
 
 ######################
 ## MATLAB GITIGNORE ##
@@ -75,7 +76,7 @@ Thumbs.db
 ####################
 ## MISC GITIGNORE ##
 ####################
-.vimrc
+#.vimrc
 *.swp
 *~
 *.m.orig
