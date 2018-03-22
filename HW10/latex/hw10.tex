@@ -1,0 +1,142 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 10}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{Question 1 $\vert$ 2 marks $\vert$ \faFilePdfO}
+
+On the assignment page you can find videos of four animated solutions of the parabolic problem
+\begin{equation}\tag{H}\label{eq:heat}
+\begin{aligned}
+\partial_t u(t) - a \Delta u(t) &= f(t) && \text{in } Q = ]0,T[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+\frac{\partial u}{\partial n} &= 0 && \text{on } \Sigma = ]0,T[ \times \partial \Omega
+\end{aligned}
+\end{equation}
+with the data from Assignment 9. However, the initial condition has been replaced with the function
+\begin{equation*}
+u_0(x) =
+\begin{dcases*}
+50 & if $\lvert x - (1,1)^\top \rvert < 0.5$\\
+20 & elsewhere
+\end{dcases*}
+\end{equation*}
+
+Explain your observations.
+
+\newpage
+
+\paragraph*{Question 2 $\vert$ 1 mark $\vert$ \faFilePdfO}
+
+We have seen that the homogeneous wave equation
+\begin{equation}\tag{W}\label{eq:wave}
+\begin{aligned}
+\partial_t^2 u - c^2 \Delta u &= 0 && \text{in } Q = \left] 0,T\right[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+\partial_t u(0) &= v_0 && \text{in } \Omega\\
+u &= 0 && \text{on } \Sigma = ]0,T[ \times \partial \Omega
+\end{aligned}
+\end{equation}
+with propagation speed $c>0$ can equivalently be re-written as
+\begin{equation}\tag{W'}\label{eq:waveSystem}
+\begin{aligned}
+\partial_t u - v &= 0 && \text{in } Q = \left] 0,T\right[ \times \Omega\\
+\partial_t v - c^2 \Delta u &= 0 && \text{in } Q = \left] 0,T\right[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+v(0) &= v_0 && \text{in } \Omega\\
+u &= 0 && \text{on } \Sigma = ]0,T[ \times \partial \Omega\\
+v &= 0 && \text{on } \Sigma = ]0,T[ \times \partial \Omega.
+\end{aligned}
+\end{equation}
+Discretising with the $\theta$-method in time and linear finite elements in space leads to the coupled system for the vectors of nodal values $\vec{u}^h_+$ and $\vec{v}^h_+$
+\begin{align*}
+M^h \vec{u}^h_+ - \theta \Delta t M^h \vec{v}^h_+ &= M^h \vec{u}^h_\circ + (1-\theta) \Delta t M^h\vec{v}^h_\circ\\
+\theta \Delta t c^2 K^h \vec{u}^h_+ + M^h \vec{v}^h_+ &= -(1-\theta) \Delta t c^2 K^h \vec{u}^h_\circ + M^h \vec{v}^h_\circ
+\end{align*}
+which has to be solved at every time step. Show that this is equivalent to the two smaller, successively solvable problems
+\begin{align*}
+\left(M^h + \left(\theta \Delta t c\right)^2 K^h\right) \vec{u}^h_+ &= M^h \left( \vec{u}^h_\circ + \Delta t \vec{v}^h_\circ\right) - \left( \theta\left(1-\theta\right) \left(\Delta t c\right)^2 \right)K^h \vec{u}^h_\circ\\
+M^h \vec{v}^h_+ &= M^h \vec{v}^h_\circ - \Delta t c^2 K^h \left( \theta \vec{u}^h_+ + \left(1-\theta\right) \vec{u}^h_\circ\right).
+\end{align*}
+
+\newpage
+
+\paragraph*{Question 3 $\vert$ 2 marks}
+
+\begin{enumerate}[(a)]
+\item \faFileCodeO \: Download and complete the \textsf{FEniCS} script \texttt{hw10.py} to solve Problem \eqref{eq:wave} with the data provided.
+\item \faFilePdfO \: \faFilePictureO \:  Solve the wave equation
+\begin{itemize}
+\item with the (symplectic) implicit midpoint rule
+\item with the backward \textsc{Euler} method
+\item with the forward \textsc{Euler} method
+\end{itemize}
+and look at the solutions in \textsf{ParaView}.
+
+\emph{Hint:} Use the `Warp by Scalar' filter, re-scale the colour map to the range $[-1,1]$ and tick the box 'enable opacity mapping for surfaces' in the colour map editor.
+
+For each of the three time stepping schemes, create a graph with curves of the total energy $E(u(t),v(t)) = T(v(t)) + V(u(t))$, the kinetic energy $T(v(t)) = \frac{1}{2}\lVert v(t) \rVert_{L^2}^2$ and the potential energy $V(u(t)) = \frac{c^2}{2}\lVert \nabla u(t) \rVert_{L^2}^2$ as functions of time. Please submit these plots and interpret the results:
+\vfill 
+\end{enumerate}
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}
