@@ -40,6 +40,7 @@ w = TrialFunction(V) # w = u in the 1st equation and w = v in the 2nd equation
 z = TestFunction(V)
 B1 = ??? # LHS of the 1st equation
 B2 = ??? # LHS of the 2nd equation
+# B = (u*v + theta*dt*a*dot(grad(u), grad(v)))*dx
 
 # Set initial data
 u = Function(V, name='Displacement')
@@ -66,10 +67,10 @@ for k in range(tsteps):
     t = t0 + (k+1)*dt
     print('Step = ', k+1, '/', tsteps , 'Time =', t)
 
-    # System for the displacement 
+    # System for the displacement
     L1 = ???
     solve(B1 == L1, u, bc)
-    
+
     # System for the velocity
     L2 = ???
     solve(B2 == L2, v, bc)

@@ -143,8 +143,8 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
     # Bloch-Torrey operator
     B = (U_1 + r*dt*U_1 - w*dt*U_2)*v_1*dx + \
         (U_2 + r*dt*U_2 + w*dt*U_1)*v_2*dx + \
-        D*dt*inner(grad(U_1),grad(v_1))*dx + \
-        D*dt*inner(grad(U_2),grad(v_2))*dx
+        D*dt*dot(grad(U_1),grad(v_1))*dx + \
+        D*dt*dot(grad(U_2),grad(v_2))*dx
 
     # Export the initial data
     u = Function(V, name='Magnetization')
