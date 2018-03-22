@@ -9,29 +9,36 @@ from fenics import *
 from mshr import *
 import time
 import numpy as np
+import os.path
 
 def create_bt_problem(loadmesh = True, savemesh = True):
-    if loadmesh:
-        mesh = Mesh('bt/geom/cylinder.xml.gz')
+    # parameters which don't change
+    L = 3000 # voxel width [um]
+    vesselrad = 250 # major vessel radius [um]
+    vesselcircum = 2*np.pi*vesselrad
+
+    # mesh filename
+    N = 100 # approximate number of cells along box edge (mesh resolution)
+    nslice = 32 # number of edges used to construct cylinder boundary
+    mesh_fname = 'bt/geom/cylinder_N' + str(N) + '_ns' + str(nslice) + '.xml.gz'
+
+    if loadmesh and os.path.isfile(mesh_fname):
+        mesh = Mesh(mesh_fname)
     else:
         # Create a geometry and mesh it
-        Nx, Ny, Nz = 30, 30, 30
-        Lx, Ly, Lz = 3000, 3000, 3000
-        meshsize = ((Lx*Ly*Lz)/(Nx*Ny*Nz))**(1.0/3.0) # h ~ ∛(CellVolume)
+        Nx, Ny, Nz = N, N, N
+        Lx, Ly, Lz = L, L, L
 
-        vesselrad = 250 # cylindrical vessel radius [um]
-        vesselcircum = 2*np.pi*vesselrad
-        nslice = 32 # number of edges used to construct cylinder boundary
-
-        # voxel = BoxMesh(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2), Nx, Ny, Nz)
+        # cylindrical vessel radius [um]
         voxel = Box(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2))
         vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2), vesselrad, vesselrad, segments = nslice)
         domain = voxel - vessel
 
-        mesh = generate_mesh(domain, meshsize)
+        mesh_res = N
+        mesh = generate_mesh(domain, mesh_res)
 
         if savemesh:
-            File('bt/geom/cylinder.xml.gz') << mesh
+            File(mesh_fname) << mesh
 
     # Define function space
     # element = VectorElement('P', tetrahedron, 1, dim=2)
@@ -118,7 +125,7 @@ def print_u(u):
 
     return
 
-def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 5e-4, D = 3037.0,
+def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
                 prnt = True, save = False, foldname = 'bt/tmp'):
     # Number of timesteps
     tsteps = int(round(T/dt))
