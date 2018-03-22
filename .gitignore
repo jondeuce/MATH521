@@ -1,6 +1,7 @@
 ###########################
 ## MATLABTOOLS GITIGNORE ##
 ###########################
+**.vtu
 HW9/fenics/heat
 Project/Fenics/bt/tmp
 
@@ -9,27 +10,16 @@ Project/Fenics/bt/tmp
 ######################
 
 # Windows default autosave extension
-*.asv
+**.asv
 
 # OSX / *nix default autosave extension
-*.m~
+**.m~
 
 # Compiled MEX binaries (all platforms)
-*.mex*
-
-# Packaged app and toolbox files 
-*.mlappinstall 
-*.mltbx 
-  
-# Generated helpsearch folders 
-helpsearch*/ 
-
-# Simulink code generation folders
-slprj/
-sccprj/
+**.mex*
 
 # Simulink autosave extension
-*.autosave
+#**.autosave
 
 #######################
 ## GENERAL GITIGNORE ##
@@ -37,12 +27,12 @@ sccprj/
 
 # Compiled source #
 ###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
+#**.com
+#**.class
+#**.dll
+#**.exe
+#**.o
+#**.so
 
 # Packages #
 ############
@@ -59,24 +49,24 @@ sccprj/
 
 # Logs and databases #
 ######################
-*.log
-*.sql
-*.sqlite
+#*.log
+#*.sql
+#*.sqlite
 
 # OS generated files #
 ######################
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+#.DS_Store
+#.DS_Store?
+#._*
+#.Spotlight-V100
+#.Trashes
+#ehthumbs.db
+#Thumbs.db
 
 ####################
 ## MISC GITIGNORE ##
 ####################
 #.vimrc
-*.swp
-*~
-*.m.orig
+#*.swp
+#**~
+#**.m.orig

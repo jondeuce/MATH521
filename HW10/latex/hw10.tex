@@ -1,18 +1,21 @@
-\documentclass[10pt,letterpaper]{scrartcl}
-\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\include{preamble}
+
+%\documentclass[10pt,letterpaper]{scrartcl}
+%\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,enumerate,graphicx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
-\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+%\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usetikzlibrary{arrows}
-\pgfplotsset{compat=1.12}
+%\pgfplotsset{compat=1.12}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
 
-\newcommand{\dx}{\;\mathrm{d}x}
+%\newcommand{\dx}{\;\mathrm{d}x}
 
 \begin{document}
 
@@ -35,9 +38,9 @@ Timm Treskatis
 
 \section*{Homework Assignment 10}
 
-Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+Please submit the following files as indicated below: %\hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
 
-\paragraph*{Question 1 $\vert$ 2 marks $\vert$ \faFilePdfO}
+\paragraph*{Question 1 $\vert$ 2 marks}% $\vert$ \faFilePdfO}
 
 On the assignment page you can find videos of four animated solutions of the parabolic problem
 \begin{equation}\tag{H}\label{eq:heat}
@@ -58,9 +61,29 @@ u_0(x) =
 
 Explain your observations.
 
+% ------------------------------------------------------------ %
+% Q1: Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
+First, we note that since our initial condition in Assignment 9 was $u_0 = 20$ in $\Omega$, the only change in the initial condition is that now $u_0 = 20$ throughout $\Omega$, except for those points contained in the region $\lvert x - (1,1)^\top \rvert < 0.5$ wherein $u_0 = 50$.
+
+Now, some initial observations:
+\begin{itemize}
+\item Our initial data has a discontinuous ``hot spot'' in the north-eastern corner of the domain.
+\item The forcing term applies gaussianly distributed heat centred about the south-western corner of the domain for the first second of the five second simulation.
+\item The heat equation will smooth out the discontinuity immediately in the continuous case due to the sharp discontinuity containing high frequency eigenmodes which are damped exponentially fast.
+Ideal numerical schemes should mimic this effect.
+\item Failure of the numerical scheme in handling the discontinuity effectively will likely lead to ringing of the solution, possible with extreme ``wiggles''.
+\end{itemize}
+
+\TODO{Interpret wiggles vs. methods}
+
+\end{solution}
+
 \newpage
 
-\paragraph*{Question 2 $\vert$ 1 mark $\vert$ \faFilePdfO}
+\paragraph*{Question 2 $\vert$ 1 mark}% $\vert$ \faFilePdfO}
 
 We have seen that the homogeneous wave equation
 \begin{equation}\tag{W}\label{eq:wave}
@@ -93,13 +116,43 @@ which has to be solved at every time step. Show that this is equivalent to the t
 M^h \vec{v}^h_+ &= M^h \vec{v}^h_\circ - \Delta t c^2 K^h \left( \theta \vec{u}^h_+ + \left(1-\theta\right) \vec{u}^h_\circ\right).
 \end{align*}
 
+
+% ------------------------------------------------------------ %
+% Q1: Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
+If we multiply the second equation of the coupled system by $\theta \Delta t$ and add it to the first equation of the coupled system and simply, we get
+\begin{align}\label{eqn:uncoupled1}
+\left(M^h + \left(\theta \Delta t c\right)^2 K^h\right) \vec{u}^h_+
+&= M^h \left( \vec{u}^h_\circ + \Delta t \vec{v}^h_\circ\right) +
+\left( \theta^2 \left(\Delta t c\right)^2  - \theta \left(\Delta t c\right)^2 \right)K^h \vec{u}^h_\circ\nonumber\\
+&= M^h \left( \vec{u}^h_\circ + \Delta t \vec{v}^h_\circ\right) - \left( \theta\left(1-\theta\right) \left(\Delta t c\right)^2 \right)K^h \vec{u}^h_\circ,
+\end{align}
+which is the first desired equation of the new uncoupled system.
+
+Now, if we simply subtract $\theta \Delta t c^2 K^h \vec{u}^h_+$ from both sides of the second equation of the coupled system and simply, we get 
+\begin{align}\label{eqn:uncoupled2}
+M^h \vec{v}^h_+
+&= M^h \vec{v}^h_\circ + \left( \Delta t c^2 K^h \theta - \Delta t c^2 K^h \right) \vec{u}^h_\circ -
+\left( \theta \Delta t c^2 K^h \right) \vec{u}^h_+ \nonumber \\
+&= M^h \vec{v}^h_\circ - 
+\Delta t c^2 K^h \left( \theta \vec{u}^h_+ + (1-\theta) \vec{u}^h_\circ \right),
+\end{align}
+which is the second desired equation of the new uncoupled system.
+
+\end{solution}
+
+
 \newpage
 
 \paragraph*{Question 3 $\vert$ 2 marks}
 
 \begin{enumerate}[(a)]
-\item \faFileCodeO \: Download and complete the \textsf{FEniCS} script \texttt{hw10.py} to solve Problem \eqref{eq:wave} with the data provided.
-\item \faFilePdfO \: \faFilePictureO \:  Solve the wave equation
+\item %\faFileCodeO \:
+Download and complete the \textsf{FEniCS} script \texttt{hw10.py} to solve Problem \eqref{eq:wave} with the data provided.
+\item %\faFilePdfO \: \faFilePictureO \:
+Solve the wave equation
 \begin{itemize}
 \item with the (symplectic) implicit midpoint rule
 \item with the backward \textsc{Euler} method
@@ -110,10 +163,18 @@ and look at the solutions in \textsf{ParaView}.
 \emph{Hint:} Use the `Warp by Scalar' filter, re-scale the colour map to the range $[-1,1]$ and tick the box 'enable opacity mapping for surfaces' in the colour map editor.
 
 For each of the three time stepping schemes, create a graph with curves of the total energy $E(u(t),v(t)) = T(v(t)) + V(u(t))$, the kinetic energy $T(v(t)) = \frac{1}{2}\lVert v(t) \rVert_{L^2}^2$ and the potential energy $V(u(t)) = \frac{c^2}{2}\lVert \nabla u(t) \rVert_{L^2}^2$ as functions of time. Please submit these plots and interpret the results:
-\vfill 
 \end{enumerate}
 
-\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+% ------------------------------------------------------------ %
+% Q1: Solution
+% ------------------------------------------------------------ %
+\vspace{0.5cm}
+\begin{solution}
+\TODO{SUBMIT plots/data, and interpret plots}
+\end{solution}
+
+\vfill
+\paragraph*{Your Learning Progress}% $\vert$ \faFilePdfO}
 
 What is the one most important thing that you have learnt from this assignment?
 

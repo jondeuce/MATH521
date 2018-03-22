@@ -27,38 +27,42 @@ t0 = 0. # initial time
 T = 5. # final time
 t = t0 # current time
 c = Constant(1.) # propagation speed
+c2 = c**2 # square speed, for convenience
 u0 = interpolate(Expression('pow(x[0],2)+pow(x[1],2) < 1./16. ? pow(1.-16.*(pow(x[0],2)+pow(x[1],2)),2) : 0.', degree=1), V) # initial displacement
 v0 = interpolate(Constant(0.), V) # initial velocity
 
 # Parameters of the time-stepping scheme
 tsteps = 500 # number of time steps
 dt = T/tsteps # time step size
-theta = Constant(1.) # degree of implicitness
+dt2 = dt**2 # square time step, for convenience
+THETA = 0.5 # floating point variable
+theta = Constant(THETA) # degree of implicitness (fenics constant object)
 
 # Define the variational problem
 w = TrialFunction(V) # w = u in the 1st equation and w = v in the 2nd equation
 z = TestFunction(V)
-B1 = ??? # LHS of the 1st equation
-B2 = ??? # LHS of the 2nd equation
-# B = (u*v + theta*dt*a*dot(grad(u), grad(v)))*dx
+B1 = (w*z + (theta*dt*c)**2 * dot(grad(w),grad(z)))*dx # LHS of the 1st equation
+B2 = w*z*dx # LHS of the 2nd equation
 
 # Set initial data
 u = Function(V, name='Displacement')
 v = Function(V, name='Velocity')
 u.assign(u0)
 v.assign(v0)
-T = assemble(???)
-V = assemble(???)
-E = ???
+T = assemble(0.5*v*v*dx)
+V = assemble(0.5*c2*dot(grad(u),grad(u))*dx)
+E = T + V
 
 # Write initial data to file
-displacement = File('wave/be.pvd')
+foldname = 'cn'
+displacement = File('wave/' + foldname + '/u.pvd')
 displacement << (u, t)
-energy = csv.writer(open('wave/energy.csv', 'w'))
+energy = csv.writer(open('wave/' + foldname + '/energy.csv', 'w'))
 energy.writerow([t] + [E] + [T] + [V])
 # Import in Octave / MATLAB with command
 #   A = csvread('wave/energy.csv');
-# Or, if your FEniCS installation has graphics output enabled, you could also plot directly from this file using Python commands
+# Or, if your FEniCS installation has graphics output enabled, you could also
+# plot directly from this file using Python commands
 
 # Time stepping
 for k in range(tsteps):
@@ -68,17 +72,23 @@ for k in range(tsteps):
     print('Step = ', k+1, '/', tsteps , 'Time =', t)
 
     # System for the displacement
-    L1 = ???
+    L1 = (u0+dt*v0)*z*dx
+    if THETA > 0.0 and THETA < 1.0:
+        L1 -= theta*(1.0-theta)*dt2*c2 * dot(grad(u0),grad(z))*dx
     solve(B1 == L1, u, bc)
 
     # System for the velocity
-    L2 = ???
+    L2 = v0*z*dx
+    if THETA > 0.0:
+        L2 -= theta*dt*c2 * dot(grad(u),grad(z))*dx
+    if THETA < 1.0:
+        L2 -= (1.0-theta)*dt*c2 * dot(grad(u0),grad(z))*dx
     solve(B2 == L2, v, bc)
 
     # Compute energy
-    T = ???
-    V = ???
-    E = ???
+    T = assemble(0.5*v*v*dx)
+    V = assemble(0.5*c2*dot(grad(u),grad(u))*dx)
+    E = T + V
 
     # Write data to file
     displacement << (u, t)
