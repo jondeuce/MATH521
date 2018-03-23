@@ -74,10 +74,37 @@ Now, some initial observations:
 \item The forcing term applies gaussianly distributed heat centred about the south-western corner of the domain for the first second of the five second simulation.
 \item The heat equation will smooth out the discontinuity immediately in the continuous case due to the sharp discontinuity containing high frequency eigenmodes which are damped exponentially fast.
 Ideal numerical schemes should mimic this effect.
-\item Failure of the numerical scheme in handling the discontinuity effectively will likely lead to ringing of the solution, possible with extreme ``wiggles''.
+\item Failure of the numerical scheme in handling the discontinuity effectively will likely lead to ringing of the solution, possibly with extreme ``wiggles'' and other effects due to instabilities.
 \end{itemize}
 
-\TODO{Interpret wiggles vs. methods}
+And, additionally, some notes on the three methods used for solving the wave equation:
+\begin{itemize}
+\item The Crank-Nicolson method is only A-stable, and not strictly or strongly A-stable. In fact, in the limit as the frequency of the eigenmode goes to infinity, the eigenmode is not damped at all.
+\item The backward Euler method is strongly A-stable, and in fact L-stable. This means that high frequency modes are damped immediately.
+\item The $\theta$-method is strongly A-stable for $\theta > 1/2$. Like the backward Euler method, this means that high frequency modes will be exponentially damped, though since the $\theta$-method is not L-stable, they likely will not be damped as quickly.
+\end{itemize}
+
+\newpage
+\paragraph*{Crank-Nicolson (\textsc{cn-50.webm}): $h=1/50$}
+In finite elements simulations using linear finite elements, discontinuities cannot be represented exactly, and in particular discontinous functions will be approximated by continuous piecewise linear functions.
+If the step size $h$ is large enough, the discontinuity will actually not be all that discontinuous in the discrete approximation.
+As can be seen from the video, the high-frequency modes of the initial condition which theoretically should not be smoothed out my the Crank-Nicolson method do manage to smooth out as time moves on.
+This is likely due to the relative large spatial resolution.
+It should be noted, however, that this process does not at all happen quickly, and there is noticeable numerical ringing around the ``discontinuity''.
+
+\paragraph*{Crank-Nicolson (\textsc{cn-200.webm}): $h=1/200$}
+In contrast with the Crank-Nicolson solution with $h=1/50$ above, here the discontinuous initial is indeed approximated well enough to show large amounts of ringing and instability near the region of discontinuity.
+The discontinuity is in fact never smoothed out, as would be expected for the Crank-Nicolson method with discontinuous initial data.
+
+\paragraph*{Backward Euler (\textsc{be-200.webm}): $h=1/200$}
+The backward Euler method, being L-stable, immediately damps out the discontinuity in the initial condition.
+The solution smooths out quickly and uniformly, and remains as such throughout the simulation.
+In fact, the disconinuity appears to be smoothed out on the very first frame, as far as I can tell, and this should be expected for an L-stable method.
+
+\paragraph*{The $\theta$-Method (\textsc{th-200.webm}): $\theta = 0.55,\,h=1/200$}
+The $\theta$-method is strongly A-stable, and so the high-frequency discontinuity is damped out exponentially fast at the beginning of the simulation, and the temperature distribution is smooth throughout the domain.
+As expected, however, the rate at which the damping occurs is slower than that of the backward Euler method, in which the smoothing occurs effectively immediately.
+
 
 \end{solution}
 
@@ -166,11 +193,38 @@ For each of the three time stepping schemes, create a graph with curves of the t
 \end{enumerate}
 
 % ------------------------------------------------------------ %
-% Q1: Solution
+% Q3: Solution
 % ------------------------------------------------------------ %
 \vspace{0.5cm}
 \begin{solution}
-\TODO{SUBMIT plots/data, and interpret plots}
+See Appendix~\ref{q3figures} for the figures.
+
+\paragraph*{Implicit Midpoint Rule}
+As hinted at in the question, the implicit midpoint rule is a symplectic integrator for the wave equation.
+This means that, to numerical precision, the conserved quantity of interest for the wave equation (the energy, as we have defined it) is conserved for each time step.
+Indeed, we see that the total energy is conserved to within numerical precision, and it appears that the potential and kinetic energies in Figure~\ref{fig:cn} obey a sort of pseudo-periodic pattern, as might be expected given the initial condition.
+
+\paragraph*{Backward \textsc{Euler} Method}
+The backward Euler method is strongly A-stable.
+However, the backward Euler method is dissipative - eigenmodes corresponding to imaginary eigenvalues are damped exponentially in time.
+Since the wave equation has imaginary eigenvalues, we expect to see damping of the solution in time.
+Indeed, all three of the total energy, potential energy, and kinetic energy are exponentially damped in Figure~\ref{fig:be}.
+
+\paragraph*{Forward \textsc{Euler} Method}
+%The forward Euler method is not A-stable; for iterates to remain bounded, time steps must be suitable small.
+%For solving the homogenous wave equation with the forward Euler method, the CFL stability restriction states that we must have $c \Delta t \leq h$, and if this is not the case the solution will not be stable; this condition stems from the fact that the region of stability of the forward Euler method does not include the whole left half complex plane.
+%
+%In our simulation, we have $h \approx 1/50$ and $\Delta t = 1/100$, and so the CFL condition is approximately satisfied.
+%However, the CFL condition is necessary but not sufficient for stability, and it is still possible to see instability.
+%As can be seen from Figure~\ref{fig:fe}, the solution does indeed grow in magnitude unboundedly; all three of the total energy, potential energy, and kinetic energy grow exponentially fast with time.
+
+The forward Euler method is not A-stable.
+In general, for iterates to remain bounded, time steps must be suitable small due to the fact that the region of stability of the forward Euler method does not include the whole left half complex plane.
+In particular, we must have that (from Example 3.2.5 in the notes): $$\Delta t \leq -2 \frac{\Re\lambda}{\abs{\lambda}^2}.$$
+
+For the homogenous wave equation which has imaginary eigenvalues, this means that no positive time step can result in stable iterations: the forward Euler method is an unconditionally unstable time-stepping method.
+As can be seen from Figure~\ref{fig:fe}, the solution does indeed grow unstably and it's magnitude grows unboundedly; all three of the total energy, potential energy, and kinetic energy grow exponentially fast with time.
+
 \end{solution}
 
 \vfill
@@ -179,25 +233,73 @@ For each of the three time stepping schemes, create a graph with curves of the t
 What is the one most important thing that you have learnt from this assignment?
 
 \vspace*{3mm}
-\hrulefill
+I'd say there were a fair number of important things; I think the splitting trick from the first question is extremely useful in practice for obtain speedups of large system solves.
+Additionally, gaining more insight into the benefits/detriments of different integration methods is extremely valuable.
+%\hrulefill
 
-\vspace*{3mm}
-\hrulefill
+\vspace*{8mm}
+%\hrulefill
 
 Any new discoveries or achievements towards the objectives of your course project?
 
 \vspace*{3mm}
-\hrulefill
+Yes, I have been using \texttt{Fenics} for my project now and I find these assignments great practice.
+I find myself stealing small snippets of code from these assignments to use in my project!
+%\hrulefill
 
-\vspace*{3mm}
-\hrulefill
+\vspace*{8mm}
+%\hrulefill
 
 What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
 
 \vspace*{3mm}
-\hrulefill
+This is a tough one. I don't think there was one particular thing, but it really all starting to fall into place.
+Love me some numerical analysis exercises, and finite element methods are some of the most interesting!
+%\hrulefill
 
 \vspace*{3mm}
-\hrulefill
+%\hrulefill
+
+\newpage
+\begin{appendices}
+% ------------------------------------------------------------ %
+% Appendix 1: Figures
+% ------------------------------------------------------------ %
+\lhead{}
+\section{}\label{q3figures}
+
+{\centering
+\null\vfill
+\includegraphics[width=6in, height=4in]{../fenics/cn.pdf}
+\captionof{figure}{Plots of the total energy, kinetic energy, and potential energy obtained when solving the homogenous wave equation using the implicit midpoint rule.
+Note the conservation of energy throughout time.\label{fig:cn}}
+\vfill
+\newpage
+\includegraphics[width=6in, height=4in]{../fenics/be.pdf}
+\captionof{figure}{Plots of the total energy, kinetic energy, and potential energy obtained when solving the homogenous wave equation using the backward Euler method.
+Note the exponential decay of the total energy throughout time.\label{fig:be}}
+\vfill
+\newpage
+\includegraphics[width=6in, height=4in]{../fenics/fe.pdf}
+\captionof{figure}{Plots of the total energy, kinetic energy, and potential energy obtained when solving the homogenous wave equation using the forward Euler method.
+Note the exponential blowup of the solution due to the instability of the method.\label{fig:fe}}
+\vfill\null
+}
+
+% ------------------------------------------------------------ %
+% Appendix 2: Code
+% ------------------------------------------------------------ %
+\newpage
+\lhead{}
+\section{}\label{hw10Code}
+\textbf{\Large\code{hw10.py}}
+\includecode{../fenics/hw10.py}
+
+\newpage
+\textbf{\Large\code{energyplots.m}}
+\includecode{../fenics/energyplots.m}
+
+\end{appendices}
+
 
 \end{document}
