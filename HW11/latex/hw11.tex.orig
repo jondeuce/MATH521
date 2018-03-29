@@ -1,0 +1,136 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 11}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+Even though the lion share of the computational expense when solving a PDE is the solution of the discrete linear system $Ax=b$, we have never spent a lot of thought on how to solve these systems. So far, we have simply used some high-level commands like the backslash in \textsf{GNU Octave} / \textsf{MATLAB} and \texttt{solve} in \textsf{FEniCS}. These commands would first run some initial tests to try and detect certain structure in the matrix, and then they choose a suitable method.
+
+This can be done more efficiently. Since we already have a lot of knowledge about properties of the matrix $A$, we can select the best possible solver ourselves so that no additional testing is necessary at runtime.
+
+Therefore, you will now learn about numerical methods for solving linear systems that stem from discretisations of PDEs. To choose a method that is (i) guaranteed to converge and (ii) as efficient as possible, you will have to use all your knowledge about the matrix $A$.
+
+Question 1 considers \emph{direct solvers}, which are useful for linear systems of moderate size, e.g. discretised 1D or 2D PDEs. Question 2 deals with \emph{iterative solvers}, which are needed for very large systems, e.g. from 3D PDE problems.
+
+\paragraph*{Question 1 $\vert$ 2 marks $\vert$ \faFileCodeO{} \: \faFilePdfO}
+
+Read about LU factorisation (aka Gaussian elimination) and \textsc{Cholesky} factorisation.
+\begin{enumerate}[(a)]
+\item Which of these direct solvers is most appropriate for solving the two linear systems
+\begin{subequations}\label{eq:wave}
+\begin{align}
+\left(M^h + \left(\theta \Delta t c\right)^2 K^h\right) \vec{u}^h_+ &= M^h \left( \vec{u}^h_\circ + \Delta t \vec{v}^h_\circ\right) - \left( \theta\left(1-\theta\right) \left(\Delta t c\right)^2 \right)K^h \vec{u}^h_\circ\label{eq:wave-displacement}\\
+M^h \vec{v}^h_+ &= M^h \vec{v}^h_\circ - \Delta t c^2 K^h \left( \theta \vec{u}^h_+ + \left(1-\theta\right) \vec{u}^h_\circ\right)\label{eq:wave-velocity}
+\end{align}
+\end{subequations}
+in the finite-element discretisation of the wave equation (cf Assignment 10) and why?
+
+\vfill
+
+\item Make a copy of \texttt{hw10.py} (you may use the program from the model answers). The new script should integrate the wave equation as in Assignment 10, but it should solve the linear systems with the method you selected in part (a).
+
+\emph{Hint:} You can find some useful \textsf{FEniCS} commands on the enclosed cheat sheet. Create a solver object for \eqref{eq:wave-displacement} and another solver object for \eqref{eq:wave-velocity}. Your code should run approximately three times faster than in Assignment 10.
+\end{enumerate}
+
+\paragraph*{Question 2 $\vert$ 3 marks $\vert$ \faFileCodeO{} \: \faFilePdfO}
+
+There are two main classes of iterative solvers: \textsc{Krylov} subspace methods and multigrid methods. We will look at \textsc{Krylov} subspace methods here.
+
+Read about the conjugate gradient method (CG), the minimal residual method (MINRES) and the generalised minimal residual method (GMRES).
+
+\begin{enumerate}[(a)]
+\item Which of these iterative solvers is most appropriate for the linear systems in \eqref{eq:wave} and why?
+
+\vfill
+
+\item Modify your \textsf{FEniCS} script from Question 1 to now solve the linear systems with the iterative method you selected in part (a).
+
+\emph{Hint:} Comment out the lines where you defined the direct solver objects. Create two iterative solver objects instead.
+
+\item Iterative methods typically converge significantly faster if they are applied to a preconditioned problem: instead of
+\begin{equation}\label{eq:not-preconditioned}
+Ax=b,
+\end{equation}
+one solves the mathematically equivalent, but numerically advantageous problem
+\begin{equation}\label{eq:preconditioned}
+P^{-1}Ax = P^{-1} b.
+\end{equation}
+The invertible matrix $P$, the so-called preconditioner, should on the one hand approximate $A$ as closely as possible, but on the other hand it should be easier to invert than $A$. Such preconditioners are designed based on the specific properties of the linear system or the original PDE.
+
+Note that if $P \approx A$, then $P^{-1}A \approx \operatorname{id}$. This is what makes \eqref{eq:preconditioned} more amenable to iterative solvers than \eqref{eq:not-preconditioned}. 
+
+Read about diagonal aka \textsc{Jacobi} preconditioning and incomplete \textsc{Cholesky} factorisation. Can you think of an even better preconditioner specifically for the mass matrix $M^h$ than these two generic preconditioners?
+
+\vfill
+\end{enumerate}
+
+\paragraph*{Your Oral Presentation}
+
+You can find a worksheet attached to the presentation assignment on \textsf{Canvas} which you may want to use to prepare for your talk. Also familiarise yourself with the marking criteria which can be found on the same page to make sure you will cover everything that is needed.
+
+You do not necessarily have to include final results in your talk. If you already have results to share, this is only to your advantage as it allows me to give you some feedback before you submit your written work where they will be graded.
+
+Come up with an interesting title and write a succinct mini-abstract of at most three short sentences. This will also be made available to the public and should thus assume no specialised knowledge, but arouse interest for your talk. Please use the presentation assignment on \textsf{Canvas} to submit your title and your mini-abstract.
+
+\newpage
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}
