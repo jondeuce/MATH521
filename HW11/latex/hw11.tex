@@ -1,11 +1,10 @@
 \include{preamble}
 
 %\documentclass[10pt,letterpaper]{scrartcl}
-%\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
-\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,enumerate,graphicx}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
-%\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usetikzlibrary{arrows}
@@ -67,9 +66,9 @@ in the finite-element discretisation of the wave equation (cf Assignment 10) and
 \vspace{0.25cm}
 \begin{solution}
 
-LU factorisation is a general matrix factorisation algorithm which works for any matrix $A$. \textsc{Cholesky} factorisation is a special case of LU factorisation for the case of symmetric positive definite matrices $A$, and is approximately twice as efficient.
+LU factorisation is a general matrix factorisation algorithm which works for any matrix $A$. \textsc{Cholesky} factorisation is a special case of LU factorisation for the case of symmetric positive definite matrices $A$, factorising $A$ into $LL^T$ instead of the more general $LU$, and is approximately twice as efficient when applicable.
 
-The matrices $M^h$ and $K^h$ are both sparse, symmetric, positive definite matrices when arising from the discretisation of the homogenous wave equation. Then, the matrix $M^h + \left(\theta \Delta t c\right)^2 K^h$ is also symmetric positive definite, and so the matrix inversion in both equations~\ref{eq:wave-displacement} and~\ref{eq:wave-velocity} can be computed using the more efficient \textsc{Cholesky} factorisation.
+The matrices $M^h$ and $K^h$ are both sparse, symmetric, positive definite matrices when they arise from the discretisation of the homogeneous wave equation. Then, the matrix $M^h + \left(\theta \Delta t c\right)^2 K^h$ is also symmetric positive definite, and so the matrix inversion in both equations~\ref{eq:wave-displacement} and~\ref{eq:wave-velocity} can be computed using the more efficient \underline{\textsc{Cholesky} factorisation method}.
 
 \end{solution}
 
@@ -82,7 +81,7 @@ The matrices $M^h$ and $K^h$ are both sparse, symmetric, positive definite matri
 % ------------------------------------------------------------ %
 \vspace{0.25cm}
 \begin{solution}
-\TODO{see attached code}
+See Appendix~\ref{hw11Code} for the modified \texttt{hw10.py} code.
 \end{solution}
 
 \end{enumerate}
@@ -104,15 +103,16 @@ Read about the conjugate gradient method (CG), the minimal residual method (MINR
 \begin{solution}
 The basic requirements of the listed \textsc{Krylov} subspace solvers are:
 \begin{itemize}
-\item \textsc{CG:} symmetric, positive definite matrix
-\item \textsc{MINRES:} symmetric matrix
-\item \textsc{GMRES:} no requirements; solver is fully generic
+\item \textsc{CG:} matrix must be symmetric positive definite
+\item \textsc{MINRES:} matrix must be symmetric
+\item \textsc{GMRES:} no requirements on the matrix; solver is fully generic
 \end{itemize}
 These methods are, naturally, also listed in decreasing order of efficiency. 
 
 Now, since the matrices $M^h$ and $K^h$ are both symmetric positive definite matrices, and therefore so is the sum $M^h + \left(\theta \Delta t c\right)^2 K^h$, the matrix inversion in both equations~\ref{eq:wave-displacement} and~\ref{eq:wave-velocity} should be solved using the \underline{conjugate gradient method}.
 \end{solution}
 
+\vspace{0.25cm}
 \item Modify your \textsf{FEniCS} script from Question 1 to now solve the linear systems with the iterative method you selected in part (a).
 
 \emph{Hint:} Comment out the lines where you defined the direct solver objects. Create two iterative solver objects instead.
@@ -122,9 +122,15 @@ Now, since the matrices $M^h$ and $K^h$ are both symmetric positive definite mat
 % ------------------------------------------------------------ %
 \vspace{0.25cm}
 \begin{solution}
-\TODO{see attached code}
+See Appendix~\ref{hw11Code} for the modified \texttt{hw10.py} code.
+
+Interestingly, when using the iterative solver, although the forward Euler solution diverges at the same time as for the direct solver, \textsc{Fenics} throws an error instead of continuing to propagate the infinity/NaN values.
+
+In my opinion, this actually seems like an advantage, as it prevents your solution from diverging silently.
+The direct solver method returned a solution without complaining, which depending on how the solution is used next, could be problematic.
 \end{solution}
 
+\newpage
 \item Iterative methods typically converge significantly faster if they are applied to a preconditioned problem: instead of
 \begin{equation}\label{eq:not-preconditioned}
 Ax=b,
@@ -146,8 +152,8 @@ Read about diagonal aka \textsc{Jacobi} preconditioning and incomplete \textsc{C
 \begin{solution}
 The basic properties of the listed preconditioners are:
 \begin{itemize}
-\item \textsc{Jacobi:} The precondition $P$ is given simply by the diagonal of the matrix $A$, and therefore $P^{-1}$ is extremely easy to compute. This method only requires that the diagonal entries of $A$ are non-zero.
-\item \textsc{Incomplete Cholesky:} The preconditioner $P$ is given by an efficient to compute sparse approximation of the \textsc{Cholesky} factorisation, and simiarly requires that the matrix $A$ is symmetric positive definite. This $P$ is sparsely constructed in such a way that it is inexpensive to invert
+\item \textsc{Jacobi:} The preconditioner $P$ is given simply by the main diagonal of the matrix $A$, and therefore $P^{-1}$ is extremely easy to compute. This method only requires that the diagonal entries of $A$ are non-zero.
+\item \textsc{Incomplete Cholesky:} The preconditioner $P$ is given by an efficient to compute sparse approximation of the \textsc{Cholesky} factorisation, and similarly requires that the matrix $A$ is symmetric positive definite. This $P$ is a sparsely constructed $LL^T$ factorisation, and therefore is inexpensive to invert.
 \end{itemize}
 
 Now, both of these generic preconditioners could be reasonably efficient for inverting the sparse symmetric positive definite mass matrix $M^h$. A more efficient preconditioner, however, would be the \underline{mass lumping matrix $\tilde{M}^h$}, which is the diagonal matrix with entries $\tilde{M}^h_{ii} = \sum_j M^h_{ij}$.
@@ -172,25 +178,36 @@ Come up with an interesting title and write a succinct mini-abstract of at most 
 What is the one most important thing that you have learnt from this assignment?
 
 \vspace*{3mm}
-\hrulefill
+How to use iterative solvers in \textsc{Fenics}!
+Although, I have already played around with this for my project (as I cannot use direct solvers for the large 3D system I am solving).
 
 \vspace*{3mm}
-\hrulefill
 
 Any new discoveries or achievements towards the objectives of your course project?
 
 \vspace*{3mm}
-\hrulefill
+Yes, I've discovered that I need to more carefully choose an iteratively solver for the PDE I am solving! Hopefully it will speed things up a little bit.
 
 \vspace*{3mm}
-\hrulefill
 
 What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
 
 \vspace*{3mm}
-\hrulefill
+Definitely reading up on proper definitions of the various iterative solvers.
+I have known about \textsc{CG} and have heard of the others from the supplemental notes, but I haven't ever really had to consider anything other than (preconditioned-)conjugate gradient, so this was good experience in that regard.
 
 \vspace*{3mm}
-\hrulefill
+
+\newpage
+\begin{appendices}
+% ------------------------------------------------------------ %
+% Appendix A: Code
+% ------------------------------------------------------------ %
+\newpage
+\lhead{}
+\section{}\label{hw11Code}
+\textbf{\Large\code{hw11.py}}
+\includecode{../fenics/hw11.py}
+\end{appendices}
 
 \end{document}
