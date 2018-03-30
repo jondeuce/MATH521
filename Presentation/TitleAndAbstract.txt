@@ -1,0 +1,3 @@
+Title: Numerical Methods in Magnetic Resonance Imaging: The Bloch-Torrey Equation
+
+Abstract: In magnetic resonance imaging (MRI), insight into different imaging modalities can be gained through the simulation of the magnetic resonance signal which is measured by the scanner. This signal is modelled as the solution of the Bloch-Torrey partial differential equation (BT PDE), a parabolic PDE in complex variables. In this work, I compare various numerical techniques for solving the BT PDE in the presence of highly discontinuous data with the goal of optimizing the tradeoff between solution accuracy and computation time.
