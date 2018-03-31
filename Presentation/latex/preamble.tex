@@ -1,0 +1,78 @@
+\documentclass[11pt]{beamer}
+%\usetheme{Warsaw}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Jonathan Doucette}
+\title[Numerical methods in MRI]{Numerical methods in magnetic resonance imaging: the Bloch-Torrey equation}
+\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{}
+%\logo{}
+\institute[UBC]{University of British Columbia}
+\date{\today}
+\subject{MATH 521}
+
+% ************************************************
+% ***************** NEW COMMANDS *****************
+% ************************************************
+
+%\renewcommand{\labelenumi}{(\alph{enumi})} % Use letters for enumerate
+%\let\vaccent=\v % rename builtin command \v{} to \vaccent{}
+
+%% MISC
+\newcommand{\ab}[1]{\left| #1 \right|} % for absolute value
+\newcommand{\avg}[1]{\left< #1 \right>} % for average
+\let\underdot=\d % rename builtin command \d{} to \underdot{}
+\let\baraccent=\= % rename builtin command \= to \baraccent
+\renewcommand{\=}[1]{\stackrel{#1}{=}} % for putting numbers above =
+\providecommand{\fr}{\frac}
+\providecommand{\RR}{\mathbb{R}}
+\providecommand{\CC}{\mathbb{C}}
+\providecommand{\NN}{\mathbb{N}}
+\providecommand{\e}{\epsilon}
+\DeclareMathOperator{\di}{d\!}
+\newcommand*\ieval[3]{\left.#1\right\rvert_{#2}^{#3}}
+
+%% Vectors
+\renewcommand{\v}[1]{\ensuremath{\mathbf{#1}}} 
+\newcommand{\gv}[1]{\ensuremath{\mbox{\boldmath$ #1 $}}} % for vectors of Greek letters
+\newcommand{\uv}[1]{\ensuremath{\mathbf{\hat{#1}}}} % for unit vector
+\providecommand{\wave}[1]{\v{\tilde{#1}}}
+
+%% DERIVATIVES
+\renewcommand{\d}[2]{\frac{d #1}{d #2}} % for derivatives
+\newcommand{\dubd}[2]{\frac{d^2 #1}{d #2^2}} % for double derivatives
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}} % for partial derivatives
+\newcommand{\pdd}[2]{\frac{\partial^2 #1}{\partial #2^2}} % for double partial derivatives
+\newcommand{\dx}[1]{\ensuremath{\operatorname{d}\!{#1}}}
+
+%% Operators
+\newcommand{\Gradient}{\ensuremath{\mbox{\boldmath$\nabla$}}} % gradient
+\newcommand{\Laplacian}{\ensuremath{\mbox{$\Delta$}}} % laplacian
+
+%% Norms
+\newcommand{\Norm}[1]{\ensuremath{\lVert #1 \rVert}} % generic norm
+\newcommand{\ANorm}[2]{\ensuremath{\lVert #1 \rVert_{#2}}} % norm with respect to specified A
+\newcommand{\LTwoNorm}[1]{\ensuremath{\lVert #1 \rVert_{L^2}}} % L2 norm
+\newcommand{\HOneNorm}[1]{\ensuremath{\lVert #1 \rVert_{H^1}}} % H1 norm
+
+%% Math Operators
+\DeclareMathOperator{\spann}{span}
+
+% ***************************************************
+% ******************* TEXT AND CODE *****************
+% ***************************************************
+
+%% Text
+\newcommand{\mathcolorbox}[2]{\colorbox{#1}{$\displaystyle #2$}}
+\newcommand{\hlfancy}[3]{\textcolor{#1}{\sethlcolor{#2}\hl{#3}}}
+\newcommand{\TODO}[1]{\hlfancy{red}{yellow}{\textbf{TODO: #1}}}
+
+%% Code
+%\newcommand{\code}[1]{\mintinline{C}{#1}}
+%\newcommand{\code}[1]{\texttt{#1}}
+%\newcommand{\code}[1]{\lstinline[columns=fixed]{#1}}
+%\newcommand{\includecode}[1]{\lstinputlisting{#1}}
