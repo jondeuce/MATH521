@@ -1,10 +1,9 @@
 \beamer@sectionintoc {1}{Background}{3}{0}{1}
 \beamer@subsectionintoc {1}{1}{Magnetic Resonance Visualised}{3}{0}{1}
-\beamer@subsectionintoc {1}{2}{The Bloch-Torrey Equation}{5}{0}{1}
-\beamer@subsectionintoc {1}{3}{Problem Geometry}{6}{0}{1}
+\beamer@subsectionintoc {1}{2}{The Bloch-Torrey Equation}{6}{0}{1}
 \beamer@sectionintoc {2}{Solving the Bloch-Torrey Equation}{7}{0}{2}
 \beamer@subsectionintoc {2}{1}{Operator Splitting Methods}{7}{0}{2}
 \beamer@subsectionintoc {2}{2}{Finite Element Methods}{9}{0}{2}
 \beamer@subsectionintoc {2}{3}{Time Stepping}{11}{0}{2}
 \beamer@sectionintoc {3}{Results}{12}{0}{3}
-\beamer@subsectionintoc {3}{1}{Operator Splitting vs. FEM}{12}{0}{3}
+\beamer@subsectionintoc {3}{1}{Operator Splitting versus FEM}{12}{0}{3}

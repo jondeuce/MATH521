@@ -1,0 +1,160 @@
+\documentclass[10pt,letterpaper]{scrartcl}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
+\usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{arrows}
+\pgfplotsset{compat=1.12}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcommand{\dx}{\;\mathrm{d}x}
+\newcommand{\ds}{\;\mathrm{d}s}
+
+\begin{document}
+
+\begin{minipage}{.2\textwidth}
+\includegraphics[width=42pt]{ubc-logo.png}
+\end{minipage}
+\hfill
+\begin{minipage}{.75\textwidth}
+\setlength{\parskip}{6pt}
+\begin{flushright}
+{\sffamily
+\textbf{MATH521}\\
+\textbf{Numerical Analysis of Partial Differential Equations}
+
+Winter 2017/18, Term 2\\
+Timm Treskatis
+}
+\end{flushright}
+\end{minipage}
+
+\section*{Homework Assignment 12}
+
+Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+
+\paragraph*{Question 1 $\vert$ 3 marks $\vert$ \faFileCodeO{} \: \faFilePdfO}
+
+Today we're solving the linear advection equation
+\begin{subequations}\label{eq:advection}
+\begin{align}
+\frac{\partial u(t)}{\partial t} + \operatorname{div} (u(t)a(t)) &= 0 && \text{in } Q = ]0,T[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+u(t) &= g(t) && \text{on } \Sigma_- = \Set{(t,x) \in \: ]0,T[ \times \partial\Omega | a(t,x)\cdot n(x) < 0},
+\end{align}
+\end{subequations}
+where $a: \: ]0,T[ \times \Omega \to \mathds{R}^2$ is a given vector field, thought of as the flow velocity of a carrier fluid, and $u_0: \Omega \to [0,1]$ the initial concentration of a solute. $g: \: ]0,T[ \times \partial\Omega \to [0,1]$ prescribes the concentration on that part of the boundary $\partial \Omega$ where the flow of solvent is directed into the domain and we use $n$ to denote the outward pointing unit normal vectors on $\partial \Omega$. For simplicity we assume in what follows that $a$ and $g$ do not depend on time.
+
+Recall that upwind discontinuous \textsc{Galerkin} methods employ the bilinear form
+\begin{equation*}
+\sum_{T\in\mathcal{T}^h} -\int\limits_T ua \cdot \nabla v \dx + \sum_{e\in\mathcal{E}^h} \int\limits_e [v] u_\text{up} a \cdot n_+ \ds
+\end{equation*}
+to discretise the transport term $\operatorname{div} (ua)$.
+\begin{enumerate}[(a)]
+\item We define the positive and negative parts of a function $f$ by
+\begin{equation*}
+f^\text{pos} = \frac{f + \lvert f \rvert}{2} \qquad \text{and} \qquad f^\text{neg} = \frac{f - \lvert f \rvert}{2}.
+\end{equation*}
+Re-write the edge integral in the upwind DG form in terms of $g$, $u_+$, $u_-$, $(a\cdot n)_+^\text{pos}$, $(a\cdot n)_+^\text{neg}$ and $[v]$:
+\begin{itemize}
+\item If $e$ is an interior edge:
+\begin{equation*}
+\int\limits_e [v] u_\text{up} a \cdot n_+ \ds = \hspace{35em}
+\end{equation*}
+\vfill
+\item If $e$ is an exterior edge (no $\pm$ subscripts or $[\:]$ brackets needed, there is only one neighbouring triangle):
+\begin{equation*}
+\int\limits_e [v] u_\text{up} a \cdot n_+ \ds = \hspace{35em}
+\end{equation*}
+\vfill
+\end{itemize}
+
+\newpage
+
+\item Complete the \textsf{FEniCS} script \texttt{hw12.py} to solve the linear advection equation with
+\begin{equation*}
+T = 2\pi \qquad \qquad a(x) = \left(
+\begin{array}{c}
+-x_2\\ x_1
+\end{array}
+\right) \textcolor{gray}{ = r \left(
+\begin{array}{c}
+-\sin \phi \\ \cos \phi
+\end{array}
+\right)  \text{ in polar coordinates}}  \qquad \qquad  g(x) \equiv 0
+\end{equation*}
+and the domain and initial data provided. Note that with these data, the advection equation rotates the initial field $u_0$ around the origin in anticlockwise direction, like a rigid body on a turntable.
+
+Use a moderate degree (e.g. $r=1$ or $2$) for the DG-discretisation in space and use the method we are most familiar with, the $\theta$-method, for time stepping. Any value of $\theta$ which results in a stable scheme is fine.
+
+\emph{Hint:} In \textsf{FEniCS} we use \verb|dS| for integrals over interior edges and \verb|ds| for integrals over exterior edges. You must add \verb|('+')| or \verb|('-')| to all discontinuous functions in integral expressions containing \verb|dS|, e.g.
+\begin{verbatim}
+u('-')*jump(v)*dS
+\end{verbatim}
+to specify on what side of the edge they should be evaluated. \verb|jump(v)| is a shortcut for \verb|v('+')-v('-')|.
+
+\item Inspect your numerical solution in \textsf{ParaView}, using the `Warp by Scalar'-Filter. Recall that \textsf{FEniCS} generally exports solution data as continuous, piecewise linear functions, so don't be surprised when you cannot see any discontinuous jumps in your visualisation.
+
+Describe any discrepancies between the numerical solution and the exact solution, using the appropriate terminology.
+
+\emph{Hint: } For general triangular meshes, the upwind DG($r$) method discretises the advection term with an accuracy of order $r+\frac{1}{2}$, which increases to $r+1$ on meshes with certain regularity.
+
+\end{enumerate}
+
+\newpage
+
+\paragraph*{Question 2 $\vert$ 2 marks $\vert$ \faFileCodeO{} \:}
+
+Make a copy of your script \texttt{hw12.py} and modify it to solve the advection-diffusion problem
+\begin{subequations}\label{eq:advection-diffusion}
+\begin{align}
+\frac{\partial u(t)}{\partial t} + \operatorname{div} (u(t)a - D\nabla u(t)) &= 0 && \text{in } Q = ]0,T[ \times \Omega\\
+u(0) &= u_0 && \text{in } \Omega\\
+\left(u(t)a-D\nabla u(t)\right) \cdot n &= 0 && \text{on } \Sigma = ]0,T[ \times \partial\Omega
+\end{align}
+\end{subequations}
+instead, using $D = 0.01$ and all other parameters as in Question 1. The new boundary condition is a no-flux \textsc{Robin} condition. It admits an interpretation of a semi-permeable membrane which allows the solvent, but not the solute to pass through.
+
+Discretise the diffusive flux with the symmetric interior penalty form
+\begin{align*}
+&\sum_{T\in\mathcal{T}^h} \int\limits_T D\nabla u \cdot \nabla v \dx && \text{(bilinear form of conforming methods)}\\
+&- \sum_{e\in\mathcal{E}^h\setminus\mathcal{I}^h} \int_e vD\nabla u \cdot n \ds - \sum_{e\in\mathcal{I}^h} \int_e [v]\left\langle D\nabla u\right\rangle\cdot n_+ \ds && \text{(consistency)}\\
+&- \sum_{e\in\mathcal{I}^h} \int_e [u]\left\langle D\nabla v\right\rangle\cdot n_+ \ds && \text{(symmetry)}\\
+&+ \sum_{e\in\mathcal{I}^h} \frac{\sigma}{h_e} \int_e [u] [v] \ds && \text{(interior penalty)}
+\end{align*}
+as derived in class, here written in a form that can be translated directly into \textsf{FEniCS} code (but note that the boundary condition has not been applied yet). Use the penalty parameter $\sigma = 0.1$ and $h_e = \langle h \rangle$.
+
+\emph{Hint:} The commands \verb|h = CellSize(mesh)| and \verb|avg(u)| may be helpful.
+
+\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+
+What is the one most important thing that you have learnt from this assignment?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+Any new discoveries or achievements towards the objectives of your course project?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
+
+\vspace*{3mm}
+\hrulefill
+
+\vspace*{3mm}
+\hrulefill
+
+\end{document}

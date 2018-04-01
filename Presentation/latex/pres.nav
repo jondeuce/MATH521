@@ -11,13 +11,11 @@
 \headcommand {\beamer@framepages {3}{3}}
 \headcommand {\slideentry {1}{1}{2}{4/4}{Magnetic Resonance Visualised}{0}}
 \headcommand {\beamer@framepages {4}{4}}
-\headcommand {\beamer@subsectionpages {3}{4}}
-\headcommand {\beamer@subsectionentry {0}{1}{2}{5}{The Bloch-Torrey Equation}}
-\headcommand {\slideentry {1}{2}{1}{5/5}{The Bloch-Torrey Equation}{0}}
+\headcommand {\slideentry {1}{1}{3}{5/5}{Magnetic Resonance Visualised}{0}}
 \headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@subsectionpages {5}{5}}
-\headcommand {\beamer@subsectionentry {0}{1}{3}{6}{Problem Geometry}}
-\headcommand {\slideentry {1}{3}{1}{6/6}{Problem Geometry}{0}}
+\headcommand {\beamer@subsectionpages {3}{5}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{6}{The Bloch-Torrey Equation}}
+\headcommand {\slideentry {1}{2}{1}{6/6}{The Bloch-Torrey Equation}{0}}
 \headcommand {\beamer@framepages {6}{6}}
 \headcommand {\beamer@sectionpages {3}{6}}
 \headcommand {\beamer@subsectionpages {6}{6}}
@@ -42,8 +40,8 @@
 \headcommand {\beamer@subsectionpages {11}{11}}
 \headcommand {\sectionentry {3}{Results}{12}{Results}{0}}
 \headcommand {\beamer@subsectionpages {12}{11}}
-\headcommand {\beamer@subsectionentry {0}{3}{1}{12}{Operator Splitting vs. FEM}}
-\headcommand {\slideentry {3}{1}{1}{12/12}{Operator Splitting vs. FEM}{0}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{12}{Operator Splitting versus FEM}}
+\headcommand {\slideentry {3}{1}{1}{12/12}{Operator Splitting versus FEM}{0}}
 \headcommand {\beamer@framepages {12}{12}}
 \headcommand {\beamer@partpages {1}{12}}
 \headcommand {\beamer@subsectionpages {12}{12}}
