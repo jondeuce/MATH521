@@ -18,6 +18,7 @@
 \TODO{uncomment all ``pause'' statements}
 \end{frame}
 
+
 \section{Background}
 
 \subsection{Magnetic Resonance Visualised}
@@ -60,14 +61,47 @@
         \CDecay(\v{x}) &= R(\v{x}) + i\omega(\v{x})
     \end{align*}
     %\pause
-    \item The initial magnetization $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
+    \item The initial transverse magnetization $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
     %\pause
     \item Boundary conditions are typically zero Neumann or periodic
 \end{enumerate}
 \end{frame}
 
+\subsection{Problem Geometry}
+
+\begin{frame}
+\frametitle{Magnetic Resonance Visualised}
+
+\centering
+%\vspace{-0.5cm}
+\begin{columns}
+\begin{column}{.5\textwidth}
+\begin{figure}
+  \includegraphics[height=0.8\textwidth]{figures/voxelgeo}
+  \caption{Cubic imaging voxel filled with randomly oriented microvasculature}
+\end{figure}
+\end{column}
+%\hfill
+\begin{column}{.5\textwidth}
+\begin{figure}
+  \includegraphics[height=0.8\textwidth]{figures/domega}
+  \caption{Cross section of $\omega$ corresponding to the microvasculature filled voxel}
+\end{figure}
+\end{column}
+\end{columns}
+
+%\begin{enumerate}
+%    \item Typical problem geometry
+%\end{enumerate}
+
+\end{frame}
+
+
 \section{Solving the Bloch-Torrey Equation}
+
+
 \subsection{Operator Splitting Methods}
+
 \begin{frame}
 \frametitle{Operator Splitting Methods}
 \begin{enumerate}
@@ -113,15 +147,42 @@
     \item The BT equation can also be solved using FEM
     %\pause
     \item First, we let $u=M_x$ and $v=M_y$ and re-write the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
+    \begin{equation*}
+    \begin{cases}
+        \pd{u}{t} = D \Laplacian{u} - R u + \omega v, \qquad u(\v{x},0) = M_x(\v{x},0) \\
+        \pd{v}{t} = D \Laplacian{v} - R v - \omega u, \qquad v(\v{x},0) = M_y(\v{x},0)
+    \end{cases}
+    \end{equation*}
+%    with
+%    \begin{align*}
+%        u(\v{x},0) &= M_x(\v{x},0) \\
+%        v(\v{x},0) &= M_y(\v{x},0)
+%    \end{align*}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Finite Element Methods}
+\begin{enumerate}
+    \item Writing the pair of PDE's as a linear system, we have
     \begin{align*}
-        \pd{u}{t} &= D \Laplacian{u} - R u + \omega v \\
-        \pd{v}{t} &= D \Laplacian{v} - R v - \omega u
+    \pd{}{t}
+    \begin{pmatrix} u \\ v \end{pmatrix}
+    = \begin{pmatrix}
+    D \Laplacian{} - R & \omega \\ 
+    -\omega & D \Laplacian{} - R
+    \end{pmatrix}
+    \begin{pmatrix} u \\ v \end{pmatrix}
     \end{align*}
-    with
+    \item If we take the inner product of both sides with $\begin{pmatrix} u, v \end{pmatrix}$, we have that
+    $$ \int_\Omega u u_t + v v_t \dx{x} = \int_\Omega D u \Laplacian{u} - R u^2 + \omega u v - \omega v u + D v \Laplacian{v} - R v^2 \dx{x} $$
+    %\pause
+    Integrating by parts, we have that
     \begin{align*}
-        u(\v{x},0) &= M_x(\v{x},0) \\
-        v(\v{x},0) &= M_y(\v{x},0)
+    \frac{1}{2} \pd{}{t} \left( \int_\Omega u^2 + v^2 \dx{x} \right) &= \int_\Omega -D \, (||\nabla u||^2 + ||\nabla v||^2) - R \, (u^2 + v^2) \dx{x} \\ &\leq 0
     \end{align*}
+    %\pause
+    \item Now, $\int_\Omega u^2 + v^2 \dx{x} = \LTwoNorm{\Mxy}^2$, and so $\LTwoNorm{\Mxy}$ decreases with time
 \end{enumerate}
 \end{frame}
 
@@ -155,38 +216,53 @@
     \\ where $A^h \coloneqq D K^h + R^h$
 \end{enumerate}
 \end{frame}
+\begin{enumerate}
+    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
+\end{enumerate}
+\end{frame}
+%\frametitle{Finite Element Methods}
+%\vspace{-1cm}
+%\begin{align*}
+%    \begin{pmatrix}
+%    M^h & 0 \\ 
+%    0 & M^h
+%    \end{pmatrix}
+%    \pd{}{t}
+%    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+%    = -
+%    \begin{pmatrix}
+%    A^h & -W^h \\ 
+%    W^h & A^h
+%    \end{pmatrix}
+%    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+%\end{align*}
+%\begin{enumerate}
+%    \item If we take the inner product of both sides with $\begin{pmatrix} \v{u}^T, \v{v}^T \end{pmatrix}$, we have that
+%    \begin{align*}
+%    \pd{}{t}
+%    \left( \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v} \right)
+%    %&= - \left( \v{u}^T A^h \v{u} - \v{u}^T W^h \v{v} + \v{v}^T W^h \v{u} + \v{v}^T A^h \v{v} \right) \\
+%    &= - \left( \v{u}^T A^h \v{u} + \v{v}^T A^h \v{v} \right)
+%    \quad \text{by symmetry of } W^h \\
+%    &\leq 0 \quad \text{by positive definiteness of } A^h
+%    \end{align*}
+%    %\pause
+%    \item Now, $\LTwoNorm{\bm{\Mxy}}^2 = \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v}$, and so $\LTwoNorm{\bm{\Mxy}}$ decreases with time
+%    %\pause
+%    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
+%\end{enumerate}
+%\end{frame}
+
+
+\section{Results}
+
+\subsection{Operator Splitting vs. FEM}
 
 \begin{frame}
-\frametitle{Finite Element Methods}
-\vspace{-1cm}
-\begin{align*}
-    \begin{pmatrix}
-    M^h & 0 \\ 
-    0 & M^h
-    \end{pmatrix}
-    \pd{}{t}
-    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
-    = -
-    \begin{pmatrix}
-    A^h & -W^h \\ 
-    W^h & A^h
-    \end{pmatrix}
-    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
-\end{align*}
+\frametitle{Operator Splitting vs. FEM}
 \begin{enumerate}
-    \item If we take the inner product of both sides with $\begin{pmatrix} \v{u}^T, \v{v}^T \end{pmatrix}$, we have that
-    \begin{align*}
-    \pd{}{t}
-    \left( \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v} \right)
-    %&= - \left( \v{u}^T A^h \v{u} - \v{u}^T W^h \v{v} + \v{v}^T W^h \v{u} + \v{v}^T A^h \v{v} \right) \\
-    &= - \left( \v{u}^T A^h \v{u} + \v{v}^T A^h \v{v} \right)
-    \quad \text{by symmetry of } W^h \\
-    &\leq 0 \quad \text{by positive definiteness of } A^h
-    \end{align*}
-    %\pause
-    \item Now, $\LTwoNorm{\bm{\Mxy}}^2 = \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v}$, and so $\LTwoNorm{\bm{\Mxy}}$ decreases with time
-    %\pause
-    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
+    \item Comparing the solution of the BT equation with splitting methods vs. FEM...
+    \item \TODO{do this} %TODO
 \end{enumerate}
 \end{frame}
 
