@@ -1,17 +1,216 @@
-\include{preamble}
+\include{preamble/preamble}
 
 \begin{document}
 
 \begin{frame}
 \titlepage
+\begin{textblock*}{2cm}(1.3cm,-3.2cm)
+    \includegraphics[height=2cm]{figures/ubc-logo}
+\end{textblock*}
+\begin{textblock*}{2cm}(9cm,-3.2cm)
+    \includegraphics[height=2cm]{figures/UBC-MRI-logo}
+\end{textblock*}
 \end{frame}
 
 \begin{frame}
 \tableofcontents
+%TODO
+\TODO{uncomment all ``pause'' statements}
 \end{frame}
 
-%\begin{frame}{•}
-%
-%\end{frame}
+
+\section{Background}
+
+\subsection{Magnetic Resonance Visualised}
+
+% Visualisation of the bulk magnetisation. Initially, all magnetised spins are aligned with the main magnetic field. 90 deg RF pulse kicks them into the xy-plane, and they begin to dephase. Note: this is RELATIVE spin rates; all spins are rotating in nearly the same direction, in fact, the relative rate between them differs by only ~1 part in 10^6
+\begin{frame}
+\frametitle{Magnetic Resonance Visualised}
+\begin{enumerate}
+    \item Animation of a typical ``spin echo'' MRI sequence
+    \item \TODO{re-compile with animated gif} %TODO
+\end{enumerate}
+\centering
+%\animategraphics[loop,controls,width=0.7\linewidth]{25}{gifs/HahnEcho_GWM-}{0}{255}
+\includegraphics[width=0.7\linewidth]{gifs/HahnEcho_GWM-100}
+\end{frame}
+
+\begin{frame}
+\frametitle{Magnetic Resonance Visualised}
+\begin{enumerate}
+    \item In actuality, spins (water molecules) do not truly fully refocus
+    %\pause
+    \item Relative angular frequency depends on local magnetic field, and therefore spins dephase at different rates at different locations
+    %\pause
+    \item In particular, the \textbf{diffusion} of spins during the scan ($\approx$ \SI{40}{\milli\second}) leads to a net lost in signal: \underline{the ``echo'' is weaker}
+\end{enumerate}
+\centering
+\includegraphics[width=0.4\linewidth]{gifs/HahnEcho_GWM-165}
+\end{frame}
+
+\subsection{The Bloch-Torrey Equation}
+
+\begin{frame}
+\frametitle{The Bloch-Torrey Equation}
+\begin{enumerate}
+    \item We model this system through the \textbf{Bloch-Torrey equation}
+    $$ \pd{\Mxy}{t} = D \Laplacian{\Mxy} - \CDecay \Mxy $$
+    where:
+    \begin{align*}
+        \Mxy &= M_x + i M_y \\
+        \CDecay(\v{x}) &= R(\v{x}) + i\omega(\v{x})
+    \end{align*}
+    %\pause
+    \item The initial magnetization $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
+    %\pause
+    \item Boundary conditions are typically zero Neumann or periodic
+\end{enumerate}
+\end{frame}
+
+\subsection{Problem Geometry}
+
+\begin{frame}
+\frametitle{Magnetic Resonance Visualised}
+\begin{enumerate}
+    \item Animation of a typical ``spin echo'' MRI sequence
+    \item \TODO{re-compile with animated gif} %TODO
+\end{enumerate}
+\centering
+%\animategraphics[loop,controls,width=0.7\linewidth]{25}{gifs/HahnEcho_GWM-}{0}{255}
+\includegraphics[width=0.7\linewidth]{gifs/HahnEcho_GWM-100}
+\end{frame}
+
+
+\section{Solving the Bloch-Torrey Equation}
+
+
+\subsection{Operator Splitting Methods}
+
+\begin{frame}
+\frametitle{Operator Splitting Methods}
+\begin{enumerate}
+    \item One effective method of solving the BT equation is via \textit{operator splitting methods}
+    %\pause
+    \item First, we re-write the BT PDE in the more suggestive form
+    $$ \pd{\Mxy}{t} = H \Mxy $$
+    where
+    \begin{gather*}
+        H = -D \Laplacian{} + \CDecay.
+    \end{gather*}
+    %\pause
+    \item Then, the general solution $\Mxy$ may then be written as
+    $$ \Mxy = e^{-Ht}\Mxy_0 $$
+    where $e^{-Ht}$ is the \textit{evolution operator}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Operator Splitting Methods}
+\begin{enumerate}
+    \item Now, the evolution operator may be \textit{split} using the approximation %TODO ref
+    \begin{align*}
+        e^{-Ht} &= e^{D \Delta t - \CDecay t} \\
+        &\approx e^{-\CDecay t/2} e^{D \Delta t} e^{-\CDecay t/2} + \mathcal{O}(t^3)
+    \end{align*}
+    %\pause
+    %\item This form is advantageous because although $e^{-Ht}$ has no closed form for general $\CDecay$, the split operators do:
+    \item Although $e^{-Ht}$ has no closed form, the split operators do:
+    \begin{align*}
+        e^{-\Gamma t/2} \Mxy &= e^{-\Gamma(\v{x}) t/2} \odot \Mxy \\
+        e^{D \Delta t} \Mxy &= \Phi \conv \Mxy
+    \end{align*}
+    where $\odot$ is the Hadamard (pointwise) product, $\conv$ is the spatial convolution, and $\Phi$ is a Gaussian smoothing kernel with $\sigma = \sqrt{2Dt}$
+\end{enumerate}
+\end{frame}
+
+\subsection{Finite Element Methods}
+
+\begin{frame}
+\frametitle{Finite Element Methods}
+\begin{enumerate}
+    \item The BT equation can also be solved using FEM
+    %\pause
+    \item First, we let $u=M_x$ and $v=M_y$ and re-write the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
+    \begin{align*}
+        \pd{u}{t} &= D \Laplacian{u} - R u + \omega v \\
+        \pd{v}{t} &= D \Laplacian{v} - R v - \omega u
+    \end{align*}
+    with
+    \begin{align*}
+        u(\v{x},0) &= M_x(\v{x},0) \\
+        v(\v{x},0) &= M_y(\v{x},0)
+    \end{align*}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Finite Element Methods}
+\begin{enumerate}
+    \item Applying the method of lines, the pair of PDE's becomes
+    \begin{align*}
+        M^h \v{u}_t &= -(D K^h + R^h) \v{u} + W^h \v{v} \\
+        M^h \v{v}_t &= -(D K^h + R^h) \v{v} - W^h \v{u}
+    \end{align*}
+    where $R^h_{ij} \coloneqq \int R \,\phi_i \,\phi_j \dx{x}$, $W^h_{ij} \coloneqq \int \omega \,\phi_i \,\phi_j \dx{x}$, and $M^h$ and $K^h$ are the usual mass and stiffness matrices
+    %\pause
+    \item $M^h$, $K^h$, and $R^h$ are symmetric positive definite; $W^h$ is symmetric
+    %\pause
+    \item In choosing a time discretisation, first consider the block system:
+    \begin{align*}
+    \begin{pmatrix}
+    M^h & 0 \\ 
+    0 & M^h
+    \end{pmatrix}
+    \pd{}{t}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+    = -
+    \begin{pmatrix}
+    A^h & -W^h \\ 
+    W^h & A^h
+    \end{pmatrix}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+    \end{align*}
+    \\ where $A^h \coloneqq D K^h + R^h$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Finite Element Methods}
+\vspace{-1cm}
+\begin{align*}
+    \begin{pmatrix}
+    M^h & 0 \\ 
+    0 & M^h
+    \end{pmatrix}
+    \pd{}{t}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+    = -
+    \begin{pmatrix}
+    A^h & -W^h \\ 
+    W^h & A^h
+    \end{pmatrix}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+\end{align*}
+\begin{enumerate}
+    \item If we take the inner product of both sides with $\begin{pmatrix} \v{u}^T, \v{v}^T \end{pmatrix}$, we have that
+    \begin{align*}
+    \pd{}{t}
+    \left( \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v} \right)
+    %&= - \left( \v{u}^T A^h \v{u} - \v{u}^T W^h \v{v} + \v{v}^T W^h \v{u} + \v{v}^T A^h \v{v} \right) \\
+    &= - \left( \v{u}^T A^h \v{u} + \v{v}^T A^h \v{v} \right)
+    \quad \text{by symmetry of } W^h \\
+    &\leq 0 \quad \text{by positive definiteness of } A^h
+    \end{align*}
+    %\pause
+    \item Now, $\LTwoNorm{\bm{\Mxy}}^2 = \v{u}^T M^h \v{u} + \v{v}^T M^h \v{v}$, and so $\LTwoNorm{\bm{\Mxy}}$ decreases with time
+    %\pause
+    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
+\end{enumerate}
+\end{frame}
+
+
+\section{Results}
+
+\subsection{Operator Splitting vs. FEM}
 
 \end{document}

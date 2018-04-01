@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{Background}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Magnetic Resonance Visualised}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{The Bloch-Torrey Equation}{5}{0}{1}
+\beamer@sectionintoc {2}{Solving the Bloch-Torrey Equation}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Operator Splitting Methods}{6}{0}{2}
+\beamer@subsectionintoc {2}{2}{Finite Element Methods}{8}{0}{2}
