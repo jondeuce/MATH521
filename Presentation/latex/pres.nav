@@ -34,10 +34,12 @@
 \headcommand {\beamer@framepages {9}{9}}
 \headcommand {\slideentry {2}{2}{2}{10/10}{Finite Element Methods}{0}}
 \headcommand {\beamer@framepages {10}{10}}
-\headcommand {\slideentry {2}{2}{3}{11/11}{Finite Element Methods}{0}}
+\headcommand {\beamer@subsectionpages {9}{10}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{11}{Time Stepping}}
+\headcommand {\slideentry {2}{3}{1}{11/11}{Time Stepping}{0}}
 \headcommand {\beamer@framepages {11}{11}}
 \headcommand {\beamer@sectionpages {7}{11}}
-\headcommand {\beamer@subsectionpages {9}{11}}
+\headcommand {\beamer@subsectionpages {11}{11}}
 \headcommand {\sectionentry {3}{Results}{12}{Results}{0}}
 \headcommand {\beamer@subsectionpages {12}{11}}
 \headcommand {\beamer@subsectionentry {0}{3}{1}{12}{Operator Splitting vs. FEM}}

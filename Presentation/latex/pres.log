@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6630 64-bit) (preloaded format=xelatex 2018.3.30)  31 MAR 2018 21:05
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6630 64-bit) (preloaded format=xelatex 2018.3.30)  31 MAR 2018 22:48
 entering extended mode
 **./pres.tex
 (pres.tex
@@ -1441,8 +1441,10 @@ File: figures/UBC-MRI-logo.png Graphic file (type bmp)
 ]
 
 LaTeX Font Warning: Font shape `TU/lmss/m/sc' in size <10.95> not available
-(Font)              Font shape `TU/lmr/m/sc' tried instead on input line 236.
+(Font)              Font shape `TU/lmr/m/sc' tried instead on input line 301.
 
+File: figures/UBC-MRI-logo.png Graphic file (type bmp)
+<figures/UBC-MRI-logo.png>
 [11
 
 ]
@@ -1460,17 +1462,17 @@ File: figures/UBC-MRI-logo.png Graphic file (type bmp)
 \tf@snm=\write8
 \openout8 = `pres.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 283.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 283.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
  (pres.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 283.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 283.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 316.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 316.
  ) 
 Here is how much of TeX's memory you used:
- 32300 strings out of 427836
- 621797 string characters out of 3147943
- 693136 words of memory out of 3000000
- 35757 multiletter control sequences out of 15000+200000
+ 32302 strings out of 427836
+ 621813 string characters out of 3147943
+ 694249 words of memory out of 3000000
+ 35759 multiletter control sequences out of 15000+200000
  544001 words of font info for 105 fonts, out of 3000000 for 9000
  1328 hyphenation exceptions out of 8191
  60i,16n,62p,10451b,928s stack positions out of 5000i,500n,10000p,200000b,50000s

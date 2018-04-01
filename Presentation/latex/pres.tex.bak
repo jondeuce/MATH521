@@ -53,7 +53,7 @@
 \begin{frame}
 \frametitle{The Bloch-Torrey Equation}
 \begin{enumerate}
-    \item We model this system through the \textbf{Bloch-Torrey equation}
+    \item This system is modelled through the \textbf{Bloch-Torrey equation}
     $$ \pd{\Mxy}{t} = D \Laplacian{\Mxy} - \CDecay \Mxy $$
     where:
     \begin{align*}
@@ -107,7 +107,7 @@
 \begin{enumerate}
     \item One effective method of solving the BT equation is via \textit{operator splitting methods}
     %\pause
-    \item First, we re-write the BT PDE in the more suggestive form
+    \item First, the BT PDE is rewritten in the more suggestive form
     $$ \pd{\Mxy}{t} = H \Mxy $$
     where
     \begin{gather*}
@@ -146,7 +146,7 @@
 \begin{enumerate}
     \item The BT equation can also be solved using FEM
     %\pause
-    \item First, we let $u=M_x$ and $v=M_y$ and re-write the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
+    \item First, let $u=M_x$ and $v=M_y$ and rewrite the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
     \begin{equation*}
     \begin{cases}
         \pd{u}{t} = D \Laplacian{u} - R u + \omega v, \qquad u(\v{x},0) = M_x(\v{x},0) \\
@@ -158,13 +158,8 @@
 %        u(\v{x},0) &= M_x(\v{x},0) \\
 %        v(\v{x},0) &= M_y(\v{x},0)
 %    \end{align*}
-\end{enumerate}
-\end{frame}
-
-\begin{frame}
-\frametitle{Finite Element Methods}
-\begin{enumerate}
-    \item Writing the pair of PDE's as a linear system, we have
+    %\pause
+    \item Writing the pair of PDE's as a linear system results in
     \begin{align*}
     \pd{}{t}
     \begin{pmatrix} u \\ v \end{pmatrix}
@@ -174,17 +169,36 @@
     \end{pmatrix}
     \begin{pmatrix} u \\ v \end{pmatrix}
     \end{align*}
-    \item If we take the inner product of both sides with $\begin{pmatrix} u, v \end{pmatrix}$, we have that
-    $$ \int_\Omega u u_t + v v_t \dx{x} = \int_\Omega D u \Laplacian{u} - R u^2 + \omega u v - \omega v u + D v \Laplacian{v} - R v^2 \dx{x} $$
-    %\pause
-    Integrating by parts, we have that
-    \begin{align*}
-    \frac{1}{2} \pd{}{t} \left( \int_\Omega u^2 + v^2 \dx{x} \right) &= \int_\Omega -D \, (||\nabla u||^2 + ||\nabla v||^2) - R \, (u^2 + v^2) \dx{x} \\ &\leq 0
-    \end{align*}
-    %\pause
-    \item Now, $\int_\Omega u^2 + v^2 \dx{x} = \LTwoNorm{\Mxy}^2$, and so $\LTwoNorm{\Mxy}$ decreases with time
 \end{enumerate}
 \end{frame}
+
+%\begin{frame}
+%\frametitle{Finite Element Methods}
+%\vspace{-0.5cm}
+%\begin{align*}
+%    \pd{}{t}
+%    \begin{pmatrix} u \\ v \end{pmatrix}
+%    = \begin{pmatrix}
+%    D \Laplacian{} - R & \omega \\ 
+%    -\omega & D \Laplacian{} - R
+%    \end{pmatrix}
+%    \begin{pmatrix} u \\ v \end{pmatrix}
+%\end{align*}
+%\vspace{-0.25cm}
+%\begin{enumerate}
+%    \item If we take the inner product of both sides with $\begin{pmatrix} u \;\, v \end{pmatrix}^T$, we have that
+%    \begin{align*}
+%    \int_\Omega u u_t + v v_t \dx{x}
+%    &= \int_\Omega D u \Laplacian{u} - R u^2 + D v \Laplacian{v} - R v^2 \dx{x} \\
+%    &= \int_\Omega -D \, (||\nabla u||^2 + ||\nabla v||^2) - R \, (u^2 + v^2) \dx{x} \\
+%    &< 0 \quad \text{for u,v} \, \not\equiv 0
+%    \end{align*}
+%    \item Now, $ \int_\Omega u u_t + v v_t \dx{x} = \frac{1}{2} \pd{}{t} \left( \int_\Omega u^2 + v^2 \dx{x} \right) = \frac{1}{2} \pd{}{t} \LTwoNorm{\Mxy}^2$, and so
+%    $$ \pd{}{t} \LTwoNorm{\Mxy(\v{x},t)} < 0 $$
+%    Therefore, the magnitude of the transverse magnetization decreases with time
+%    %\item Additionally, it is clear that the presence of diffusion increases the rate of decrease
+%\end{enumerate}
+%\end{frame}
 
 \begin{frame}
 \frametitle{Finite Element Methods}
@@ -213,14 +227,10 @@
     \end{pmatrix}
     \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
     \end{align*}
-    \\ where $A^h \coloneqq D K^h + R^h$
+    \\ where $A^h \coloneqq D K^h + R^h$ is symmetric positive definite
 \end{enumerate}
 \end{frame}
-\begin{enumerate}
-    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
-\end{enumerate}
-\end{frame}
-%\frametitle{Finite Element Methods}
+\frametitle{Finite Element Methods}
 %\vspace{-1cm}
 %\begin{align*}
 %    \begin{pmatrix}
@@ -252,6 +262,43 @@
 %    \item For this reason, the second order and strongly A-stable time stepping \textsc{TR-BDF2} was used
 %\end{enumerate}
 %\end{frame}
+
+\subsection{Time Stepping}
+
+\begin{frame}
+\frametitle{Time Stepping Methods}
+\begin{align*}
+    \begin{pmatrix}
+    M^h & 0 \\ 
+    0 & M^h
+    \end{pmatrix}
+    \pd{}{t}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+    = -
+    \begin{pmatrix}
+    A^h & -W^h \\ 
+    W^h & A^h
+    \end{pmatrix}
+    \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+\end{align*}
+\begin{enumerate}
+    \item Solutions to the Bloch-Torrey equation decay exponentially in time at a rate roughly equal to $R(\v{x})$
+%    \begin{align*}
+%        - \begin{pmatrix} \v{u}^T \, \v{v}^T \end{pmatrix}
+%        \begin{pmatrix}
+%        A^h & -W^h \\ 
+%        W^h & A^h
+%        \end{pmatrix}
+%        \begin{pmatrix} \v{u} \\ \v{v} \end{pmatrix}
+%        &= - \v{u}^T A^h \v{u} - \v{v}^T A^h \v{v} \\
+%        &< 0 \quad \text{for \v{u},\v{v}} \, \neq \v{0}
+%    \end{align*}
+%    %\pause
+    \item The time discretisation scheme should therefore be at least strongly A-stable to reflect this
+    %\pause
+    \item For this reason, the strongly A-stable and second order accurate time stepping scheme \textsc{TR-BDF2} was used
+\end{enumerate}
+\end{frame}
 
 
 \section{Results}
