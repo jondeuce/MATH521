@@ -1,0 +1,43 @@
+function [S_tr, S_be] = CompareBTSignals
+
+tr_files = {'Fenics/trbdf2/tmp/dt_8e-3/signal.csv',...
+    'Fenics/trbdf2/tmp/dt_4e-3/signal.csv',...
+    'Fenics/trbdf2/tmp/dt_2e-3/signal.csv',...
+    'Fenics/trbdf2/tmp/dt_1e-3/signal.csv'};%,...
+%     'Fenics/trbdf2/tmp/dt_5e-4/signal.csv',...
+%     'Fenics/trbdf2/tmp/dt_2p5e-4/signal.csv',...
+%     'Fenics/trbdf2/tmp/dt_1p25e-4/signal.csv'};
+
+tr_dt = {8e-3, 4e-3, 2e-3, 1e-3, 5e-4, 2.5e-4, 1.25e-4};
+
+% be_files = {'Fenics/be/tmp/dt_8e-3/signal.csv',...
+%     'Fenics/be/tmp/dt_4e-3/signal.csv',...
+%     'Fenics/be/tmp/dt_2e-3/signal.csv',...
+%     'Fenics/be/tmp/dt_1e-3/signal.csv',...
+%     'Fenics/be/tmp/dt_5e-4/signal.csv',...
+%     'Fenics/be/tmp/dt_2p5e-4/signal.csv',...
+%     'Fenics/be/tmp/dt_1p25e-4/signal.csv',...
+%     'Fenics/be/tmp/dt_6p25e-5/signal.csv'};
+% 
+% be_dt = {8e-3, 4e-3, 2e-3, 1e-3, 5e-4, 2.5e-4, 1.25e-4, 6.25e-5};
+
+S_tr = loadSignals(tr_files, tr_dt);
+% S_be = loadSignals(be_files, be_dt);
+
+end
+
+function S = loadSignals(fileList, dt)
+
+S = struct('dt', [], 't', [], 'Sx', [], 'Sy', [], 'S', [], 'walltime', []);
+for ii = 1:length(fileList)
+    S(ii).dt = dt{ii};
+    
+    sig = load(fileList{ii});
+    S(ii).t = sig(:,1);
+    S(ii).Sx = sig(:,2);
+    S(ii).Sy = sig(:,3);
+    S(ii).S = sig(:,4);
+    S(ii).walltime = sig(:,5);
+end
+
+end

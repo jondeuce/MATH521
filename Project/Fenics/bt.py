@@ -7,9 +7,11 @@ conditions.
 from __future__ import print_function
 from fenics import *
 from mshr import *
-import time
 import numpy as np
-import os.path
+import time
+import csv
+import os
+from timeit import default_timer as timer
 
 def create_bt_problem(loadmesh = True, savemesh = True):
     # parameters which don't change
@@ -55,7 +57,7 @@ def create_bt_problem(loadmesh = True, savemesh = True):
     # u0 = Expression(('0.0','1.0'), degree=0)
     # u0 = project(u0, V)
     u0 = Constant((0.0, 1.0)) # π/2-pulse
-    u0 = interpolate(u0, V)
+    # u0 = interpolate(u0, V)
 
     return u0, V, mesh
 
@@ -111,90 +113,293 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
 
     return w, r
 
-def print_u(u):
-    # print the magnetization vector u = (u_1, u_2)
-    u_1, u_2 = u.split(deepcopy=True)
-    u_1, u_2 = u_1.vector().get_local(), u_2.vector().get_local()
-    u_magn = np.sqrt(np.square(u_1) + np.square(u_2))
+def print_u(U, S0=1.0):
+    # print the magnetization vector U = (u, v)
+    # u, v = U.split(deepcopy=True)
+    # u, v = u.vector().get_local(), v.vector().get_local()
+    # u_magn = np.sqrt(np.square(u) + np.square(v))
+    #
+    # print('  u range: [', u.min(), ', ', u.max(), ']')
+    # print('  v range: [', v.min(), ', ', v.max(), ']')
+    #
+    # print('||u|| range: [', np.min(u_magn), ', ', np.max(u_magn), ']')
+    # print('||u|| mean:   ', np.mean(u_magn))
 
-    print('  u_1 range: [', u_1.min(), ', ', u_1.max(), ']')
-    print('  u_2 range: [', u_2.min(), ', ', u_2.max(), ']')
+    # u, v = U.split(deepcopy=true)
+    # print('u range: [', u.vector().get_local().min(), ', ', u.vector().get_local().max(), ']')
+    # print('v range: [', v.vector().get_local().min(), ', ', v.vector().get_local().max(), ']')
 
-    print('||u|| range: [', np.min(u_magn), ', ', np.max(u_magn), ']')
-    print('||u|| mean:   ', np.mean(u_magn))
+    u, v = U.split()
+    Sx = assemble(u*dx)
+    Sy = assemble(v*dx)
+    S = np.sqrt(Sx**2 + Sy**2)
+
+    print('  [Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
+    print('        S  =  ', S)
 
     return
 
 def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
-                prnt = True, save = False, foldname = 'bt/tmp'):
+                prnt = True, save = False, foldname = 'be/tmp'):
+    # Total function time
+    funcstart = timer()
+
     # Number of timesteps
+    t = t0
     tsteps = int(round(T/dt))
 
     # Create geometry and initial condition
     u0, V, mesh = create_bt_problem()
-    w, r = create_bt_gamma(V, mesh, B0 = -3.0)
+    omega, r2decay = create_bt_gamma(V, mesh, B0 = -3.0)
 
     # Define the variational problem for the Backward Euler scheme
-    U = TrialFunction(V)
-    v = TestFunction(V)
-    U_1, U_2 = split(U)
-    v_1, v_2 = split(v)
+    # U = TrialFunction(V)
+    # v = TestFunction(V)
+    # U_1, U_2 = split(U)
+    # v_1, v_2 = split(v)
+    W = TrialFunction(V)
+    Z = TestFunction(V)
+    u, v = split(W)
+    x, y = split(Z)
 
     # Bloch-Torrey operator
-    B = (U_1 + r*dt*U_1 - w*dt*U_2)*v_1*dx + \
-        (U_2 + r*dt*U_2 + w*dt*U_1)*v_2*dx + \
-        D*dt*dot(grad(U_1),grad(v_1))*dx + \
-        D*dt*dot(grad(U_2),grad(v_2))*dx
+    B = (u + r2decay*dt*u - omega*dt*v)*x*dx + \
+        (v + r2decay*dt*v + omega*dt*u)*y*dx + \
+        D*dt*dot(grad(u),grad(x))*dx + \
+        D*dt*dot(grad(v),grad(y))*dx
+
+    # Assmble Bloch-Torrey solver
+    A = assemble(B)
+    # solver = KrylovSolver(A,'bicgstab','ilu')
+    solver = KrylovSolver(A,'gmres','ilu')
+    solver.parameters.absolute_tolerance = 1E-7
+    solver.parameters.relative_tolerance = 1E-4
+    solver.parameters.maximum_iterations = 1000
+    solver.parameters.nonzero_initial_guess = True
 
     # Export the initial data
-    u = Function(V, name='Magnetization')
-    u.assign(u0)
+    U = Function(V, name='Magnetization')
+    U.assign(u0)
+
+    # Compute initial signal
+    u, v = U.split()
+    Sx = assemble(u*dx)
+    Sy = assemble(v*dx)
+    S0 = np.sqrt(Sx**2 + Sy**2)
 
     if prnt:
         print('Step = ', 0, '/', tsteps , 'Time =', t0)
-        print_u(u0)
+        print_u(U, S0=S0)
 
     if save:
+        # check if folder exists
+        if not os.path.exists(foldname):
+            os.makedirs(foldname)
+
+        # write signal
+        signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
+        signal.writerow([t] + [Sx] + [Sy] + [S0] + [timer()-funcstart])
+
         # Create VTK files for visualization output and save initial state
-        vtkfile_u_1 = File(foldname + '/' + 'u_1.pvd')
-        vtkfile_u_2 = File(foldname + '/' + 'u_2.pvd')
-        u_1, u_2 = u.split()
-        vtkfile_u_1 << (u_1, t0)
-        vtkfile_u_2 << (u_2, t0)
+        # vtkfile_u = File(foldname + '/' + 'u.pvd')
+        # vtkfile_v = File(foldname + '/' + 'v.pvd')
+        # u, v = U.split()
+        # vtkfile_u << (u, t0)
+        # vtkfile_v << (v, t0)
 
     # Time-stepping
-    t = t0
     for k in range(tsteps):
+        # start loop time
+        loopstart = timer()
+
         # Current time
         t = t0 + (k+1)*dt
 
-        # Assemble the right hand side
-        u_1, u_2 = u.split()
-        L = u_1*v_1*dx + u_2*v_2*dx
+        # Assemble the right hand side with data from current step
+        u0, v0 = U.split()
+        L = u0*x*dx + v0*y*dx
+        b = assemble(L)
+        # bc.apply(b)
 
-        # Solve variational problem for time step
-        solve(B == L, u, solver_parameters={"linear_solver": "bicgstab"})
+        # solve into U (VectorFunction)
+        solver.solve(U.vector(), b)
+
+        # Calculate signal
+        u, v = U.split()
+        Sx = assemble(u*dx)
+        Sy = assemble(v*dx)
+        S = np.sqrt(Sx**2 + Sy**2)
+
+        # stop loop time
+        loopstop = timer()
+        looptime = loopstop - loopstart
 
         if prnt:
-            print('Step = ', k+1, '/', tsteps , 'Time =', t)
-            print_u(u)
+            print('Step = ', k+1, '/', tsteps , 'Time =', t, 'Loop = ', looptime)
+            print_u(U, S0=S0)
 
         if save:
-            u_1, u_2 = u.split()
-            vtkfile_u_1 << (u_1, t)
-            vtkfile_u_2 << (u_2, t)
-
-        # Update previous solution
-        # u0.assign(u)
-
-        # Update progress bar
-        # progress.update(t / T)
+            signal.writerow([t] + [Sx] + [Sy] + [S] + [timer()-funcstart])
+            # vtkfile_u << (u, t)
+            # vtkfile_v << (v, t)
 
     # Return Solution
-    return u
+    return U
+
+def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
+                prnt = True, save = False, foldname = 'trbdf2/tmp'):
+    # Total function time
+    funcstart = timer()
+
+    # Number of timesteps
+    t = t0
+    tsteps = int(round(T/dt))
+
+    # Create geometry and initial condition
+    U0_vec, V, mesh = create_bt_problem()
+    omega, r2decay = create_bt_gamma(V, mesh, B0 = -3.0)
+    # u0, v0 = U0_vec.split() # U0_vec is the vector initial condition
+
+    # Misc. constants for the TRBDF2 method with α = 2-√2
+    c1 = (1.0 - 1.0/sqrt(2.0));
+    c2 = 0.5*(1.0 + sqrt(2.0));
+    c3 = 0.5*(1.0 - sqrt(2.0));
+
+    # Define the variational problem
+    W = TrialFunction(V)
+    Z = TestFunction(V)
+    u, v = split(W)
+    x, y = split(Z)
+
+    A = (D*dot(grad(u), grad(x)) + r2decay*u*x - omega*u*y)*dx + \
+        (D*dot(grad(v), grad(y)) + r2decay*v*y + omega*v*x)*dx
+    M = u*x*dx + v*y*dx
+    B = M + (c1*dt)*A # LHS of the 1st and 2nd equation
+
+    # Assemble the LHS
+    A = assemble(B)
+    # bc.apply(A)
+
+    # Create solver objects (positive definite, but NON-symmetric)
+    #  -> list_linear_solver_methods()
+    #  -> list_krylov_solver_preconditioners()
+    # solver = KrylovSolver(A,'gmres','petsc_amg') # 3.14s/loop
+    solver = KrylovSolver(A,'gmres','ilu') # 1.95s/loop
+    # solver = KrylovSolver(A,'gmres','sor') # 2.0s/loop
+    # solver = KrylovSolver(A,'gmres','hypre_amg') # 2.05s/loop
+    # solver = KrylovSolver(A,'bicgstab','ilu') # 1.94s/loop
+    # solver = KrylovSolver(A,'bicgstab','sor') # 2.15s/loop
+    # solver = KrylovSolver(A,'bicgstab','petsc_amg') # 3.14s/loop
+    # solver = KrylovSolver(A,'bicgstab','hypre_amg') #2.16s/loop
+    solver.parameters.absolute_tolerance = 1E-7
+    solver.parameters.relative_tolerance = 1E-4
+    solver.parameters.maximum_iterations = 1000
+    solver.parameters.nonzero_initial_guess = True
+
+    # Set initial data
+    U = Function(V, name='Magnetization')
+    Ua = Function(V, name='InterMag')
+    U0 = Function(V, name='InitMag')
+    U.assign(U0_vec)
+    Ua.assign(U0_vec)
+    U0.assign(U0_vec)
+
+    # Compute initial signal
+    u0, v0 = U0.split()
+    Sx = assemble(u0*dx)
+    Sy = assemble(v0*dx)
+    S0 = np.sqrt(Sx**2 + Sy**2)
+
+    if prnt:
+        print('Step = ', 0, '/', tsteps , 'Time =', t0)
+        print_u(U0, S0=S0)
+
+    # Write initial data to file
+    if save:
+        if not os.path.exists(foldname):
+            os.makedirs(foldname)
+
+        # Save signal to csv-file
+        signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
+        signal.writerow([t] + [Sx] + [Sy] + [S0] + [timer()-funcstart])
+
+        # Create VTK files for visualization output and save initial state
+        # vtkfile_u = File(foldname + '/' + 'u.pvd')
+        # vtkfile_v = File(foldname + '/' + 'v.pvd')
+        # vtkfile_u << (u0, t0)
+        # vtkfile_v << (v0, t0)
+
+    # Time stepping
+    for k in range(tsteps):
+        # start loop time
+        loopstart = timer()
+
+        # Current time
+        t = t0 + (k+1)*dt
+
+        # System for the intermediate magnetization
+        u0, v0 = U0.split()
+        AU0 = (D*dot(grad(u0), grad(x)) + r2decay*u0*x - omega*u0*y)*dx + \
+              (D*dot(grad(v0), grad(y)) + r2decay*v0*y + omega*v0*x)*dx
+        MU0 = u0*x*dx + v0*y*dx
+        b = assemble(MU0 - (c1*dt)*AU0)
+        # bc.apply(b)
+
+        Ua.assign(U0)
+        solver.solve(Ua.vector(), b) # solve into Ua (VectorFunction)
+
+        # System for the magnetization at the next step
+        ua, va = Ua.split()
+        MUa = ua*x*dx + va*y*dx
+        b = assemble(c2*MUa + c3*MU0)
+        # bc.apply(b)
+
+        U.assign(Ua)
+        solver.solve(U.vector(), b) # solve into U (VectorFunction)
+
+        # Compute signal
+        u, v = U.split()
+        Sx = assemble(u*dx)
+        Sy = assemble(v*dx)
+        S = np.sqrt(Sx**2 + Sy**2)
+
+        # stop loop time
+        loopstop = timer()
+        looptime = loopstop - loopstart
+
+        if prnt:
+            print('Step = ', k+1, '/', tsteps , 'Time =', t, 'Loop = ', looptime)
+            print_u(U, S0=S0)
+
+        # Write data to file
+        if save:
+            signal.writerow([t] + [Sx] + [Sy] + [S] + [timer()-funcstart])
+            # vtkfile_u << (u, t)
+            # vtkfile_v << (v, t)
+
+        # Update
+        U0.assign(U)
 
 # ---------------------------------------------------------------------------- #
 # Solve the Bloch-Torrey equation with linear finite elements, time-stepping
 # using the backward euler method
 # ---------------------------------------------------------------------------- #
-u = bt_bwdeuler(prnt = True, save = True)
+
+if __name__ == "__main__":
+    u = bt_bwdeuler(prnt = True, save = True, dt = 8e-3, foldname = 'be/tmp/dt_8e-3')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 4e-3, foldname = 'be/tmp/dt_4e-3')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 2e-3, foldname = 'be/tmp/dt_2e-3')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 1e-3, foldname = 'be/tmp/dt_1e-3')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 5e-4, foldname = 'be/tmp/dt_5e-4')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 2.5e-4, foldname = 'be/tmp/dt_2p5e-4')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 1.25e-4, foldname = 'be/tmp/dt_1p25e-4')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 6.25e-5, foldname = 'be/tmp/dt_6p25e-5')
+    u = bt_bwdeuler(prnt = True, save = True, dt = 3.125e-5, foldname = 'be/tmp/dt_3p125e-5')
+
+    # u = bt_trbdf2(prnt = True, save = True, dt = 8e-3, foldname = 'trbdf2/tmp/dt_8e-3')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 4e-3, foldname = 'trbdf2/tmp/dt_4e-3')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 2e-3, foldname = 'trbdf2/tmp/dt_2e-3')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 1e-3, foldname = 'trbdf2/tmp/dt_1e-3')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 5e-4, foldname = 'trbdf2/tmp/dt_5e-4')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 2.5e-4, foldname = 'trbdf2/tmp/dt_2p5e-4')
+    # u = bt_trbdf2(prnt = True, save = True, dt = 1.25e-4, foldname = 'trbdf2/tmp/dt_1p25e-4')
