@@ -37,15 +37,24 @@
 
 \begin{frame}
 \frametitle{Magnetic Resonance Visualised}
+%\begin{enumerate}
+%    \item In actuality, spins (water molecules) do not truly fully refocus
+%    %\pause
+%    \item Relative angular frequency depends on local magnetic field, and therefore spins dephase at different rates at different locations
+%    %\pause
+%    \item In particular, the \textbf{diffusion} of spins during the scan ($\approx$ \SI{40}{\milli\second}) leads to a net lost in signal: \underline{the ``echo'' is weaker}
+%\end{enumerate}
 \begin{enumerate}
-    \item In actuality, spins (water molecules) do not truly fully refocus
+    \item Spins (water molecules) do not truly refocus:
     %\pause
-    \item Relative angular frequency depends on local magnetic field, and therefore spins dephase at different rates at different locations
-    %\pause
-    \item In particular, the \textbf{diffusion} of spins during the scan ($\approx$ \SI{40}{\milli\second}) leads to a net lost in signal: \underline{the ``echo'' is weaker}
+    \begin{enumerate}
+        \item Precession rate depends on position
+        %\pause
+        \item Diffusion plays an important role
+    \end{enumerate}
 \end{enumerate}
 \centering
-\includegraphics[width=0.4\linewidth]{gifs/HahnEcho_GWM-165}
+\includegraphics[width=0.55\linewidth]{gifs/HahnEcho_GWM-165}
 \end{frame}
 
 \begin{frame}
@@ -56,14 +65,16 @@
 \begin{column}{.5\textwidth}
 \begin{figure}
   \includegraphics[height=0.8\textwidth]{figures/voxelgeo}
-  \caption{Cubic imaging voxel filled with randomly oriented microvasculature}
+  \caption{Simulated imaging voxel}
+%  \caption{Cubic imaging voxel filled with randomly oriented microvasculature}
 \end{figure}
 \end{column}
 %\hfill
 \begin{column}{.5\textwidth}
 \begin{figure}
   \includegraphics[height=0.8\textwidth]{figures/domega}
-  \caption{Cross section of $\omega$ corresponding to the microvasculature filled voxel}
+  \caption{Cross section of precession rate}
+%  \caption{Cross section of $\omega$ corresponding to the microvasculature filled voxel}
 \end{figure}
 \end{column}
 \end{columns}
@@ -74,7 +85,7 @@
 \begin{frame}
 \frametitle{The Bloch-Torrey Equation}
 \begin{enumerate}
-    \item Evolution of the transverse magnetization through time is modelled with the \textbf{Bloch-Torrey equation}
+    \item Evolution of the magnetization is modelled by the \textbf{Bloch-Torrey equation}
     $$ \pd{\Mxy}{t} = D \Laplacian{\Mxy} - \CDecay \Mxy $$
     where:
     \begin{align*}
@@ -82,9 +93,9 @@
         \CDecay(\v{x}) &= R(\v{x}) + i \, \omega(\v{x})
     \end{align*}
     %\pause
-    \item The initial transverse magnetization $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
+    \item IC: $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
     %\pause
-    \item Boundary conditions are typically zero Neumann or periodic
+    \item BC: zero Neumann or periodic
     %\pause
     \item Note:
     $$ D = 0 \, \Rightarrow \, \Mxy(\v{x},t) = \Mxy_0(\v{x}) e^{-\CDecay(\v{x}) t} $$
@@ -99,7 +110,7 @@
 \begin{frame}
 \frametitle{Operator Splitting Methods}
 \begin{enumerate}
-    \item One effective method of solving the BT equation is via \textit{operator splitting methods}
+    %\item One effective method of solving the BT equation is via \textit{operator splitting methods}
     %\pause
     \item First, the BT PDE is rewritten in the more suggestive form
     $$ \pd{\Mxy}{t} = H \Mxy $$
@@ -129,7 +140,7 @@
         e^{-\Gamma t/2} \Mxy &= e^{-\Gamma(\v{x}) t/2} \odot \Mxy \\
         e^{D \Delta t} \Mxy &= \Phi \conv \Mxy
     \end{align*}
-    where $\odot$ is the Hadamard (pointwise) product, $\conv$ is the spatial convolution, and $\Phi$ is a Gaussian smoothing kernel with $\sigma = \sqrt{2Dt}$
+    %where $\odot$ is the Hadamard (pointwise) product, $\conv$ is the spatial convolution, and $\Phi$ is a Gaussian smoothing kernel with $\sigma = \sqrt{2Dt}$
 \end{enumerate}
 \end{frame}
 
@@ -140,11 +151,11 @@
 \begin{enumerate}
     \item The BT equation can also be solved using FEM
     %\pause
-    \item First, let $u=M_x$ and $v=M_y$ and rewrite the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
+    \item First, let $u=M_x$ and $v=M_y$ and write:% and rewrite the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
     \begin{equation*}
     \begin{cases}
-        \pd{u}{t} = D \Laplacian{u} - R u + \omega v, \qquad u(\v{x},0) = M_x(\v{x},0) \\
-        \hspace{0.5pt}\pd{v}{t} = D \Laplacian{v} - R v - \omega u, \qquad \hspace{1pt} v(\v{x},0) = M_y(\v{x},0)
+        \pd{u}{t} = D \Laplacian{u} - R u + \omega v\\%, \qquad u(\v{x},0) = M_x(\v{x},0) \\
+        \hspace{0.5pt}\pd{v}{t} = D \Laplacian{v} - R v - \omega u\\%, \qquad \hspace{1pt} v(\v{x},0) = M_y(\v{x},0)
     \end{cases}
     \end{equation*}
 %    with
@@ -197,12 +208,16 @@
 \begin{frame}
 \frametitle{Finite Element Methods}
 \begin{enumerate}
-    \item Applying the method of lines, the pair of PDE's becomes
+    \item Applying the method of lines:%, the pair of PDE's becomes
     \begin{align*}
         M^h \v{u}_t &= -(D K^h + R^h) \v{u} + W^h \v{v} \\
         M^h \v{v}_t &= -(D K^h + R^h) \v{v} - W^h \v{u}
     \end{align*}
-    where $R^h_{ij} \coloneqq \int R \,\phi_i \,\phi_j \dx{x}$, $W^h_{ij} \coloneqq \int \omega \,\phi_i \,\phi_j \dx{x}$, and $M^h$ and $K^h$ are the usual mass and stiffness matrices
+    where:% $R^h_{ij} \coloneqq \int R \,\phi_i \,\phi_j \dx{x}$, $W^h_{ij} \coloneqq \int \omega \,\phi_i \,\phi_j \dx{x}$, and $M^h$ and $K^h$ are the usual mass and stiffness matrices
+    \begin{align*}
+        R^h_{ij} &\coloneqq \int R \,\phi_i \,\phi_j \dx{x} \\
+        W^h_{ij} &\coloneqq \int \omega \,\phi_i \,\phi_j \dx{x}
+    \end{align*}
 %    %\pause
 %    \item $M^h$, $K^h$, and $R^h$ are symmetric positive definite; $W^h$ is symmetric
 %    %\pause
@@ -282,7 +297,7 @@
 \end{align*}
 \vspace{-0.5cm}
 \begin{enumerate}
-    \item Solutions to the Bloch-Torrey equation decay exponentially in time at a rate roughly equal to $R(\v{x})$
+    \item Solutions to the Bloch-Torrey equation decay exponentially in time at a rate of roughly $R(\v{x})$
 %    \begin{align*}
 %        - \begin{pmatrix} \v{u}^T \, \v{v}^T \end{pmatrix}
 %        \begin{pmatrix}
@@ -294,8 +309,8 @@
 %        &< 0 \quad \text{for \v{u},\v{v}} \, \neq \v{0}
 %    \end{align*}
 %    %\pause
-    \item The time 
-discretization scheme should therefore be at least strongly A-stable to reflect this
+%    \item The time 
+%discretization scheme should therefore be at least strongly A-stable to reflect this
     %\pause
     \item For this reason, the strongly A-stable and second order accurate time stepping scheme \textsc{TR-BDF2} was used
 \end{enumerate}
