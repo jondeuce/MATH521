@@ -403,3 +403,4 @@ if __name__ == "__main__":
     # u = bt_trbdf2(prnt = True, save = True, dt = 5e-4, foldname = 'trbdf2/tmp/dt_5e-4')
     # u = bt_trbdf2(prnt = True, save = True, dt = 2.5e-4, foldname = 'trbdf2/tmp/dt_2p5e-4')
     # u = bt_trbdf2(prnt = True, save = True, dt = 1.25e-4, foldname = 'trbdf2/tmp/dt_1p25e-4')
+    u = bt_trbdf2(prnt = True, save = True, dt = 6.25e-5, foldname = 'trbdf2/tmp/dt_6p25e-5')
