@@ -143,7 +143,7 @@ def bt_bilinear(U,Z,D,r,w):
     # U is a two-element vector, Z is a two-element vector, D is the diffusion
     # coefficient, r is the decay rate, and w is the precession rate
 
-    u, v = split(U) # trial function -> components
+    u, v = split(U) # "trial function" -> components
     x, y = split(Z) # test function -> components
 
     # Weak form bloch torrey operator:
@@ -156,7 +156,7 @@ def bt_bilinear(U,Z,D,r,w):
 
 def M_bilinear(U,Z):
     # Return the mass matrix operator: M = dot(U,Z)*dx
-    u, v = split(U) # trial function -> components
+    u, v = split(U) # "trial function" -> components
     x, y = split(Z) # test function -> components
     M = (u*x + v*y)*dx
     return M
@@ -165,7 +165,7 @@ def S_signal(U):
     u, v = U.split()
     Sx = assemble(u*dx) # x-component of signal
     Sy = assemble(v*dx) # y-component of signal
-    S = np.sqrt(Sx**2 + Sy**2) # signal magnitude
+    S = np.hypot(Sx, Sy)
     return Sx, Sy, S
 
 def print_u(U, S0=1.0):
@@ -283,7 +283,7 @@ def bt_bwdeuler(V, mesh, omega, r2decay,
             # vtkfile_u << (u, t)
             # vtkfile_v << (v, t)
 
-    return
+    return U
 
 def bt_trbdf2(V, mesh, omega, r2decay,
               t0 = 0.0, T = 40.0e-3, dt = 1.0e-3, Dcoeff = 3037.0, B0 = -3.0,
@@ -408,7 +408,7 @@ def bt_trbdf2(V, mesh, omega, r2decay,
         # Update
         U0.assign(U)
 
-    return
+    return U
 
 # ---------------------------------------------------------------------------- #
 # Solve the Bloch-Torrey equation with linear finite elements, time-stepping
@@ -420,36 +420,56 @@ if __name__ == "__main__":
     vesselunion = False
     vesselradius = 250.0
 
-    for vesselunion in [True, False]:
-        # for N, nslice in [(10,8),(25,16),(50,32),(100,32)]:
-        for N, nslice in [(100,32)]:
-            V, mesh, mesh_str = get_bt_geom(N = N, nslice = nslice, vesselrad = vesselradius, vesselunion = vesselunion)
-            # V, mesh, mesh_str = get_bt_geom(N = 10, nslice = 8, vesselrad = vesselradius, vesselunion = vesselunion)
-            # V, mesh, mesh_str = get_bt_geom(N = 25, nslice = 16, vesselrad = vesselradius, vesselunion = vesselunion)
-            # V, mesh, mesh_str = get_bt_geom(N = 50, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
-            # V, mesh, mesh_str = get_bt_geom(N = 100, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
-            # V, mesh, mesh_str = get_bt_geom(N = 200, nslice = 64, vesselrad = vesselradius, vesselunion = vesselunion)
+    # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
+    # Nlist, nslicelist = [10,25,50], [8,16,32]
+    # Nlist, nslicelist = [10], [8]
+    Nlist, nslicelist = [200], [64]
 
-            w, r = create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = vesselradius, force_outer = not vesselunion)
+    # Number of simulations to do, halving time step each time.
+    # Minimum time step dt_min = dt0/2^(Num-1):
+    #   9 -> dt_min = 8e-3/2**8 = 3.125e-5
+    #   8 -> dt_min = 8e-3/2**7 = 6.25e-5
+    #   7 -> dt_min = 8e-3/2**6 = 0.000125
+    dt0 = 8e-3
+    NumBE = 4
+    NumTR = 4
+
+    for vesselunion in [True, False]:
+        for N, nslice in zip(Nlist,nslicelist):
+
+            print("\n", "vesselunion = ", vesselunion, ", N = ", N, ", nslice = ", nslice, "\n")
+
+            Geomargs = {'N':N, 'nslice':nslice, 'vesselrad':vesselradius, 'vesselunion':vesselunion}
+            Gammaargs = {'B0':-3.0, 'theta_deg':90.0, 'a':vesselradius, 'force_outer':not vesselunion}
+
+            V, mesh, mesh_str = get_bt_geom(**Geomargs)
+            w, r = create_bt_gamma(V, mesh, **Gammaargs)
 
             parent_foldname = 'bt/results/union' if vesselunion else 'bt/results/hollow';
             results_foldname = parent_foldname + '/' + mesh_str
 
-            bt_bwdeuler(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'be/dt_8e-3')
-            bt_bwdeuler(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'be/dt_4e-3')
-            bt_bwdeuler(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'be/dt_2e-3')
-            bt_bwdeuler(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'be/dt_1e-3')
-            bt_bwdeuler(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_5e-4')
-            bt_bwdeuler(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_2p5e-4')
-            bt_bwdeuler(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'be/dt_1p25e-4')
-            bt_bwdeuler(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'be/dt_6p25e-5')
-            bt_bwdeuler(V, mesh, w, r, dt = 3.125e-5, save = True, foldname = results_foldname + '/' + 'be/dt_3p125e-5')
+            # ---------------------------------------------------------------- #
+            # Backward Euler Method
+            # ---------------------------------------------------------------- #
+            dt = dt0
+            for _ in range(NumBE):
+                BEfoldname = results_foldname + '/be/dt_' + str(dt).replace('.','p')
+                BEargs = {'dt':dt, 'save':True, 'foldname':BEfoldname}
 
-            bt_trbdf2(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_8e-3')
-            bt_trbdf2(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_4e-3')
-            bt_trbdf2(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2e-3')
-            bt_trbdf2(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1e-3')
-            bt_trbdf2(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_5e-4')
-            bt_trbdf2(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2p5e-4')
-            bt_trbdf2(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1p25e-4')
-            bt_trbdf2(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_6p25e-5')
+                print("\n", "BE: dt = ", dt, "\n")
+                bt_bwdeuler(V, mesh, w, r, **BEargs)
+
+                dt = 0.5*dt
+
+            # ---------------------------------------------------------------- #
+            # TRBDF2 (α = 2-√2) Method
+            # ---------------------------------------------------------------- #
+            dt = dt0
+            for _ in range(NumTR):
+                TRfoldname = results_foldname + '/trbdf2/dt_' + str(dt).replace('.','p')
+                TRargs = {'dt':dt, 'save':True, 'foldname':TRfoldname}
+
+                print("\n", "TRBDF2: dt = ", dt, "\n")
+                bt_trbdf2(V, mesh, w, r, **TRargs)
+
+                dt = 0.5*dt
