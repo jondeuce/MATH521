@@ -12,11 +12,11 @@
 \end{textblock*}
 \end{frame}
 
-\begin{frame}
-\tableofcontents
-%TODO
-\TODO{uncomment all ``pause'' statements}
-\end{frame}
+%\begin{frame}
+%\tableofcontents
+%%TODO
+%\TODO{uncomment all ``pause'' statements}
+%\end{frame}
 
 
 \section{Background}
@@ -46,10 +46,10 @@
 %\end{enumerate}
 \begin{enumerate}
     \item Spins (water molecules) do not truly refocus:
-    %\pause
+    \pause
     \begin{enumerate}
         \item Precession rate depends on position
-        %\pause
+        \pause
         \item Diffusion plays an important role
     \end{enumerate}
 \end{enumerate}
@@ -92,11 +92,11 @@
         \Mxy &= M_x + i \, M_y \\
         \CDecay(\v{x}) &= R(\v{x}) + i \, \omega(\v{x})
     \end{align*}
-    %\pause
+    \pause
     \item IC: $\Mxy(\v{x},0) = \Mxy_0(\v{x})$ is given
-    %\pause
+    \pause    
     \item BC: zero Neumann or periodic
-    %\pause
+    \pause
     \item Note:
     $$ D = 0 \, \Rightarrow \, \Mxy(\v{x},t) = \Mxy_0(\v{x}) e^{-\CDecay(\v{x}) t} $$
 \end{enumerate}
@@ -118,7 +118,7 @@
     \begin{gather*}
         H = -D \Laplacian{} + \CDecay.
     \end{gather*}
-    %\pause
+    \pause
     \item Then, the general solution $\Mxy$ may then be written as
     $$ \Mxy = e^{-Ht}\Mxy_0 $$
     where $e^{-Ht}$ is the \textit{evolution operator}
@@ -135,6 +135,7 @@
     \end{align*}
     %\pause
     %\item This form is advantageous because although $e^{-Ht}$ has no closed form for general $\CDecay$, the split operators do:
+    \pause
     \item Although $e^{-Ht}$ has no closed form, the split operators do:
     \begin{align*}
         e^{-\Gamma t/2} \Mxy &= e^{-\Gamma(\v{x}) t/2} \odot \Mxy \\
@@ -150,7 +151,7 @@
 \frametitle{Finite Element Methods}
 \begin{enumerate}
     \item The BT equation can also be solved using FEM
-    %\pause
+    \pause
     \item First, let $u=M_x$ and $v=M_y$ and write:% and rewrite the complex Bloch-Torrey PDE as a pair of coupled real PDE's:
     \begin{equation*}
     \begin{cases}
@@ -297,7 +298,7 @@
 \end{align*}
 \vspace{-0.5cm}
 \begin{enumerate}
-    \item Solutions to the Bloch-Torrey equation decay exponentially in time at a rate of roughly $R(\v{x})$
+    \item Solutions to the Bloch-Torrey equation decay exponentially in time and smooth high frequency modes
 %    \begin{align*}
 %        - \begin{pmatrix} \v{u}^T \, \v{v}^T \end{pmatrix}
 %        \begin{pmatrix}
@@ -311,8 +312,8 @@
 %    %\pause
 %    \item The time 
 %discretization scheme should therefore be at least strongly A-stable to reflect this
-    %\pause
-    \item For this reason, the strongly A-stable and second order accurate time stepping scheme \textsc{TR-BDF2} was used
+    \pause
+    \item Strongly A-stable time stepping methods are required %and second order accurate time stepping scheme \textsc{TR-BDF2} was used
 \end{enumerate}
 \end{frame}
 
@@ -321,12 +322,56 @@
 
 \subsection{Operator Splitting versus FEM}
 
+%\begin{frame}
+%\frametitle{Operator Splitting versus FEM}
+%\begin{enumerate}
+%    \item Comparing the solution of the BT equation with splitting methods versus FEM...
+%    \item \TODO{do this} %TODO
+%\end{enumerate}
+%\end{frame}
+
 \begin{frame}
 \frametitle{Operator Splitting versus FEM}
+\centering
+\includegraphics[width=0.9\linewidth]{figures/error_curves}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+\frametitle{Conclusion}
+\Large
 \begin{enumerate}
-    \item Comparing the solution of the BT equation with splitting methods versus FEM...
-    \item \TODO{do this} %TODO
+    \item Splitting methods:
+    \begin{enumerate}
+        \large
+        \item[$+$] Fast
+        \item[$-$] Resolution limitations
+        \item[$\pm$] Periodic boundary conditions
+    \end{enumerate}
+    \pause
+    \vspace{0.5cm}
+    \item Finite element methods:
+    \begin{enumerate}
+        \large
+        \item[$-$] Slow
+        \item[$+$] Flexible boundary conditions
+        \item[$+$] Adaptivity?
+    \end{enumerate}
 \end{enumerate}
 \end{frame}
+
+%\section{Acknowledgements}
+%\begin{frame}
+%\frametitle{Acknowledgements}
+%\centering
+%\vspace{-2.0cm}
+%\huge Thank you
+%\begin{textblock*}{3cm}(1.3cm,1cm)
+%    \includegraphics[height=3cm]{figures/ubc-logo}
+%\end{textblock*}
+%\begin{textblock*}{3cm}(6.8cm,1cm)
+%    \includegraphics[height=3cm]{figures/UBC-MRI-logo}
+%\end{textblock*}
+%\end{frame}
 
 \end{document}

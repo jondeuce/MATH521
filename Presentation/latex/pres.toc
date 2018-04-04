@@ -1,9 +1,10 @@
-\beamer@sectionintoc {1}{Background}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{Magnetic Resonance Visualised}{3}{0}{1}
-\beamer@subsectionintoc {1}{2}{The Bloch-Torrey Equation}{6}{0}{1}
-\beamer@sectionintoc {2}{Solving the Bloch-Torrey Equation}{7}{0}{2}
-\beamer@subsectionintoc {2}{1}{Operator Splitting Methods}{7}{0}{2}
-\beamer@subsectionintoc {2}{2}{Finite Element Methods}{9}{0}{2}
-\beamer@subsectionintoc {2}{3}{Time Stepping}{11}{0}{2}
-\beamer@sectionintoc {3}{Results}{12}{0}{3}
-\beamer@subsectionintoc {3}{1}{Operator Splitting versus FEM}{12}{0}{3}
+\beamer@sectionintoc {1}{Background}{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{Magnetic Resonance Visualised}{2}{0}{1}
+\beamer@subsectionintoc {1}{2}{The Bloch-Torrey Equation}{7}{0}{1}
+\beamer@sectionintoc {2}{Solving the Bloch-Torrey Equation}{11}{0}{2}
+\beamer@subsectionintoc {2}{1}{Operator Splitting Methods}{11}{0}{2}
+\beamer@subsectionintoc {2}{2}{Finite Element Methods}{15}{0}{2}
+\beamer@subsectionintoc {2}{3}{Time Stepping}{18}{0}{2}
+\beamer@sectionintoc {3}{Results}{20}{0}{3}
+\beamer@subsectionintoc {3}{1}{Operator Splitting versus FEM}{20}{0}{3}
+\beamer@sectionintoc {4}{Conclusion}{21}{0}{4}

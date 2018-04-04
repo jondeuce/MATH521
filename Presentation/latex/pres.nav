@@ -1,50 +1,53 @@
 \headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
 \headcommand {\beamer@framepages {1}{1}}
-\headcommand {\slideentry {0}{0}{2}{2/2}{}{0}}
+\headcommand {\beamer@sectionpages {1}{1}}
+\headcommand {\beamer@subsectionpages {1}{1}}
+\headcommand {\sectionentry {1}{Background}{2}{Background}{0}}
+\headcommand {\beamer@subsectionpages {2}{1}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{2}{Magnetic Resonance Visualised}}
+\headcommand {\slideentry {1}{1}{1}{2/2}{Magnetic Resonance Visualised}{0}}
 \headcommand {\beamer@framepages {2}{2}}
-\headcommand {\beamer@sectionpages {1}{2}}
-\headcommand {\beamer@subsectionpages {1}{2}}
-\headcommand {\sectionentry {1}{Background}{3}{Background}{0}}
-\headcommand {\beamer@subsectionpages {3}{2}}
-\headcommand {\beamer@subsectionentry {0}{1}{1}{3}{Magnetic Resonance Visualised}}
-\headcommand {\slideentry {1}{1}{1}{3/3}{Magnetic Resonance Visualised}{0}}
-\headcommand {\beamer@framepages {3}{3}}
-\headcommand {\slideentry {1}{1}{2}{4/4}{Magnetic Resonance Visualised}{0}}
-\headcommand {\beamer@framepages {4}{4}}
-\headcommand {\slideentry {1}{1}{3}{5/5}{Magnetic Resonance Visualised}{0}}
-\headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@subsectionpages {3}{5}}
-\headcommand {\beamer@subsectionentry {0}{1}{2}{6}{The Bloch-Torrey Equation}}
-\headcommand {\slideentry {1}{2}{1}{6/6}{The Bloch-Torrey Equation}{0}}
+\headcommand {\slideentry {1}{1}{2}{3/5}{Magnetic Resonance Visualised}{0}}
+\headcommand {\beamer@framepages {3}{5}}
+\headcommand {\slideentry {1}{1}{3}{6/6}{Magnetic Resonance Visualised}{0}}
 \headcommand {\beamer@framepages {6}{6}}
-\headcommand {\beamer@sectionpages {3}{6}}
-\headcommand {\beamer@subsectionpages {6}{6}}
-\headcommand {\sectionentry {2}{Solving the Bloch-Torrey Equation}{7}{Solving the Bloch-Torrey Equation}{0}}
-\headcommand {\beamer@subsectionpages {7}{6}}
-\headcommand {\beamer@subsectionentry {0}{2}{1}{7}{Operator Splitting Methods}}
-\headcommand {\slideentry {2}{1}{1}{7/7}{Operator Splitting Methods}{0}}
-\headcommand {\beamer@framepages {7}{7}}
-\headcommand {\slideentry {2}{1}{2}{8/8}{Operator Splitting Methods}{0}}
-\headcommand {\beamer@framepages {8}{8}}
-\headcommand {\beamer@subsectionpages {7}{8}}
-\headcommand {\beamer@subsectionentry {0}{2}{2}{9}{Finite Element Methods}}
-\headcommand {\slideentry {2}{2}{1}{9/9}{Finite Element Methods}{0}}
-\headcommand {\beamer@framepages {9}{9}}
-\headcommand {\slideentry {2}{2}{2}{10/10}{Finite Element Methods}{0}}
-\headcommand {\beamer@framepages {10}{10}}
-\headcommand {\beamer@subsectionpages {9}{10}}
-\headcommand {\beamer@subsectionentry {0}{2}{3}{11}{Time Stepping}}
-\headcommand {\slideentry {2}{3}{1}{11/11}{Time Stepping}{0}}
-\headcommand {\beamer@framepages {11}{11}}
-\headcommand {\beamer@sectionpages {7}{11}}
-\headcommand {\beamer@subsectionpages {11}{11}}
-\headcommand {\sectionentry {3}{Results}{12}{Results}{0}}
-\headcommand {\beamer@subsectionpages {12}{11}}
-\headcommand {\beamer@subsectionentry {0}{3}{1}{12}{Operator Splitting versus FEM}}
-\headcommand {\slideentry {3}{1}{1}{12/12}{Operator Splitting versus FEM}{0}}
-\headcommand {\beamer@framepages {12}{12}}
-\headcommand {\beamer@partpages {1}{12}}
-\headcommand {\beamer@subsectionpages {12}{12}}
-\headcommand {\beamer@sectionpages {12}{12}}
-\headcommand {\beamer@documentpages {12}}
+\headcommand {\beamer@subsectionpages {2}{6}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{7}{The Bloch-Torrey Equation}}
+\headcommand {\slideentry {1}{2}{1}{7/10}{The Bloch-Torrey Equation}{0}}
+\headcommand {\beamer@framepages {7}{10}}
+\headcommand {\beamer@sectionpages {2}{10}}
+\headcommand {\beamer@subsectionpages {7}{10}}
+\headcommand {\sectionentry {2}{Solving the Bloch-Torrey Equation}{11}{Solving the Bloch-Torrey Equation}{0}}
+\headcommand {\beamer@subsectionpages {11}{10}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{11}{Operator Splitting Methods}}
+\headcommand {\slideentry {2}{1}{1}{11/12}{Operator Splitting Methods}{0}}
+\headcommand {\beamer@framepages {11}{12}}
+\headcommand {\slideentry {2}{1}{2}{13/14}{Operator Splitting Methods}{0}}
+\headcommand {\beamer@framepages {13}{14}}
+\headcommand {\beamer@subsectionpages {11}{14}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{15}{Finite Element Methods}}
+\headcommand {\slideentry {2}{2}{1}{15/16}{Finite Element Methods}{0}}
+\headcommand {\beamer@framepages {15}{16}}
+\headcommand {\slideentry {2}{2}{2}{17/17}{Finite Element Methods}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\beamer@subsectionpages {15}{17}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{18}{Time Stepping}}
+\headcommand {\slideentry {2}{3}{1}{18/19}{Time Stepping}{0}}
+\headcommand {\beamer@framepages {18}{19}}
+\headcommand {\beamer@sectionpages {11}{19}}
+\headcommand {\beamer@subsectionpages {18}{19}}
+\headcommand {\sectionentry {3}{Results}{20}{Results}{0}}
+\headcommand {\beamer@subsectionpages {20}{19}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{20}{Operator Splitting versus FEM}}
+\headcommand {\slideentry {3}{1}{1}{20/20}{Operator Splitting versus FEM}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\beamer@sectionpages {20}{20}}
+\headcommand {\beamer@subsectionpages {20}{20}}
+\headcommand {\sectionentry {4}{Conclusion}{21}{Conclusion}{0}}
+\headcommand {\slideentry {4}{0}{1}{21/22}{}{0}}
+\headcommand {\beamer@framepages {21}{22}}
+\headcommand {\beamer@partpages {1}{22}}
+\headcommand {\beamer@subsectionpages {21}{22}}
+\headcommand {\beamer@sectionpages {21}{22}}
+\headcommand {\beamer@documentpages {22}}
 \headcommand {\gdef \inserttotalframenumber {12}}
