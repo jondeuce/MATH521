@@ -13,13 +13,13 @@ import csv
 import os
 from timeit import default_timer as timer
 
-def create_bt_problem(loadmesh = True, savemesh = True, N = 100, nslice = 32,
+def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
     L = 3000.0, vesselrad = 250.0, vesselunion = False):
     # voxel parameters (one major vessel)
-    #    L [= 3000.0]        voxel width [um]
-    #    vesselrad [= 250.0] major vessel radius [um]
-    #    N [= 100]           approx. num. cells along box edge (mesh resolution)
-    #    nslice [= 32]       num. edges used to construct cylinder boundary
+    #    L          [3000.0] voxel width [um]
+    #    vesselrad  [250.0]  major vessel radius [um]
+    #    N          [100]    approx. num. cells along box edge (mesh resolution)
+    #    nslice     [32]     num. edges used to construct cylinder boundary
 
 
     mesh_str = 'cylinder_N' + str(N) + '_ns' + str(nslice) + '_r' + str(int(round(vesselrad)))
@@ -52,29 +52,18 @@ def create_bt_problem(loadmesh = True, savemesh = True, N = 100, nslice = 32,
             File(mesh_filename) << mesh
 
     # Define function space
-    # element = VectorElement('P', tetrahedron, 1, dim=2)
-    # V = FunctionSpace(mesh, element)
-    # P1 = FiniteElement('P', tetrahedron, 1)
-    # element = MixedElement([P1, P1])
-    # V = FunctionSpace(mesh, element)
-    # V = VectorFunctionSpace(mesh, 'P', 1, dim=2)
     P1 = FiniteElement('P', tetrahedron, 1)
-    element = P1 * P1 #vector element
+    element = MixedElement([P1, P1])
     V = FunctionSpace(mesh, element)
 
-    # Initial condition
-    # u0 = Expression(('0.0','1.0'), degree=0)
-    # u0 = project(u0, V)
-    u0 = Constant((0.0, 1.0)) # π/2-pulse
-    # u0 = interpolate(u0, V)
+    return V, mesh, mesh_str
 
-    return u0, V, mesh
-
-def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
+def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250.0, force_outer = True):
     # ------------------------------------------------------------------------ #
     # Calculate dephasing frequency ω
     # ------------------------------------------------------------------------ #
     gamma = 2.67515255e8 # gyromagnetic ratio [rad/(s*Tesla)]
+    theta_rad = np.pi * (theta_deg/180.0) # angle in radians
 
     # Susceptibility difference in blood vs. tissue including contrast agent
     CA = 0.0
@@ -93,19 +82,43 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
 
     # Dephasing frequency ω and decay rate R₂ (uniform cylinder):
     #   reference for ω: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2962550/
-    theta_rad = (np.pi/180.0)*theta_deg
-    sinsqtheta = np.sin(theta_rad)**2
-    # outside vessel:
-    w = Expression("(0.5*gamma*B0*chi*sinsqtheta) * (a*a) * (x[1]*x[1]-x[0]*x[0]) / pow(x[0]*x[0]+x[1]*x[1],2.0)",
-                    degree = 1, gamma = gamma, B0 = B0, chi = dChi_Blood, sinsqtheta = sinsqtheta, a = a)
-    # inside vessel:
-    # w = Expression("(chi*gamma*B0/6) * ((3.0*x[2]*x[2])/(x[0]*x[0]+x[1]*x[1]+x[2]*x[2]) - 1.0)",
-    #             degree = 1, chi = dChi_Blood, gamma = gamma, B0 = B0)
+    code = '''
+    class MyFunc : public Expression
+    {
+    public:
+        double gamma, B0, chi, sinsqtheta, cossqtheta, radsq;
+        bool force_outer;
 
-    # Vw = FunctionSpace(mesh, 'P', 1)
-    # w = interpolate(w, Vw)
-    # print('max(w) = ', w.vector().get_local().max())
-    # print('min(w) = ', w.vector().get_local().min())
+        MyFunc() : Expression() {}
+
+        void eval(Array<double>& values, const Array<double>& x,
+                  const ufc::cell& c) const
+        {
+            const double a2 = radsq;
+            const double Kouter = gamma*B0*chi*sinsqtheta/2.0;
+            const double Kinner = gamma*B0*chi*(3.0*cossqtheta-1.0)/6.0;
+
+            const double y2x2 = x[1]*x[1]-x[0]*x[0]; // y^2 - x^2
+            const double r2 = x[0]*x[0]+x[1]*x[1]; // x^2 + y^2
+            const double InnerVal = Kinner;
+            const double OuterVal = Kouter * (a2/r2) * (y2x2/r2);
+
+            if (force_outer) {
+                // Assume all points are outside
+                values[0] = OuterVal;
+            } else {
+                // Points may be inside
+                values[0] = r2 >= a2 ? OuterVal : InnerVal;
+            }
+
+            return;
+        }
+    };'''
+
+    # Code expression
+    w = Expression(code, degree = 1, gamma = gamma, B0 = B0, chi = dChi_Blood,
+        sinsqtheta = np.sin(theta_rad)**2, cossqtheta = np.cos(theta_rad)**2,
+        radsq = a**2, force_outer = force_outer)
 
     # ------------------------------------------------------------------------ #
     # Calculate relaxation rate r
@@ -121,6 +134,39 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250):
     r = Constant(R2_Tissue_Base)
 
     return w, r
+
+def bt_bilinear(U,Z,D,r,w):
+    # Weak form of the Bloch-Torrey operator. Output operators are defined
+    # such that we have:
+    #   M*dU/dt = -A*U
+    #
+    # U is a two-element vector, Z is a two-element vector, D is the diffusion
+    # coefficient, r is the decay rate, and w is the precession rate
+
+    u, v = split(U) # trial function -> components
+    x, y = split(Z) # test function -> components
+
+    # Weak form bloch torrey operator:
+    #   A = [x, y] * [-DΔ+r    -w] * [u] dx
+    #                [   w  -DΔ+r]   [v]
+    A = dot(D*grad(u),grad(x))*dx + (r*u - w*v)*x*dx + \
+        dot(D*grad(v),grad(y))*dx + (r*v + w*u)*y*dx
+
+    return A
+
+def M_bilinear(U,Z):
+    # Return the mass matrix operator: M = dot(U,Z)*dx
+    u, v = split(U) # trial function -> components
+    x, y = split(Z) # test function -> components
+    M = (u*x + v*y)*dx
+    return M
+
+def S_signal(U):
+    u, v = U.split()
+    Sx = assemble(u*dx) # x-component of signal
+    Sy = assemble(v*dx) # y-component of signal
+    S = np.sqrt(Sx**2 + Sy**2) # signal magnitude
+    return Sx, Sy, S
 
 def print_u(U, S0=1.0):
     # print the magnetization vector U = (u, v)
@@ -138,18 +184,15 @@ def print_u(U, S0=1.0):
     # print('u range: [', u.vector().get_local().min(), ', ', u.vector().get_local().max(), ']')
     # print('v range: [', v.vector().get_local().min(), ', ', v.vector().get_local().max(), ']')
 
-    u, v = U.split()
-    Sx = assemble(u*dx)
-    Sy = assemble(v*dx)
-    S = np.sqrt(Sx**2 + Sy**2)
-
+    Sx, Sy, S = S_signal(U)
     print('  [Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
     # print('        S  =  ', S)
 
     return
 
-def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
-                save = False, foldname = 'be/tmp'):
+def bt_bwdeuler(V, mesh, omega, r2decay,
+                t0 = 0.0, T = 40.0e-3, dt = 1.0e-3, Dcoeff = 3037.0, B0 = -3.0,
+                prnt = True, save = False, foldname = 'be/tmp'):
     # Total function time
     funcstart = timer()
 
@@ -157,30 +200,21 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
     t = t0
     tsteps = int(round(T/dt))
 
-    # Create geometry and initial condition
-    u0, V, mesh = create_bt_problem()
-    omega, r2decay = create_bt_gamma(V, mesh, B0 = -3.0)
-
     # Define the variational problem for the Backward Euler scheme
-    # U = TrialFunction(V)
-    # v = TestFunction(V)
-    # U_1, U_2 = split(U)
-    # v_1, v_2 = split(v)
     W = TrialFunction(V)
     Z = TestFunction(V)
-    u, v = split(W)
-    x, y = split(Z)
 
-    # Bloch-Torrey operator
-    B = (u + r2decay*dt*u - omega*dt*v)*x*dx + \
-        (v + r2decay*dt*v + omega*dt*u)*y*dx + \
-        D*dt*dot(grad(u),grad(x))*dx + \
-        D*dt*dot(grad(v),grad(y))*dx
+    # Bloch-Torrey operator (backward euler step):
+    #   dU/dt = -A*U => (M + A*dt)U = M*U0
+    A = bt_bilinear(W,Z,Dcoeff,r2decay,omega)
+    M = M_bilinear(W,Z)
+    B = M + dt*A
 
     # Assmble Bloch-Torrey solver
-    A = assemble(B)
-    # solver = KrylovSolver(A,'bicgstab','ilu')
-    solver = KrylovSolver(A,'gmres','ilu')
+    B_mat = assemble(B)
+
+    # solver = KrylovSolver(B_mat,'bicgstab','ilu')
+    solver = KrylovSolver(B_mat,'gmres','ilu')
     solver.parameters.absolute_tolerance = 1E-7
     solver.parameters.relative_tolerance = 1E-4
     solver.parameters.maximum_iterations = 1000
@@ -188,13 +222,12 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
 
     # Export the initial data
     U = Function(V, name='Magnetization')
-    U.assign(u0)
+
+    U0_vec = Constant((0.0, 1.0)) # π/2-pulse
+    U.assign(U0_vec)
 
     # Compute initial signal
-    u, v = U.split()
-    Sx = assemble(u*dx)
-    Sy = assemble(v*dx)
-    S0 = np.sqrt(Sx**2 + Sy**2)
+    Sx0, Sy0, S0 = S_signal(U)
 
     if prnt:
         print('Step = ', 0, '/', tsteps , 'Time =', t0)
@@ -207,7 +240,7 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
 
         # write signal
         signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
-        signal.writerow([t] + [Sx] + [Sy] + [S0] + [timer()-funcstart])
+        signal.writerow([t] + [Sx0] + [Sy0] + [S0] + [timer()-funcstart])
 
         # Create VTK files for visualization output and save initial state
         # vtkfile_u = File(foldname + '/' + 'u.pvd')
@@ -224,9 +257,9 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
         # Current time
         t = t0 + (k+1)*dt
 
-        # Assemble the right hand side with data from current step
-        u0, v0 = U.split()
-        L = u0*x*dx + v0*y*dx
+        # Assemble the right hand (backward euler step; U = U0 here)
+        #   dU/dt = -A*U => (M + A*dt)U = M*U0
+        L = M_bilinear(U,Z)
         b = assemble(L)
         # bc.apply(b)
 
@@ -234,10 +267,7 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
         solver.solve(U.vector(), b)
 
         # Calculate signal
-        u, v = U.split()
-        Sx = assemble(u*dx)
-        Sy = assemble(v*dx)
-        S = np.sqrt(Sx**2 + Sy**2)
+        Sx, Sy, S = S_signal(U)
 
         # stop loop time
         loopstop = timer()
@@ -249,25 +279,21 @@ def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
 
         if save:
             signal.writerow([t] + [Sx] + [Sy] + [S] + [timer()-funcstart])
+            # u, v = U.split()
             # vtkfile_u << (u, t)
             # vtkfile_v << (v, t)
 
-    # Return Solution
-    return U
+    return
 
-def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
-                prnt = True, save = False, foldname = 'trbdf2/tmp'):
+def bt_trbdf2(V, mesh, omega, r2decay,
+              t0 = 0.0, T = 40.0e-3, dt = 1.0e-3, Dcoeff = 3037.0, B0 = -3.0,
+              prnt = True, save = False, foldname = 'trbdf2/tmp'):
     # Total function time
     funcstart = timer()
 
     # Number of timesteps
     t = t0
     tsteps = int(round(T/dt))
-
-    # Create geometry and initial condition
-    U0_vec, V, mesh = create_bt_problem()
-    omega, r2decay = create_bt_gamma(V, mesh, B0 = -3.0)
-    # u0, v0 = U0_vec.split() # U0_vec is the vector initial condition
 
     # Misc. constants for the TRBDF2 method with α = 2-√2
     c1 = (1.0 - 1.0/sqrt(2.0));
@@ -277,29 +303,28 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
     # Define the variational problem
     W = TrialFunction(V)
     Z = TestFunction(V)
-    u, v = split(W)
-    x, y = split(Z)
 
-    A = (D*dot(grad(u), grad(x)) + r2decay*u*x - omega*u*y)*dx + \
-        (D*dot(grad(v), grad(y)) + r2decay*v*y + omega*v*x)*dx
-    M = u*x*dx + v*y*dx
+    # LHS of both TRBDF2 steps (α = 2-√2):
+    #   (M+c1*dt*A)*Ua = (M - c1*dt*A)*U0
+    #   (M+c1*dt*A)*U  = c2*M*Ua + c3*M*U0
+    A = bt_bilinear(W,Z,Dcoeff,r2decay,omega)
+    M = M_bilinear(W,Z)
     B = M + (c1*dt)*A # LHS of the 1st and 2nd equation
-
-    # Assemble the LHS
-    A = assemble(B)
-    # bc.apply(A)
 
     # Create solver objects (positive definite, but NON-symmetric)
     #  -> list_linear_solver_methods()
     #  -> list_krylov_solver_preconditioners()
-    # solver = KrylovSolver(A,'gmres','petsc_amg') # 3.14s/loop
-    solver = KrylovSolver(A,'gmres','ilu') # 1.95s/loop
-    # solver = KrylovSolver(A,'gmres','sor') # 2.0s/loop
-    # solver = KrylovSolver(A,'gmres','hypre_amg') # 2.05s/loop
-    # solver = KrylovSolver(A,'bicgstab','ilu') # 1.94s/loop
-    # solver = KrylovSolver(A,'bicgstab','sor') # 2.15s/loop
-    # solver = KrylovSolver(A,'bicgstab','petsc_amg') # 3.14s/loop
-    # solver = KrylovSolver(A,'bicgstab','hypre_amg') #2.16s/loop
+    B_mat = assemble(B)
+    # bc.apply(A)
+
+    # solver = KrylovSolver(B_mat,'gmres','petsc_amg') # 3.14s/loop
+    solver = KrylovSolver(B_mat,'gmres','ilu') # 1.95s/loop
+    # solver = KrylovSolver(B_mat,'gmres','sor') # 2.0s/loop
+    # solver = KrylovSolver(B_mat,'gmres','hypre_amg') # 2.05s/loop
+    # solver = KrylovSolver(B_mat,'bicgstab','ilu') # 1.94s/loop
+    # solver = KrylovSolver(B_mat,'bicgstab','sor') # 2.15s/loop
+    # solver = KrylovSolver(B_mat,'bicgstab','petsc_amg') # 3.14s/loop
+    # solver = KrylovSolver(B_mat,'bicgstab','hypre_amg') #2.16s/loop
     solver.parameters.absolute_tolerance = 1E-7
     solver.parameters.relative_tolerance = 1E-4
     solver.parameters.maximum_iterations = 1000
@@ -309,15 +334,12 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
     U = Function(V, name='Magnetization')
     Ua = Function(V, name='InterMag')
     U0 = Function(V, name='InitMag')
-    U.assign(U0_vec)
-    Ua.assign(U0_vec)
+
+    U0_vec = Constant((0.0, 1.0)) # π/2-pulse
     U0.assign(U0_vec)
 
     # Compute initial signal
-    u0, v0 = U0.split()
-    Sx = assemble(u0*dx)
-    Sy = assemble(v0*dx)
-    S0 = np.sqrt(Sx**2 + Sy**2)
+    Sx0, Sy0, S0 = S_signal(U0)
 
     if prnt:
         print('Step = ', 0, '/', tsteps , 'Time =', t0)
@@ -330,11 +352,12 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
 
         # Save signal to csv-file
         signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
-        signal.writerow([t] + [Sx] + [Sy] + [S0] + [timer()-funcstart])
+        signal.writerow([t] + [Sx0] + [Sy0] + [S0] + [timer()-funcstart])
 
         # Create VTK files for visualization output and save initial state
         # vtkfile_u = File(foldname + '/' + 'u.pvd')
         # vtkfile_v = File(foldname + '/' + 'v.pvd')
+        # u0, v0 = U0.split()
         # vtkfile_u << (u0, t0)
         # vtkfile_v << (v0, t0)
 
@@ -346,31 +369,27 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
         # Current time
         t = t0 + (k+1)*dt
 
-        # System for the intermediate magnetization
-        u0, v0 = U0.split()
-        AU0 = (D*dot(grad(u0), grad(x)) + r2decay*u0*x - omega*u0*y)*dx + \
-              (D*dot(grad(v0), grad(y)) + r2decay*v0*y + omega*v0*x)*dx
-        MU0 = u0*x*dx + v0*y*dx
-        b = assemble(MU0 - (c1*dt)*AU0)
+        # RHS of second TRBDF2 step (α = 2-√2):
+        #   (M+c1*dt*A)*Ua = M*U0 - c1*dt*A*U0
+        A_U0 = bt_bilinear(U0,Z,Dcoeff,r2decay,omega)
+        M_U0 = M_bilinear(U0,Z)
+        b = assemble(M_U0 - (c1*dt)*A_U0)
         # bc.apply(b)
 
         Ua.assign(U0)
         solver.solve(Ua.vector(), b) # solve into Ua (VectorFunction)
 
-        # System for the magnetization at the next step
-        ua, va = Ua.split()
-        MUa = ua*x*dx + va*y*dx
-        b = assemble(c2*MUa + c3*MU0)
+        # RHS of second TRBDF2 step (α = 2-√2):
+        #   (M+c1*dt*A)*U  = c2*M*Ua + c3*M*U0z
+        M_Ua = M_bilinear(Ua,Z)
+        b = assemble(c2*M_Ua + c3*M_U0)
         # bc.apply(b)
 
         U.assign(Ua)
         solver.solve(U.vector(), b) # solve into U (VectorFunction)
 
         # Compute signal
-        u, v = U.split()
-        Sx = assemble(u*dx)
-        Sy = assemble(v*dx)
-        S = np.sqrt(Sx**2 + Sy**2)
+        Sx, Sy, S = S_signal(U)
 
         # stop loop time
         loopstop = timer()
@@ -389,39 +408,46 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
         # Update
         U0.assign(U)
 
+    return
+
 # ---------------------------------------------------------------------------- #
 # Solve the Bloch-Torrey equation with linear finite elements, time-stepping
 # using the backward euler method
 # ---------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
-    # u = bt_bwdeuler(dt = 8e-3, save = True, foldname = 'be/tmp/dt_8e-3')
-    # u = bt_bwdeuler(dt = 4e-3, save = True, foldname = 'be/tmp/dt_4e-3')
-    # u = bt_bwdeuler(dt = 2e-3, save = True, foldname = 'be/tmp/dt_2e-3')
-    # u = bt_bwdeuler(dt = 1e-3, save = True, foldname = 'be/tmp/dt_1e-3')
-    # u = bt_bwdeuler(dt = 5e-4, save = True, foldname = 'be/tmp/dt_5e-4')
-    # u = bt_bwdeuler(dt = 2.5e-4, save = True, foldname = 'be/tmp/dt_2p5e-4')
-    # u = bt_bwdeuler(dt = 1.25e-4, save = True, foldname = 'be/tmp/dt_1p25e-4')
-    # u = bt_bwdeuler(dt = 6.25e-5, save = True, foldname = 'be/tmp/dt_6p25e-5')
-    # u = bt_bwdeuler(dt = 3.125e-5, save = True, foldname = 'be/tmp/dt_3p125e-5')
+    # load mesh, or create if necessary
+    vesselunion = False
+    vesselradius = 250.0
 
-    # u = bt_trbdf2(dt = 8e-3, save = True, foldname = 'trbdf2/tmp/dt_8e-3')
-    # u = bt_trbdf2(dt = 4e-3, save = True, foldname = 'trbdf2/tmp/dt_4e-3')
-    # u = bt_trbdf2(dt = 2e-3, save = True, foldname = 'trbdf2/tmp/dt_2e-3')
-    # u = bt_trbdf2(dt = 1e-3, save = True, foldname = 'trbdf2/tmp/dt_1e-3')
-    # u = bt_trbdf2(dt = 5e-4, save = True, foldname = 'trbdf2/tmp/dt_5e-4')
-    # u = bt_trbdf2(dt = 2.5e-4, save = True, foldname = 'trbdf2/tmp/dt_2p5e-4')
-    # u = bt_trbdf2(dt = 1.25e-4, save = True, foldname = 'trbdf2/tmp/dt_1p25e-4')
-    # u = bt_trbdf2(dt = 6.25e-5, save = True, foldname = 'trbdf2/tmp/dt_6p25e-5')
+    for N, nslice in [(10,8),(25,16),(50,32),(100,32)]:
+        V, mesh, mesh_str = get_bt_geom(N = N, nslice = nslice, vesselrad = vesselradius, vesselunion = vesselunion)
+        # V, mesh, mesh_str = get_bt_geom(N = 10, nslice = 8, vesselrad = vesselradius, vesselunion = vesselunion)
+        # V, mesh, mesh_str = get_bt_geom(N = 25, nslice = 16, vesselrad = vesselradius, vesselunion = vesselunion)
+        # V, mesh, mesh_str = get_bt_geom(N = 50, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
+        # V, mesh, mesh_str = get_bt_geom(N = 100, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
+        # V, mesh, mesh_str = get_bt_geom(N = 200, nslice = 64, vesselrad = vesselradius, vesselunion = vesselunion)
 
-    # create_bt_problem(N = 10, nslice = 8, L = 3000.0, vesselrad = 250.0, vesselunion = True)
-    # create_bt_problem(N = 25, nslice = 16, L = 3000.0, vesselrad = 250.0, vesselunion = True)
-    create_bt_problem(N = 50, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
-    create_bt_problem(N = 100, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
-    create_bt_problem(N = 200, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+        w, r = create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = vesselradius, force_outer = not vesselunion)
 
-    # create_bt_problem(N = 10, nslice = 8, L = 3000.0, vesselrad = 250.0, vesselunion = False)
-    # create_bt_problem(N = 25, nslice = 16, L = 3000.0, vesselrad = 250.0, vesselunion = False)
-    # create_bt_problem(N = 50, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
-    # create_bt_problem(N = 100, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
-    create_bt_problem(N = 200, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
+        parent_foldname = 'bt/results/union' if vesselunion else 'bt/results/hollow';
+        results_foldname = parent_foldname + '/' + mesh_str
+
+        bt_bwdeuler(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'be/dt_8e-3')
+        bt_bwdeuler(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'be/dt_4e-3')
+        bt_bwdeuler(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'be/dt_2e-3')
+        bt_bwdeuler(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'be/dt_1e-3')
+        bt_bwdeuler(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_5e-4')
+        bt_bwdeuler(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_2p5e-4')
+        bt_bwdeuler(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'be/dt_1p25e-4')
+        bt_bwdeuler(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'be/dt_6p25e-5')
+        bt_bwdeuler(V, mesh, w, r, dt = 3.125e-5, save = True, foldname = results_foldname + '/' + 'be/dt_3p125e-5')
+
+        bt_trbdf2(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_8e-3')
+        bt_trbdf2(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_4e-3')
+        bt_trbdf2(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2e-3')
+        bt_trbdf2(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1e-3')
+        bt_trbdf2(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_5e-4')
+        bt_trbdf2(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2p5e-4')
+        bt_trbdf2(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1p25e-4')
+        bt_trbdf2(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_6p25e-5')
