@@ -2,6 +2,7 @@
 ## MATLABTOOLS GITIGNORE ##
 ###########################
 **.vtu
+**.xml.gz
 HW9/fenics/heat
 Project/Fenics/bt/tmp
 

@@ -13,19 +13,22 @@ import csv
 import os
 from timeit import default_timer as timer
 
-def create_bt_problem(loadmesh = True, savemesh = True):
-    # parameters which don't change
-    L = 3000 # voxel width [um]
-    vesselrad = 250 # major vessel radius [um]
-    vesselcircum = 2*np.pi*vesselrad
+def create_bt_problem(loadmesh = True, savemesh = True, N = 100, nslice = 32,
+    L = 3000.0, vesselrad = 250.0, vesselunion = False):
+    # voxel parameters (one major vessel)
+    #    L [= 3000.0]        voxel width [um]
+    #    vesselrad [= 250.0] major vessel radius [um]
+    #    N [= 100]           approx. num. cells along box edge (mesh resolution)
+    #    nslice [= 32]       num. edges used to construct cylinder boundary
 
-    # mesh filename
-    N = 100 # approximate number of cells along box edge (mesh resolution)
-    nslice = 32 # number of edges used to construct cylinder boundary
-    mesh_fname = 'bt/geom/cylinder_N' + str(N) + '_ns' + str(nslice) + '.xml.gz'
 
-    if loadmesh and os.path.isfile(mesh_fname):
-        mesh = Mesh(mesh_fname)
+    mesh_str = 'cylinder_N' + str(N) + '_ns' + str(nslice) + '_r' + str(int(round(vesselrad)))
+    geom_foldname = 'bt/geom/union' if vesselunion else 'bt/geom/hollow';
+    mesh_foldname = geom_foldname + '/' + mesh_str
+    mesh_filename = mesh_foldname + '/' + mesh_str + '.xml.gz'
+
+    if loadmesh and os.path.isfile(mesh_filename):
+        mesh = Mesh(mesh_filename)
     else:
         # Create a geometry and mesh it
         Nx, Ny, Nz = N, N, N
@@ -34,13 +37,19 @@ def create_bt_problem(loadmesh = True, savemesh = True):
         # cylindrical vessel radius [um]
         voxel = Box(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2))
         vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2), vesselrad, vesselrad, segments = nslice)
-        domain = voxel - vessel
+
+        if vesselunion:
+            domain = voxel + vessel
+        else:
+            domain = voxel - vessel
 
         mesh_res = N
         mesh = generate_mesh(domain, mesh_res)
 
         if savemesh:
-            File(mesh_fname) << mesh
+            if not os.path.exists(mesh_foldname):
+                os.makedirs(mesh_foldname)
+            File(mesh_filename) << mesh
 
     # Define function space
     # element = VectorElement('P', tetrahedron, 1, dim=2)
@@ -135,12 +144,12 @@ def print_u(U, S0=1.0):
     S = np.sqrt(Sx**2 + Sy**2)
 
     print('  [Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
-    print('        S  =  ', S)
+    # print('        S  =  ', S)
 
     return
 
 def bt_bwdeuler(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
-                prnt = True, save = False, foldname = 'be/tmp'):
+                save = False, foldname = 'be/tmp'):
     # Total function time
     funcstart = timer()
 
@@ -386,21 +395,33 @@ def bt_trbdf2(t0 = 0.0, T = 40.0e-3, dt = 1e-3, D = 3037.0,
 # ---------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
-    u = bt_bwdeuler(prnt = True, save = True, dt = 8e-3, foldname = 'be/tmp/dt_8e-3')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 4e-3, foldname = 'be/tmp/dt_4e-3')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 2e-3, foldname = 'be/tmp/dt_2e-3')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 1e-3, foldname = 'be/tmp/dt_1e-3')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 5e-4, foldname = 'be/tmp/dt_5e-4')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 2.5e-4, foldname = 'be/tmp/dt_2p5e-4')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 1.25e-4, foldname = 'be/tmp/dt_1p25e-4')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 6.25e-5, foldname = 'be/tmp/dt_6p25e-5')
-    u = bt_bwdeuler(prnt = True, save = True, dt = 3.125e-5, foldname = 'be/tmp/dt_3p125e-5')
+    # u = bt_bwdeuler(dt = 8e-3, save = True, foldname = 'be/tmp/dt_8e-3')
+    # u = bt_bwdeuler(dt = 4e-3, save = True, foldname = 'be/tmp/dt_4e-3')
+    # u = bt_bwdeuler(dt = 2e-3, save = True, foldname = 'be/tmp/dt_2e-3')
+    # u = bt_bwdeuler(dt = 1e-3, save = True, foldname = 'be/tmp/dt_1e-3')
+    # u = bt_bwdeuler(dt = 5e-4, save = True, foldname = 'be/tmp/dt_5e-4')
+    # u = bt_bwdeuler(dt = 2.5e-4, save = True, foldname = 'be/tmp/dt_2p5e-4')
+    # u = bt_bwdeuler(dt = 1.25e-4, save = True, foldname = 'be/tmp/dt_1p25e-4')
+    # u = bt_bwdeuler(dt = 6.25e-5, save = True, foldname = 'be/tmp/dt_6p25e-5')
+    # u = bt_bwdeuler(dt = 3.125e-5, save = True, foldname = 'be/tmp/dt_3p125e-5')
 
-    # u = bt_trbdf2(prnt = True, save = True, dt = 8e-3, foldname = 'trbdf2/tmp/dt_8e-3')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 4e-3, foldname = 'trbdf2/tmp/dt_4e-3')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 2e-3, foldname = 'trbdf2/tmp/dt_2e-3')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 1e-3, foldname = 'trbdf2/tmp/dt_1e-3')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 5e-4, foldname = 'trbdf2/tmp/dt_5e-4')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 2.5e-4, foldname = 'trbdf2/tmp/dt_2p5e-4')
-    # u = bt_trbdf2(prnt = True, save = True, dt = 1.25e-4, foldname = 'trbdf2/tmp/dt_1p25e-4')
-    u = bt_trbdf2(prnt = True, save = True, dt = 6.25e-5, foldname = 'trbdf2/tmp/dt_6p25e-5')
+    # u = bt_trbdf2(dt = 8e-3, save = True, foldname = 'trbdf2/tmp/dt_8e-3')
+    # u = bt_trbdf2(dt = 4e-3, save = True, foldname = 'trbdf2/tmp/dt_4e-3')
+    # u = bt_trbdf2(dt = 2e-3, save = True, foldname = 'trbdf2/tmp/dt_2e-3')
+    # u = bt_trbdf2(dt = 1e-3, save = True, foldname = 'trbdf2/tmp/dt_1e-3')
+    # u = bt_trbdf2(dt = 5e-4, save = True, foldname = 'trbdf2/tmp/dt_5e-4')
+    # u = bt_trbdf2(dt = 2.5e-4, save = True, foldname = 'trbdf2/tmp/dt_2p5e-4')
+    # u = bt_trbdf2(dt = 1.25e-4, save = True, foldname = 'trbdf2/tmp/dt_1p25e-4')
+    # u = bt_trbdf2(dt = 6.25e-5, save = True, foldname = 'trbdf2/tmp/dt_6p25e-5')
+
+    # create_bt_problem(N = 10, nslice = 8, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+    # create_bt_problem(N = 25, nslice = 16, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+    create_bt_problem(N = 50, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+    create_bt_problem(N = 100, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+    create_bt_problem(N = 200, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = True)
+
+    # create_bt_problem(N = 10, nslice = 8, L = 3000.0, vesselrad = 250.0, vesselunion = False)
+    # create_bt_problem(N = 25, nslice = 16, L = 3000.0, vesselrad = 250.0, vesselunion = False)
+    # create_bt_problem(N = 50, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
+    # create_bt_problem(N = 100, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
+    create_bt_problem(N = 200, nslice = 32, L = 3000.0, vesselrad = 250.0, vesselunion = False)
