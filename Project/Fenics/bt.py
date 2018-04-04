@@ -420,34 +420,36 @@ if __name__ == "__main__":
     vesselunion = False
     vesselradius = 250.0
 
-    for N, nslice in [(10,8),(25,16),(50,32),(100,32)]:
-        V, mesh, mesh_str = get_bt_geom(N = N, nslice = nslice, vesselrad = vesselradius, vesselunion = vesselunion)
-        # V, mesh, mesh_str = get_bt_geom(N = 10, nslice = 8, vesselrad = vesselradius, vesselunion = vesselunion)
-        # V, mesh, mesh_str = get_bt_geom(N = 25, nslice = 16, vesselrad = vesselradius, vesselunion = vesselunion)
-        # V, mesh, mesh_str = get_bt_geom(N = 50, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
-        # V, mesh, mesh_str = get_bt_geom(N = 100, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
-        # V, mesh, mesh_str = get_bt_geom(N = 200, nslice = 64, vesselrad = vesselradius, vesselunion = vesselunion)
+    for vesselunion in [True, False]:
+        # for N, nslice in [(10,8),(25,16),(50,32),(100,32)]:
+        for N, nslice in [(100,32)]:
+            V, mesh, mesh_str = get_bt_geom(N = N, nslice = nslice, vesselrad = vesselradius, vesselunion = vesselunion)
+            # V, mesh, mesh_str = get_bt_geom(N = 10, nslice = 8, vesselrad = vesselradius, vesselunion = vesselunion)
+            # V, mesh, mesh_str = get_bt_geom(N = 25, nslice = 16, vesselrad = vesselradius, vesselunion = vesselunion)
+            # V, mesh, mesh_str = get_bt_geom(N = 50, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
+            # V, mesh, mesh_str = get_bt_geom(N = 100, nslice = 32, vesselrad = vesselradius, vesselunion = vesselunion)
+            # V, mesh, mesh_str = get_bt_geom(N = 200, nslice = 64, vesselrad = vesselradius, vesselunion = vesselunion)
 
-        w, r = create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = vesselradius, force_outer = not vesselunion)
+            w, r = create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = vesselradius, force_outer = not vesselunion)
 
-        parent_foldname = 'bt/results/union' if vesselunion else 'bt/results/hollow';
-        results_foldname = parent_foldname + '/' + mesh_str
+            parent_foldname = 'bt/results/union' if vesselunion else 'bt/results/hollow';
+            results_foldname = parent_foldname + '/' + mesh_str
 
-        bt_bwdeuler(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'be/dt_8e-3')
-        bt_bwdeuler(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'be/dt_4e-3')
-        bt_bwdeuler(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'be/dt_2e-3')
-        bt_bwdeuler(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'be/dt_1e-3')
-        bt_bwdeuler(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_5e-4')
-        bt_bwdeuler(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_2p5e-4')
-        bt_bwdeuler(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'be/dt_1p25e-4')
-        bt_bwdeuler(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'be/dt_6p25e-5')
-        bt_bwdeuler(V, mesh, w, r, dt = 3.125e-5, save = True, foldname = results_foldname + '/' + 'be/dt_3p125e-5')
+            bt_bwdeuler(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'be/dt_8e-3')
+            bt_bwdeuler(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'be/dt_4e-3')
+            bt_bwdeuler(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'be/dt_2e-3')
+            bt_bwdeuler(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'be/dt_1e-3')
+            bt_bwdeuler(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_5e-4')
+            bt_bwdeuler(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'be/dt_2p5e-4')
+            bt_bwdeuler(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'be/dt_1p25e-4')
+            bt_bwdeuler(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'be/dt_6p25e-5')
+            bt_bwdeuler(V, mesh, w, r, dt = 3.125e-5, save = True, foldname = results_foldname + '/' + 'be/dt_3p125e-5')
 
-        bt_trbdf2(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_8e-3')
-        bt_trbdf2(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_4e-3')
-        bt_trbdf2(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2e-3')
-        bt_trbdf2(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1e-3')
-        bt_trbdf2(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_5e-4')
-        bt_trbdf2(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2p5e-4')
-        bt_trbdf2(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1p25e-4')
-        bt_trbdf2(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_6p25e-5')
+            bt_trbdf2(V, mesh, w, r, dt = 8e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_8e-3')
+            bt_trbdf2(V, mesh, w, r, dt = 4e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_4e-3')
+            bt_trbdf2(V, mesh, w, r, dt = 2e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2e-3')
+            bt_trbdf2(V, mesh, w, r, dt = 1e-3, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1e-3')
+            bt_trbdf2(V, mesh, w, r, dt = 5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_5e-4')
+            bt_trbdf2(V, mesh, w, r, dt = 2.5e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_2p5e-4')
+            bt_trbdf2(V, mesh, w, r, dt = 1.25e-4, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_1p25e-4')
+            bt_trbdf2(V, mesh, w, r, dt = 6.25e-5, save = True, foldname = results_foldname + '/' + 'trbdf2/dt_6p25e-5')
