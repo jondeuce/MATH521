@@ -59,6 +59,13 @@ def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
     return V, mesh, mesh_str
 
 def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250.0, force_outer = True):
+    # Problem parameters
+    CA = 0.0 # [mM]
+    Y = 0.61 # [fraction]
+    Hct = 0.44 # [fraction]
+    dChi_CA_per_mM = 0.3393e-6 #[(T/T)/mM]
+    dR2_CA_per_mM = 5.2 # [Hz/mM]
+
     # ------------------------------------------------------------------------ #
     # Calculate dephasing frequency ω
     # ------------------------------------------------------------------------ #
@@ -66,30 +73,26 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250.0, force_outer
     theta_rad = np.pi * (theta_deg/180.0) # angle in radians
 
     # Susceptibility difference in blood vs. tissue including contrast agent
-    CA = 0.0
-    dChi_CA_per_mM = 0.3393e-6
-    dChi_Blood_CA = CA * dChi_CA_per_mM
+    dChi_Blood_CA = dChi_CA_per_mM * CA
 
     # Susceptibilty of blood relative to tissue due to blood oxygenation and
     # hematocrit concentration is given by:
     #   deltaChi_Blood_Tissue  :=   Hct * (1-Y) * 2.26e-6 [T/T]
-    Y = 0.61
-    Hct = 0.44
-    dChi_Blood_Oxy = 2.26e-6*Hct*(1-Y)
+    dChi_Blood_Oxy = 2.26e-6 * Hct * (1-Y)
 
     # Total susceptibility difference in blood vs. tissue
     dChi_Blood = dChi_Blood_Oxy + dChi_Blood_CA
 
     # Dephasing frequency ω and decay rate R₂ (uniform cylinder):
     #   reference for ω: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2962550/
-    code = '''
-    class MyFunc : public Expression
+    OmegaCode = '''
+    class Omega : public Expression
     {
     public:
         double gamma, B0, chi, sinsqtheta, cossqtheta, radsq;
         bool force_outer;
 
-        MyFunc() : Expression() {}
+        Omega() : Expression() {}
 
         void eval(Array<double>& values, const Array<double>& x,
                   const ufc::cell& c) const
@@ -98,8 +101,8 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250.0, force_outer
             const double Kouter = gamma*B0*chi*sinsqtheta/2.0;
             const double Kinner = gamma*B0*chi*(3.0*cossqtheta-1.0)/6.0;
 
-            const double y2x2 = x[1]*x[1]-x[0]*x[0]; // y^2 - x^2
-            const double r2 = x[0]*x[0]+x[1]*x[1]; // x^2 + y^2
+            const double y2x2 = x[1]*x[1] - x[0]*x[0]; // y^2 - x^2
+            const double r2 = x[0]*x[0] + x[1]*x[1]; // x^2 + y^2
             const double InnerVal = Kinner;
             const double OuterVal = Kouter * (a2/r2) * (y2x2/r2);
 
@@ -116,22 +119,51 @@ def create_bt_gamma(V, mesh, B0 = -3.0, theta_deg = 90.0, a = 250.0, force_outer
     };'''
 
     # Code expression
-    w = Expression(code, degree = 1, gamma = gamma, B0 = B0, chi = dChi_Blood,
-        sinsqtheta = np.sin(theta_rad)**2, cossqtheta = np.cos(theta_rad)**2,
-        radsq = a**2, force_outer = force_outer)
+    w = Expression(OmegaCode, degree = 1, force_outer = force_outer,
+        gamma = gamma, B0 = B0, chi = dChi_Blood, radsq = a**2,
+        sinsqtheta = np.sin(theta_rad)**2, cossqtheta = np.cos(theta_rad)**2)
 
     # ------------------------------------------------------------------------ #
     # Calculate relaxation rate r
     # ------------------------------------------------------------------------ #
-    T2_Tissue_Base = 69 # standard value [ms]
+    T2_Tissue_Base = 69.0 # B0 = -3.0T value [ms]
+    dR2_Blood_Oxy = 30.0125 # B0 = -3.0T value (with Y = 0.61) [Hz]
+
     if B0 == -3.0:
-        T2_Tissue_Base = 69 # +/- 3 [ms]
+        T2_Tissue_Base = 69.0 # +/- 3 [ms]
+        dR2_Blood_Oxy = 30.0125 # For Y = 0.61 [Hz]
     if B0 == -7.0:
         T2_Tissue_Base = 45.9 # +/-1.9 [ms]
+        dR2_Blood_Oxy = 71.114475 # For Y = 0.61 [Hz]
 
-    R2_Tissue_Base = 1000/T2_Tissue_Base # [ms] -> [Hz]
+    dR2_Blood_CA = dR2_CA_per_mM * CA # R2 change due to CA [ms]
+    R2_Blood = dR2_Blood_Oxy + dR2_Blood_CA # Total R2 [ms]
+    R2_Tissue = 1000.0/T2_Tissue_Base # [ms] -> [Hz]
 
-    r = Constant(R2_Tissue_Base)
+    R2DecayCode = '''
+    class R2Decay : public Expression
+    {
+    public:
+        double R2_Blood, R2_Tissue, radsq;
+
+        R2Decay() : Expression() {}
+
+        void eval(Array<double>& values, const Array<double>& x,
+                  const ufc::cell& c) const
+        {
+            // Points may be inside
+            const double a2 = radsq;
+            const double r2 = x[0]*x[0] + x[1]*x[1]; // x^2 + y^2
+            values[0] = r2 >= a2 ? R2_Tissue : R2_Blood;
+
+            return;
+        }
+    };'''
+
+    if force_outer:
+        r = Constant(R2_Tissue)
+    else:
+        r = Expression(R2DecayCode, degree = 1, R2_Tissue = R2_Tissue, R2_Blood = R2_Blood)
 
     return w, r
 
@@ -296,20 +328,20 @@ def bt_trbdf2(V, mesh, omega, r2decay,
     tsteps = int(round(T/dt))
 
     # Misc. constants for the TRBDF2 method with α = 2-√2
-    c1 = (1.0 - 1.0/sqrt(2.0));
-    c2 = 0.5*(1.0 + sqrt(2.0));
-    c3 = 0.5*(1.0 - sqrt(2.0));
+    c0 = (1.0 - 1.0/sqrt(2.0));
+    c1 = 0.5*(1.0 + sqrt(2.0));
+    c2 = 0.5*(1.0 - sqrt(2.0));
 
     # Define the variational problem
     W = TrialFunction(V)
     Z = TestFunction(V)
 
     # LHS of both TRBDF2 steps (α = 2-√2):
-    #   (M+c1*dt*A)*Ua = (M - c1*dt*A)*U0
-    #   (M+c1*dt*A)*U  = c2*M*Ua + c3*M*U0
+    #   (M+c0*dt*A)*Ua = (M - c0*dt*A)*U0
+    #   (M+c0*dt*A)*U  = c1*M*Ua + c2*M*U0
     A = bt_bilinear(W,Z,Dcoeff,r2decay,omega)
     M = M_bilinear(W,Z)
-    B = M + (c1*dt)*A # LHS of the 1st and 2nd equation
+    B = M + (c0*dt)*A # LHS of the 1st and 2nd equation
 
     # Create solver objects (positive definite, but NON-symmetric)
     #  -> list_linear_solver_methods()
@@ -370,19 +402,19 @@ def bt_trbdf2(V, mesh, omega, r2decay,
         t = t0 + (k+1)*dt
 
         # RHS of second TRBDF2 step (α = 2-√2):
-        #   (M+c1*dt*A)*Ua = M*U0 - c1*dt*A*U0
+        #   (M+c0*dt*A)*Ua = M*U0 - c0*dt*A*U0
         A_U0 = bt_bilinear(U0,Z,Dcoeff,r2decay,omega)
         M_U0 = M_bilinear(U0,Z)
-        b = assemble(M_U0 - (c1*dt)*A_U0)
+        b = assemble(M_U0 - (c0*dt)*A_U0)
         # bc.apply(b)
 
         Ua.assign(U0)
         solver.solve(Ua.vector(), b) # solve into Ua (VectorFunction)
 
         # RHS of second TRBDF2 step (α = 2-√2):
-        #   (M+c1*dt*A)*U  = c2*M*Ua + c3*M*U0z
+        #   (M+c0*dt*A)*U  = c1*M*Ua + c2*M*U0z
         M_Ua = M_bilinear(Ua,Z)
-        b = assemble(c2*M_Ua + c3*M_U0)
+        b = assemble(c1*M_Ua + c2*M_U0)
         # bc.apply(b)
 
         U.assign(Ua)
@@ -416,9 +448,8 @@ def bt_trbdf2(V, mesh, omega, r2decay,
 # ---------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
-    # load mesh, or create if necessary
-    vesselunion = False
-    vesselradius = 250.0
+    # vesselunionlist = [True, False]
+    vesselunionlist = [True]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
@@ -430,17 +461,21 @@ if __name__ == "__main__":
     #   9 -> dt_min = 8e-3/2**8 = 3.125e-5
     #   8 -> dt_min = 8e-3/2**7 = 6.25e-5
     #   7 -> dt_min = 8e-3/2**6 = 0.000125
-    dt0 = 8e-3
-    NumBE = 4
-    NumTR = 4
+    dt0 = 8.0e-3 # [s]
+    NumBE = 0
+    NumTR = 7
 
-    for vesselunion in [True, False]:
+    vesselradius = 250.0
+    theta_deg = 90.0
+    B0 = -3.0
+
+    for vesselunion in vesselunionlist:
         for N, nslice in zip(Nlist,nslicelist):
 
             print("\n", "vesselunion = ", vesselunion, ", N = ", N, ", nslice = ", nslice, "\n")
 
             Geomargs = {'N':N, 'nslice':nslice, 'vesselrad':vesselradius, 'vesselunion':vesselunion}
-            Gammaargs = {'B0':-3.0, 'theta_deg':90.0, 'a':vesselradius, 'force_outer':not vesselunion}
+            Gammaargs = {'B0':B0, 'theta_deg':theta_deg, 'a':vesselradius, 'force_outer':not vesselunion}
 
             V, mesh, mesh_str = get_bt_geom(**Geomargs)
             w, r = create_bt_gamma(V, mesh, **Gammaargs)

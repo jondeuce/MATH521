@@ -1,12 +1,16 @@
-\documentclass[10pt,letterpaper]{scrartcl}
-\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\include{preamble}
+%\documentclass[10pt,letterpaper]{scrartcl}
+%\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,dsfont,enumerate,fontawesome,graphicx}
+\usepackage{amsfonts,amsmath,amssymb,braket,xcolor,enumerate,graphicx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings,multicol,mathtools,textcomp,tikz,pgfplots,wrapfig}
 \usepackage[inner=2cm,outer=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{appendix}
+\usepackage{fancyhdr}
 \usetikzlibrary{arrows}
-\pgfplotsset{compat=1.12}
+%\pgfplotsset{compat=1.12}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -36,9 +40,9 @@ Timm Treskatis
 
 \section*{Homework Assignment 12}
 
-Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
+%Please submit the following files as indicated below: \hfill \faFileCodeO \: source code \hfill \faFilePdfO \: PDF file \hfill \faFilePictureO \: image file \hfill \faFileMovieO \: video file
 
-\paragraph*{Question 1 $\vert$ 3 marks $\vert$ \faFileCodeO{} \: \faFilePdfO}
+\paragraph*{Question 1 $\vert$ 3 marks}% $\vert$ \faFileCodeO{} \: \faFilePdfO}
 
 Today we're solving the linear advection equation
 \begin{subequations}\label{eq:advection}
@@ -48,30 +52,35 @@ u(0) &= u_0 && \text{in } \Omega\\
 u(t) &= g(t) && \text{on } \Sigma_- = \Set{(t,x) \in \: ]0,T[ \times \partial\Omega | a(t,x)\cdot n(x) < 0},
 \end{align}
 \end{subequations}
-where $a: \: ]0,T[ \times \Omega \to \mathds{R}^2$ is a given vector field, thought of as the flow velocity of a carrier fluid, and $u_0: \Omega \to [0,1]$ the initial concentration of a solute. $g: \: ]0,T[ \times \partial\Omega \to [0,1]$ prescribes the concentration on that part of the boundary $\partial \Omega$ where the flow of solvent is directed into the domain and we use $n$ to denote the outward pointing unit normal vectors on $\partial \Omega$. For simplicity we assume in what follows that $a$ and $g$ do not depend on time.
+where $a: \: ]0,T[ \times \Omega \to \mathbb{R}^2$ is a given vector field, thought of as the flow velocity of a carrier fluid, and $u_0: \Omega \to [0,1]$ the initial concentration of a solute. $g: \: ]0,T[ \times \partial\Omega \to [0,1]$ prescribes the concentration on that part of the boundary $\partial \Omega$ where the flow of solvent is directed into the domain and we use $n$ to denote the outward pointing unit normal vectors on $\partial \Omega$. For simplicity we assume in what follows that $a$ and $g$ do not depend on time.
 
 Recall that upwind discontinuous \textsc{Galerkin} methods employ the bilinear form
 \begin{equation*}
-\sum_{T\in\mathcal{T}^h} -\int\limits_T ua \cdot \nabla v \dx + \sum_{e\in\mathcal{E}^h} \int\limits_e [v] u_\text{up} a \cdot n_+ \ds
+\sum_{T\in\mathcal{T}^h} -\int\limits_T ua \cdot \nabla v \dx + \sum_{e\in\mathcal{E}^h} \int\limits_e [v] u_{\text{up}} a \cdot n_+ \ds
 \end{equation*}
 to discretise the transport term $\operatorname{div} (ua)$.
 \begin{enumerate}[(a)]
 \item We define the positive and negative parts of a function $f$ by
 \begin{equation*}
-f^\text{pos} = \frac{f + \lvert f \rvert}{2} \qquad \text{and} \qquad f^\text{neg} = \frac{f - \lvert f \rvert}{2}.
+f^{\text{pos}} = \frac{f + \lvert f \rvert}{2} \qquad \text{and} \qquad f^{\text{neg}} = \frac{f - \lvert f \rvert}{2}.
 \end{equation*}
-Re-write the edge integral in the upwind DG form in terms of $g$, $u_+$, $u_-$, $(a\cdot n)_+^\text{pos}$, $(a\cdot n)_+^\text{neg}$ and $[v]$:
+Re-write the edge integral in the upwind DG form in terms of $g$, $u_+$, $u_-$, $(a\cdot n_+)^{\text{pos}}$, $(a\cdot n_+)^{\text{neg}}$ and $[v]$:
 \begin{itemize}
 \item If $e$ is an interior edge:
-\begin{equation*}
-\int\limits_e [v] u_\text{up} a \cdot n_+ \ds = \hspace{35em}
-\end{equation*}
+\begin{align*}
+\int\limits_e [v] u_{\text{up}} a \cdot n_+ \ds
+&= \int\limits_e [v] u_{\text{up}} \left[ (a\cdot n_+)^{\text{pos}} + (a\cdot n_+)^{\text{neg}} \right] \ds \\
+&= \int\limits_e [v] u_+ (a\cdot n_+)^{\text{pos}} \ds + \int\limits_e [v] u_- (a\cdot n_+)^{\text{neg}} \ds
+\end{align*}
+The second line follows from the fact that $(a\cdot n_+)^{\text{pos}} = 0$ when $a\cdot n_+ < 0$, and therefore $u_{\text{up}} = u_+$ wherever the integrand in non-zero. Similarly, $u_{\text{up}} = u_-$ in the second term when $(a\cdot n_+)^{\text{neg}}$ is non-zero.
 \vfill
 \item If $e$ is an exterior edge (no $\pm$ subscripts or $[\:]$ brackets needed, there is only one neighbouring triangle):
-\begin{equation*}
-\int\limits_e [v] u_\text{up} a \cdot n_+ \ds = \hspace{35em}
-\end{equation*}
-\vfill
+\begin{align*}
+\int\limits_e [v] u_{\text{up}} a \cdot n_+ \ds
+&= \int\limits_e v u_{\text{up}} \left[ (a\cdot n)^{\text{pos}} + (a\cdot n)^{\text{neg}} \right] \ds \\
+&= \int\limits_e v u (a\cdot n)^{\text{pos}} \ds + \int\limits_e v g (a\cdot n)^{\text{neg}} \ds
+\end{align*}
+Where we have used the fact that $u=g$ when $a\cdot n < 0$.
 \end{itemize}
 
 \newpage
@@ -108,7 +117,7 @@ Describe any discrepancies between the numerical solution and the exact solution
 
 \newpage
 
-\paragraph*{Question 2 $\vert$ 2 marks $\vert$ \faFileCodeO{} \:}
+\paragraph*{Question 2 $\vert$ 2 marks}% $\vert$ \faFileCodeO{} \:}
 
 Make a copy of your script \texttt{hw12.py} and modify it to solve the advection-diffusion problem
 \begin{subequations}\label{eq:advection-diffusion}
@@ -131,7 +140,7 @@ as derived in class, here written in a form that can be translated directly into
 
 \emph{Hint:} The commands \verb|h = CellSize(mesh)| and \verb|avg(u)| may be helpful.
 
-\paragraph*{Your Learning Progress $\vert$ \faFilePdfO}
+\paragraph*{Your Learning Progress}% $\vert$ \faFilePdfO}
 
 What is the one most important thing that you have learnt from this assignment?
 
@@ -156,5 +165,17 @@ What is the most substantial new insight that you have gained from this course t
 
 \vspace*{3mm}
 \hrulefill
+
+\newpage
+\begin{appendices}
+% ------------------------------------------------------------ %
+% Appendix A: Code
+% ------------------------------------------------------------ %
+\newpage
+\lhead{}
+\section{}\label{hw12code}
+\textbf{\Large\texttt{hw12.py}}
+\includecode{../fenics/hw12.py}
+\end{appendices}
 
 \end{document}
