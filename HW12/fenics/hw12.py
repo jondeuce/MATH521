@@ -107,11 +107,11 @@ def get_Lg(u,v):
 # Writing f = L-B*u, the theta method gives us:
 #   M*u₁ = M*u₀ + Δt(θ*f(t,u₁) + (1-θ)*f(t,u₀))
 # And so:
-#   M*u₁ - θΔt*f(t,u₁) = M*u₀ + (1-θ)Δt*f(t,u₀)
+#   M*u₁ - θΔt*f(t,u₁)  = M*u₀ + (1-θ)Δt*f(t,u₀)
 #   M*u₁ - θΔt*(L-B*u₁) = M*u₀ + (1-θ)Δt*(L-B*u₀)
-#   (M + θΔt*B)*u₁ = M*u₀ + (1-θ)Δt*(L-B*u₀) + θΔt*L
-#   (M + θΔt*B)*u₁ = (M - (1-θ)Δt*B)*u₀ + Δt*L
+#    ==> (M + θΔt*B)*u₁ = (M - (1-θ)Δt*B)*u₀ + Δt*L
 
+# LHS matrix: M + θΔt*B
 M = get_M(u,v)
 B = get_B(u,v)
 A = assemble(M + theta*dt*B)
@@ -138,7 +138,7 @@ for k in range(tsteps):
     t = t0 + (k+1)*dt
     print('Step = ', k+1, '/', tsteps , 'Time =', t)
 
-    # Define right hand side
+    # Define right hand side: RHS = (M - (1-θ)Δt*B)*u₀ + Δt*Lg
     M_u0 = get_M(u0,v)
     B_u0 = get_B(u0,v)
     L = assemble(M_u0 - (1-theta)*dt*B_u0) + Lg_dt
