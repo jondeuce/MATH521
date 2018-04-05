@@ -449,7 +449,8 @@ def bt_trbdf2(V, mesh, omega, r2decay,
 
 if __name__ == "__main__":
     # vesselunionlist = [True, False]
-    vesselunionlist = [True]
+    # vesselunionlist = [True]
+    vesselunionlist = [False]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
@@ -461,9 +462,9 @@ if __name__ == "__main__":
     #   9 -> dt_min = 8e-3/2**8 = 3.125e-5
     #   8 -> dt_min = 8e-3/2**7 = 6.25e-5
     #   7 -> dt_min = 8e-3/2**6 = 0.000125
-    dt0 = 8.0e-3 # [s]
-    NumBE = 0
-    NumTR = 7
+    dt0 = 0.5e-3 # [s]
+    NumBE = 3
+    NumTR = 3
 
     vesselradius = 250.0
     theta_deg = 90.0
