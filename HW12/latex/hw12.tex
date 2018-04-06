@@ -65,6 +65,8 @@ to discretise the transport term $\operatorname{div} (ua)$.
 f^{\text{pos}} = \frac{f + \lvert f \rvert}{2} \qquad \text{and} \qquad f^{\text{neg}} = \frac{f - \lvert f \rvert}{2}.
 \end{equation*}
 Re-write the edge integral in the upwind DG form in terms of $g$, $u_+$, $u_-$, $(a\cdot n_+)^{\text{pos}}$, $(a\cdot n_+)^{\text{neg}}$ and $[v]$:
+
+\vspace{0.5cm}
 \begin{solution}
 There are two cases:
 \begin{itemize}
@@ -110,11 +112,36 @@ u('-')*jump(v)*dS
 \end{verbatim}
 to specify on what side of the edge they should be evaluated. \verb|jump(v)| is a shortcut for \verb|v('+')-v('-')|.
 
+\vspace{0.5cm}
+\begin{solution}
+See the attached \texttt{hw12.py} code in Appendix~\ref{hw12code}.
+
+Note that \texttt{hw12.py} contains code for both the advection only problem and the advection-diffusion problem:
+\begin{itemize}
+\item Setting \texttt{D = 0.0} in the script ignores the diffusive flux term and uses the boundary data \texttt{g} on the inflow boundary region $\Gamma_-$
+\item Settings \texttt{D = 0.01} (or any non-zero number) ignores the boundary data \texttt{g} and applies no-flux \textsc{Robin} boundary conditions on $\partial\Omega$
+\end{itemize}
+\end{solution}
+\vspace{1cm}
+
 \item Inspect your numerical solution in \textsf{ParaView}, using the `Warp by Scalar'-Filter. Recall that \textsf{FEniCS} generally exports solution data as continuous, piecewise linear functions, so don't be surprised when you cannot see any discontinuous jumps in your visualisation.
 
 Describe any discrepancies between the numerical solution and the exact solution, using the appropriate terminology.
 
 \emph{Hint: } For general triangular meshes, the upwind DG($r$) method discretises the advection term with an accuracy of order $r+\frac{1}{2}$, which increases to $r+1$ on meshes with certain regularity.
+
+\vspace{0.5cm}
+\begin{solution}
+We know that upwind schemes introduce numerical diffusion into the discretisation of the advection terms.
+Thus, we would expect to see numerical diffusion in regions of large concentration gradient, such as at solution discontinuities.
+Additionally, although the upwind $DG(r)$ methods preserve mass exactly (to numerical precision), discontinuous changes in the solution can also introduce spurious oscillations, i.e. numerical dissipation.
+
+Indeed, the discontinuous concentration at time $t=0$ begins to spread out as it advects around the domain, and spurious oscillations in the solution occur in the wake behind the advecting concentration mass.
+These spurious oscillations become larger with increasing solution degree $r$ and with decreasing amount of implicitness $\theta$ in the time stepping scheme.
+
+This is in contrast to the true (weak) solution with no inflow $g$ which would retain the same discontinuous initial condition and simply advect around the domain in a circular pattern.
+
+\end{solution}
 
 \end{enumerate}
 
@@ -143,31 +170,44 @@ as derived in class, here written in a form that can be translated directly into
 
 \emph{Hint:} The commands \verb|h = CellSize(mesh)| and \verb|avg(u)| may be helpful.
 
+\vspace{0.5cm}
+\begin{solution}
+See the attached \texttt{hw12.py} code in Appendix~\ref{hw12code}.
+
+Note that \texttt{hw12.py} contains code for both the advection only problem and the advection-diffusion problem:
+\begin{itemize}
+\item Setting \texttt{D = 0.0} in the script ignores the diffusive flux term and uses the boundary data \texttt{g} on the inflow boundary region $\Gamma_-$
+\item Settings \texttt{D = 0.01} (or any non-zero number) ignores the boundary data \texttt{g} and applies no-flux \textsc{Robin} boundary conditions on $\partial\Omega$
+\end{itemize}
+\end{solution}
+\vspace{1cm}
+
+\newpage
 \paragraph*{Your Learning Progress}% $\vert$ \faFilePdfO}
 
 What is the one most important thing that you have learnt from this assignment?
 
-\vspace*{3mm}
-\hrulefill
+\vspace{0.5cm}
+\begin{itemize}
+\item Discontinuous Galerkin methods are really fun to play with and quite easy to implement in \texttt{Fenics}!
+\end{itemize}
 
-\vspace*{3mm}
-\hrulefill
-
+\vspace{0.8cm}
 Any new discoveries or achievements towards the objectives of your course project?
 
-\vspace*{3mm}
-\hrulefill
+\vspace{0.5cm}
+\begin{itemize}
+\item Yes, progress has been very good in the last week, especially with having to prepare for the presentation.
+I might have to play with discontinuous Galerkin methods for the Bloch-Torrey equation, now!
+\end{itemize}
 
-\vspace*{3mm}
-\hrulefill
-
+\vspace{0.8cm}
 What is the most substantial new insight that you have gained from this course this week? Any \emph{aha moment}?
 
-\vspace*{3mm}
-\hrulefill
-
-\vspace*{3mm}
-\hrulefill
+\vspace{0.5cm}
+\begin{itemize}
+\item Upwind discretisation schemes in general was kind of one big \emph{aha moment}; I never really understood mathematically why they were used, despite the physical intuition being quite clear.
+\end{itemize}
 
 \newpage
 \begin{appendices}
@@ -177,7 +217,8 @@ What is the most substantial new insight that you have gained from this course t
 \newpage
 \lhead{}
 \section{}\label{hw12code}
-\textbf{\Large\texttt{hw12.py}}
+\textbf{\Large\texttt{hw12.py}}\\\\
+\textbf{Note:} unicode characters do not seem to be rendering correctly in \LaTeX; see attached file instead.
 \includecode{../fenics/hw12.py}
 \end{appendices}
 

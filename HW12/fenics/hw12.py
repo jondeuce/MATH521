@@ -34,8 +34,8 @@ u0_expr = Expression('pow(x[0],2)+pow(x[1]-0.5,2) < 1./16. ? 1. : 0.', degree=0)
 u0 = project(u0_expr, V) # initial concentration
 
 # Parameters of the time-stepping scheme
-t0 = 0. # initial time
-T = 2.*pi # final time
+t0 = 0.0 # initial time
+T = 2.0*pi # final time
 t = t0 # current time
 tsteps = 500 # number of time steps
 dt = T/tsteps # time step size
@@ -46,9 +46,11 @@ dt = T/tsteps # time step size
 # numerical diffusion which ideally should be mitigated by using an anti-
 # dissipative time stepping scheme (Forward Euler, etc.). I will just make the
 # safe choice of θ = 0.5, which will be stable, and not try to guess the optimal
-# amount of explicitness to add to the problem.
-#   Note: Added implicitness seems to help the advection-diffusion problem due
-#         to the diffusion term
+# amount of explicitness to add to the problem to counteract the diffusion.
+#
+#   Note: For the advection-diffusion problem, a fully implicit backward Euler
+#         seems to fair much better, avoiding numerical dispersion arising from
+#         the discontinuous initial data
 theta = 1.0
 
 # Define variational problem
@@ -105,11 +107,10 @@ def get_Lg(u,v):
 # for no-flux Robin BC's in the advection-diffusion problem)
 #
 # Writing f = L-B*u, the theta method gives us:
-#   M*u₁ = M*u₀ + Δt(θ*f(t,u₁) + (1-θ)*f(t,u₀))
+#   M*u1 = M*u0 + Δt(θ*f(t,u1) + (1-θ)*f(t,u0))
 # And so:
-#   M*u₁ - θΔt*f(t,u₁)  = M*u₀ + (1-θ)Δt*f(t,u₀)
-#   M*u₁ - θΔt*(L-B*u₁) = M*u₀ + (1-θ)Δt*(L-B*u₀)
-#    ==> (M + θΔt*B)*u₁ = (M - (1-θ)Δt*B)*u₀ + Δt*L
+#   M*u1 - θΔt*(L-B*u1) = M*u0 + (1-θ)Δt*(L-B*u0)
+#    ==> (M + θΔt*B)*u1 = (M - (1-θ)Δt*B)*u0 + Δt*L
 
 # LHS matrix: M + θΔt*B
 M = get_M(u,v)
@@ -138,11 +139,13 @@ for k in range(tsteps):
     t = t0 + (k+1)*dt
     print('Step = ', k+1, '/', tsteps , 'Time =', t)
 
-    # Define right hand side: RHS = (M - (1-θ)Δt*B)*u₀ + Δt*Lg
+    # Define right hand side: RHS = (M - (1-θ)Δt*B)*u0 + Δt*Lg
     M_u0 = get_M(u0,v)
     B_u0 = get_B(u0,v)
     L = assemble(M_u0 - (1-theta)*dt*B_u0) + Lg_dt
     solver.solve(u.vector(), L)
+
+    # print(sum(assemble(get_M(u,v)).get_local())) # check mass conservation
 
     # Write data to file
     concentration << (u, t)
