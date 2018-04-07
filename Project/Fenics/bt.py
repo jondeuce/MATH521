@@ -24,6 +24,11 @@ CA = 0.0 # [mM]
 Y = 0.61 # [fraction]
 Hct = 0.44 # [fraction]
 
+# Misc. constants for the TRBDF2 method with α = 2-√2
+c0 = (1.0 - 1.0/sqrt(2.0));
+c1 = 0.5*(1.0 + sqrt(2.0));
+c2 = 0.5*(1.0 - sqrt(2.0));
+
 # ------------------------------------------------------------------------ #
 # Global constants for calculating frequency ω
 # ------------------------------------------------------------------------ #
@@ -184,13 +189,12 @@ def bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=False):
     # Weak form bloch torrey operator:
     #   A = [w, z] * [-DΔ+R₂,     -ω] * [u] dx
     #                [     ω, -DΔ+R₂]   [v]
-    if not isdual:
-        A = dot(Dcoeff*grad(u),grad(w))*dx + (r2decay*u*w - omega*v*w)*dx + \
-            dot(Dcoeff*grad(v),grad(z))*dx + (r2decay*v*z + omega*u*z)*dx
-    else:
-        # swap [u,v] <-> [w,z]
-        A = dot(Dcoeff*grad(w),grad(u))*dx + (r2decay*w*u - omega*z*u)*dx + \
-            dot(Dcoeff*grad(z),grad(v))*dx + (r2decay*z*v + omega*w*v)*dx
+    A = dot(Dcoeff*grad(u),grad(w))*dx + (r2decay*u*w - omega*v*w)*dx + \
+        dot(Dcoeff*grad(v),grad(z))*dx + (r2decay*v*z + omega*u*z)*dx
+
+    if isdual:
+        # Equivalent to [u,v] <--> [w,z]
+        A = adjoint(A)
 
     return A
 
@@ -230,137 +234,36 @@ def print_u(U, S0=1.0):
 
     return
 
-def bt_bwdeuler(U0, V, mesh, omega, r2decay, isdual = False,
-                t0 = 0.0, T = 40.0e-3, dt = 1.0e-3, Dcoeff = 3037.0,
-                prnt = True, savesignal = False, savemag = False,
-                foldname = 'be/tmp'):
-    # Total function time
-    funcstart = timer()
-
-    # Number of timesteps
-    t = t0
-    tsteps = int(round(T/dt))
-
-    # Define the variational problem for the Backward Euler scheme
-    W = TrialFunction(V)
-    Z = TestFunction(V)
-
-    # Bloch-Torrey operator (backward euler step):
-    #   dU/dt = -A*U => (M + A*dt)U = M*U0
-    A = bt_bilinear(W,Z,Dcoeff,r2decay,omega,isdual=isdual)
-    M = M_bilinear(W,Z)
-    B = M + dt*A
-
-    # Assmble Bloch-Torrey solver
-    B_mat = assemble(B)
-
-    # solver = KrylovSolver(B_mat,'bicgstab','ilu')
-    solver = KrylovSolver(B_mat,'gmres','ilu')
-    solver.parameters.absolute_tolerance = 1E-7
-    solver.parameters.relative_tolerance = 1E-4
-    solver.parameters.maximum_iterations = 1000
-    solver.parameters.nonzero_initial_guess = True
-
-    # Export the initial data
-    U = Function(V, name='Magnetization')
-    U.assign(U0)
-
-    # Compute initial signal
-    Sx0, Sy0, S0 = S_signal(U0)
-
-    if prnt:
-        print('Step = ', 0, '/', tsteps , 'Time =', t0)
-        print_u(U0, S0=S0)
-
-    if savesignal:
-        # check if folder exists
-        if not os.path.exists(foldname):
-            os.makedirs(foldname)
-
-        # write signal
-        signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
-        signal.writerow([t] + [Sx0] + [Sy0] + [S0] + [timer()-funcstart])
-
-    if savemag:
-        # Create VTK files for visualization output and save initial state
-        vtkfile_u = File(foldname + '/' + 'u.pvd')
-        vtkfile_v = File(foldname + '/' + 'v.pvd')
-        u, v = U0.split()
-        vtkfile_u << (u, t0)
-        vtkfile_v << (v, t0)
-
-    # Time-stepping
-    for k in range(tsteps):
-        # start loop time
-        loopstart = timer()
-
-        # Current time
-        t = t0 + (k+1)*dt
-
-        # Assemble the right hand (backward euler step; U = U0 here)
-        #   dU/dt = -A*U => (M + A*dt)U = M*U0
-        L = M_bilinear(U0,Z)
-        b = assemble(L)
-        # bc.apply(b)
-
-        # solve into U (VectorFunction)
-        solver.solve(U.vector(), b)
-
-        # Calculate signal
-        Sx, Sy, S = S_signal(U)
-
-        # stop loop time
-        loopstop = timer()
-        looptime = loopstop - loopstart
-
-        if prnt:
-            print('Step = ', k+1, '/', tsteps , 'Time =', t, 'Loop = ', looptime)
-            print_u(U, S0=S0)
-
-        if savesignal:
-            signal.writerow([t] + [Sx] + [Sy] + [S] + [timer()-funcstart])
-
-        if savemag:
-            u, v = U.split()
-            vtkfile_u << (u, t)
-            vtkfile_v << (v, t)
-
-        U0.assign(U)
-
-    return U
-
-def bt_trbdf2(U0, V, mesh, omega, r2decay, isdual = False,
+def bt_solver(U0, V, mesh, omega, r2decay, isdual = False, stepper = 'be',
               t0 = 0.0, T = 40.0e-3, dt = 1.0e-3, Dcoeff = 3037.0,
               prnt = True, savesignal = False, savemag = False,
-              foldname = 'trbdf2/tmp'):
+              foldname = 'solver/tmp'):
     # Total function time
     funcstart = timer()
 
     # Number of timesteps
     t = t0
     tsteps = int(round(T/dt))
-
-    # Misc. constants for the TRBDF2 method with α = 2-√2
-    c0 = (1.0 - 1.0/sqrt(2.0));
-    c1 = 0.5*(1.0 + sqrt(2.0));
-    c2 = 0.5*(1.0 - sqrt(2.0));
 
     # Define the variational problem
     W = TrialFunction(V)
     Z = TestFunction(V)
-
-    # LHS of both TRBDF2 steps (α = 2-√2):
-    #   (M+c0*dt*A)*Ua = (M - c0*dt*A)*U0
-    #   (M+c0*dt*A)*U  = c1*M*Ua + c2*M*U0
     A = bt_bilinear(W,Z,Dcoeff,r2decay,omega,isdual=isdual)
     M = M_bilinear(W,Z)
-    B = M + (c0*dt)*A # LHS of the 1st and 2nd equation
+
+    # Assemble LHS matrix form B
+    if stepper.lower() == 'trbdf2':
+        # TRBDF2 with α = 2-√2
+        B = M + (c0*dt)*A
+    else:
+        # Backward Euler
+        B = M + dt*A
+
+    B_mat = assemble(B) # bc.apply(B_mat), if there were BC's to set
 
     # Create solver objects (positive definite, but NON-symmetric)
     #  -> list_linear_solver_methods()
     #  -> list_krylov_solver_preconditioners()
-    B_mat = assemble(B)
-    # bc.apply(A)
 
     # solver = KrylovSolver(B_mat,'gmres','petsc_amg') # 3.14s/loop
     solver = KrylovSolver(B_mat,'gmres','ilu') # 1.95s/loop
@@ -377,7 +280,12 @@ def bt_trbdf2(U0, V, mesh, omega, r2decay, isdual = False,
 
     # Set initial data
     U = Function(V, name='Magnetization')
-    Ua = Function(V, name='InterMag')
+
+    # Method specific initialization (temp variables, etc.)
+    if stepper.lower() == 'trbdf2':
+        Ua = Function(V, name='InterMag')
+    else: #'be'
+        U.assign(U0)
 
     # Compute initial signal
     Sx0, Sy0, S0 = S_signal(U0)
@@ -394,6 +302,7 @@ def bt_trbdf2(U0, V, mesh, omega, r2decay, isdual = False,
         # Save signal to csv-file
         signal = csv.writer(open(foldname + '/' + 'signal.csv', 'w'))
         signal.writerow([t] + [Sx0] + [Sy0] + [S0] + [timer()-funcstart])
+
     if savemag:
         # Create VTK files for visualization output and save initial state
         vtkfile_u = File(foldname + '/' + 'u.pvd')
@@ -410,24 +319,34 @@ def bt_trbdf2(U0, V, mesh, omega, r2decay, isdual = False,
         # Current time
         t = t0 + (k+1)*dt
 
-        # RHS of second TRBDF2 step (α = 2-√2):
-        #   (M+c0*dt*A)*Ua = M*U0 - c0*dt*A*U0
-        A_U0 = bt_bilinear(U0,Z,Dcoeff,r2decay,omega)
-        M_U0 = M_bilinear(U0,Z)
-        b = assemble(M_U0 - (c0*dt)*A_U0)
-        # bc.apply(b)
+        # Assemble rhs vector form L
+        if stepper.lower() == 'trbdf2':
+            # TRBDF2 steps (α = 2-√2, dU/dt = -A*U):
+            #   (M+c0*dt*A)*Ua = (M - c0*dt*A)*U0
+            #   (M+c0*dt*A)*U  = c1*M*Ua + c2*M*U0
 
-        Ua.assign(U0)
-        solver.solve(Ua.vector(), b) # solve into Ua (VectorFunction)
+            A_U0 = bt_bilinear(U0,Z,Dcoeff,r2decay,omega)
+            M_U0 = M_bilinear(U0,Z)
+            L = M_U0 - (c0*dt)*A_U0
+            b = assemble(L)
+            # bc.apply(b)
 
-        # RHS of second TRBDF2 step (α = 2-√2):
-        #   (M+c0*dt*A)*U  = c1*M*Ua + c2*M*U0z
-        M_Ua = M_bilinear(Ua,Z)
-        b = assemble(c1*M_Ua + c2*M_U0)
-        # bc.apply(b)
+            # Solve first step:
+            Ua.assign(U0)
+            solver.solve(Ua.vector(), b) # solve into Ua (VectorFunction)
+            U.assign(Ua)
 
-        U.assign(Ua)
-        solver.solve(U.vector(), b) # solve into U (VectorFunction)
+            # Set up RHS of second step:
+            M_Ua = M_bilinear(Ua,Z)
+            L = c1*M_Ua + c2*M_U0
+        else:
+            # Backward Euler step (dU/dt = -A*U):
+            #   (M + A*dt)U = M*U0
+            L = M_bilinear(U0,Z)
+
+        # Solve into U (VectorFunction)
+        b = assemble(L) # bc.apply(b), if there were BC's to set
+        solver.solve(U.vector(), b)
 
         # Compute signal
         Sx, Sy, S = S_signal(U)
@@ -476,6 +395,8 @@ def run_bt():
     NumBE = 1
     NumTR = 1
 
+    # parent_foldname = 'bt/results'
+    parent_foldname = 'bt/tmp'
     vesselradius = 250.0
 
     for isvesselunion in isvesselunionlist:
@@ -489,22 +410,23 @@ def run_bt():
             V, mesh, mesh_str = get_bt_geom(**Geomargs)
             omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
 
-            # parent_foldname = 'bt/results/union' if isvesselunion else 'bt/results/hollow';
-            parent_foldname = 'bt/tmp/union' if isvesselunion else 'bt/tmp/hollow';
-            results_foldname = parent_foldname + '/' + mesh_str
+            sub_foldname = 'union' if isvesselunion else 'hollow';
+            results_foldname = parent_foldname + '/' + sub_foldname + '/' + mesh_str
 
             # ---------------------------------------------------------------- #
             # Backward Euler Method
             # ---------------------------------------------------------------- #
             U0 = Function(V, name='InitMag')
             U0.assign(Constant((0.0, 1.0))) # π/2-pulse
+            stepper = 'be'
             dt = dt0
             for _ in range(NumBE):
-                BEfoldname = results_foldname + '/be/dt_' + str(dt).replace('.','p')
-                BEargs = {'dt':dt, 'savesignal':True, 'foldname':BEfoldname}
+                BEfoldname = results_foldname + '/' + stepper + '/dt_' + str(dt).replace('.','p')
+                BEargs = {'dt':dt, 'stepper':stepper, 'savesignal':True, 'foldname':BEfoldname}
 
                 print("\n", "BE: dt = ", dt, "\n")
-                bt_bwdeuler(U0, V, mesh, omega, r2decay, **BEargs)
+                # bt_bwdeuler(U0, V, mesh, omega, r2decay, **BEargs)
+                bt_solver(U0, V, mesh, omega, r2decay, **BEargs)
 
                 dt = 0.5*dt
 
@@ -513,13 +435,15 @@ def run_bt():
             # ---------------------------------------------------------------- #
             U0 = Function(V, name='InitMag')
             U0.assign(Constant((0.0, 1.0))) # π/2-pulse
+            stepper = 'trbdf2'
             dt = dt0
             for _ in range(NumTR):
-                TRfoldname = results_foldname + '/trbdf2/dt_' + str(dt).replace('.','p')
-                TRargs = {'dt':dt, 'savesignal':True, 'foldname':TRfoldname}
+                TRfoldname = results_foldname + '/' + stepper + '/dt_' + str(dt).replace('.','p')
+                TRargs = {'dt':dt, 'stepper':stepper, 'savesignal':True, 'foldname':TRfoldname}
 
                 print("\n", "TRBDF2: dt = ", dt, "\n")
-                bt_trbdf2(U0, V, mesh, omega, r2decay, **TRargs)
+                # bt_trbdf2(U0, V, mesh, omega, r2decay, **TRargs)
+                bt_solver(U0, V, mesh, omega, r2decay, **TRargs)
 
                 dt = 0.5*dt
 
@@ -544,6 +468,8 @@ def run_adaptive_bt():
     NumBE = 1
     NumTR = 1
 
+    # parent_foldname = 'bt/adapt/results'
+    parent_foldname = 'bt/adapt/tmp'
     vesselradius = 250.0
 
     for isvesselunion in isvesselunionlist:
@@ -557,9 +483,8 @@ def run_adaptive_bt():
             V, mesh, mesh_str = get_bt_geom(**Geomargs)
             omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
 
-            # parent_foldname = 'bt/results/union' if isvesselunion else 'bt/results/hollow';
-            parent_foldname = 'bt/adapt/tmp/union' if isvesselunion else 'bt/adapt/tmp/hollow';
-            results_foldname = parent_foldname + '/' + mesh_str
+            sub_foldname = 'union' if isvesselunion else 'hollow';
+            results_foldname = parent_foldname + '/' + sub_foldname + '/' + mesh_str
 
             # ---------------------------------------------------------------- #
             # Backward Euler Method
@@ -590,5 +515,5 @@ def run_adaptive_bt():
     return
 
 if __name__ == "__main__":
-    # run_bt()
-    run_adaptive_bt()
+    run_bt()
+    # run_adaptive_bt()
