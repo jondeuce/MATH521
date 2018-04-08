@@ -8,6 +8,7 @@ from __future__ import print_function
 from fenics import *
 from mshr import *
 import numpy as np
+import itertools
 import time
 import csv
 import os
@@ -500,43 +501,98 @@ def run_bt():
     return
 
 def run_adaptive_bt():
-    # isvesselunionlist = [True, False]
     # isvesselunionlist = [True]
-    isvesselunionlist = [False]
+    # isvesselunionlist = [True]
+    isvesselunionlist = [True, False]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
     # Nlist, nslicelist = [200], [64]
     # Nlist, nslicelist = [50], [32]
-    Nlist, nslicelist = [25], [16]
+    # Nlist, nslicelist = [25], [16]
     # Nlist, nslicelist = [10], [8]
+    # Nlist, nslicelist = [10], [32]
+    Nlist, nslicelist = [10, 10], [32, 64]
 
-    max_mesh_refinements = 2
+    # High accuracy solution to compare to:
+    # N_exlist, nslice_exlist = [100], [8]
+    # N_exlist, nslice_exlist = [100], [32]
+    N_exlist, nslice_exlist = [100, 200], [32, 64]
 
-    # parent_foldname = 'bt/adapt/results'
-    parent_foldname = 'bt/adapt/tmp'
+    # stepper_list = ['be']
+    stepper_list = ['be', 'trbdf2']
+
+    # dt_list = [2.0e-3] # [s]
+    dt_list = [4.0e-3, 2.0e-3, 1.0e-3, 0.5e-3]
+
+    parent_foldname = 'bt/adapt/results'
+    # parent_foldname = 'bt/adapt/tmp'
+    compute_high_accuracy = False # High accuracy solution to compare to:
+    exactprnt = True
+    forwprnt = True
+    dualprnt = False
+    save_err_y = False
+
+    max_mesh_refinements = 6
+    refine_percentile = 50.0 # cutoff percentile above which cell is refined
+
     vesselradius = 250.0 # [μm]
     Dcoeff = 3037.0 # [mm²/s]
     T = 40.0e-3 # [s]
-    dt = 1.0e-3 # [s]
 
-    for isvesselunion in isvesselunionlist:
-        for N, nslice in zip(Nlist,nslicelist):
+    def print_u_detailed(U,S0=1.0):
+        Sx, Sy, S = S_signal(U)
+        print("\n")
+        print('[Sx/S, Sy/S] = [', Sx/S0, ', ', Sy/S0, ']')
+        print("Sx = ", Sx)
+        print("Sy = ", Sy)
+        print("S  = ", S)
+        print("|Sx_err|/Sx = ", abs(Sx-Sx_ex)/Sx)
+        print("|Sy_err|/Sy = ", abs(Sy-Sy_ex)/Sy)
+        print(" |S_err|/S  = ", abs(S-S_ex)/S)
+        print("\n")
+        return
+
+    param_lists = (isvesselunionlist,dt_list,stepper_list)
+
+    for params in itertools.product(*param_lists):
+
+        isvesselunion, dt, stepper = params
+
+        for N, nslice, N_ex, nslice_ex in zip(Nlist,nslicelist,N_exlist,nslice_exlist):
+
+            if compute_high_accuracy:
+                # ---------------------------------------------------------------- #
+                # Compute high accuracy solution on fine grid
+                # ---------------------------------------------------------------- #
+                print("\n", "High Precision Solution (", stepper, "): dt = ", dt, "\n")
+
+                Geomargs = {'N':N_ex, 'nslice':nslice_ex, 'vesselrad':vesselradius, 'isvesselunion':isvesselunion}
+                V, elem, mesh, mesh_str = get_bt_geom(**Geomargs)
+
+                Gammaargs = {'a':vesselradius, 'force_outer':not isvesselunion}
+                omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
+
+                U0 = Function(V, name='InitMag')
+                U0.assign(Constant((0.0, 1.0))) # π/2-pulse
+                _, _, S0 = S_signal(U0)
+
+                ExArgs = {'dt':dt, 'T':T, 'stepper':stepper, 'prnt':exactprnt,
+                          'savesignal':False, 'savemag':False, 'foldname':''}
+                U_ex, _ = bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, **ExArgs)
+                Sx_ex, Sy_ex, S_ex = S_signal(U_ex)
+                print_u_detailed(U_ex,S0=S0)
 
             print("\n", "isvesselunion = ", isvesselunion, ", N = ", N, ", nslice = ", nslice, "\n")
 
             Geomargs = {'N':N, 'nslice':nslice, 'vesselrad':vesselradius, 'isvesselunion':isvesselunion}
-            Gammaargs = {'a':vesselradius, 'force_outer':not isvesselunion}
+            V, elem, mesh, mesh_str = get_bt_geom(**Geomargs)
 
             # Generate initial geometry
             for k in range(max_mesh_refinements+1): # first run is unrefined
 
-                if k == 0:
-                    V, elem, mesh, mesh_str = get_bt_geom(**Geomargs)
-                else:
-                    V = FunctionSpace(mesh, elem)
-
                 # Generate omega and r2decay maps
+                Gammaargs = {'a':vesselradius, 'force_outer':not isvesselunion}
                 omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
 
                 sub_foldname = 'union' if isvesselunion else 'hollow';
@@ -547,14 +603,27 @@ def run_adaptive_bt():
                 # ------------------------------------------------------------ #
                 print("\n", "Forward problem: dt = ", dt, "\n")
 
-                foldname = results_foldname + '/Forw/dt_' + str(dt).replace('.','p')
-                ForwArgs = {'isdual':False, 'stepper':'BE', 'dt':dt, 'T':T,
-                            'accumulator':accum_max_vecnormdiff,
-                            'savesignal':True, 'savemag':False, 'foldname':foldname}
-
                 U0 = Function(V, name='InitMag')
                 U0.assign(Constant((0.0, 1.0))) # π/2-pulse
+                _, _, S0 = S_signal(U0)
+
+                foldname = results_foldname + '/Forw/dt_' + str(dt).replace('.','p')
+                ForwArgs = {'isdual':False, 'stepper':stepper, 'dt':dt, 'T':T,
+                            'accumulator':accum_max_vecnormdiff, 'prnt':forwprnt,
+                            'savesignal':True, 'savemag':False, 'foldname':foldname}
                 U, Eu = bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, **ForwArgs)
+
+                # ------------------------------------------------------------ #
+                # Compare with high accuracy solution
+                # ------------------------------------------------------------ #
+                if compute_high_accuracy:
+                    print_u_detailed(U,S0=S0)
+                else:
+                    Sx, Sy, S = S_signal(U)
+                    print('[Sx/S, Sy/S] = [', Sx/S0, ', ', Sy/S0, ']')
+
+                if k == max_mesh_refinements:
+                    break
 
                 # ------------------------------------------------------------ #
                 # Solve Dual problem using backward Euler method
@@ -565,53 +634,48 @@ def run_adaptive_bt():
                 Z = TestFunction(V)
                 w, z = split(Z) # test function -> components
 
-                # Assemble the inital vector psi for the dual problem,
-                # representing a vector of quadrature weights such that:
+                # Assemble the inital vector psi for the dual problem. psi is a
+                # vector containing quadrature weights for computing Sy, i.e.:
                 #   dot(psi, U) = integral(v dx)
-                # i.e., the Sy signal only
                 psi.vector()[:] = assemble(z*dx)
                 psi_norm = np.linalg.norm(psi.vector())
                 psi.vector()[:] /= psi_norm # normalize psi
 
                 foldname = results_foldname + '/Dual/dt_' + str(dt).replace('.','p')
-                DualArgs = {'isdual':True, 'stepper':'BE', 'dt':dt, 'T':T,
-                            'accumulator':accum_int_dualderivsquared,
+                DualArgs = {'isdual':True, 'stepper':stepper, 'dt':dt, 'T':T,
+                            'accumulator':accum_int_dualderivsquared, 'prnt':dualprnt,
                             'savesignal':False, 'savemag':False, 'foldname':foldname}
                 phi, eta = bt_solver(psi, V, mesh, Dcoeff, omega, r2decay, **DualArgs)
 
                 eta_x, eta_y = eta.split(deepcopy=True)
                 Sy_err = Eu*np.sqrt(T*np.sum(eta_y.vector().get_local()))
-                print('|e⋅ψ| < ', str(Sy_err))
+                print("\n", "|e⋅ψ| < ", str(Sy_err), "\n")
 
                 # Get cellwise errors
                 DG = FunctionSpace(mesh, 'DG', 0)
                 DGv = TestFunction(DG)
-                err_y = Function(DG)
-                avg_eta_y = Eu*sqrt(T)/CellVolume(mesh)*inner(eta_y, DGv)*dx
-                assemble(avg_eta_y, tensor=err_y.vector())
+                rel_err_y = Function(DG)
+                avg_err_y = (Eu*sqrt(T)/S0)/CellVolume(mesh)*inner(eta_y, DGv)*dx
+                assemble(avg_err_y, tensor=rel_err_y.vector())
 
-                # Create VTK files for visualization output
-                # vtkfile_x = File(foldname + '/eta/' + 'eta_x.pvd')
-                # vtkfile_y = File(foldname + '/eta/' + 'eta_y.pvd')
-                # vtkfile_x << eta_x
-                # vtkfile_y << eta_y
-                vtkfile_err_y = File(foldname + '/err/' + 'err_y.pvd')
-                vtkfile_err_y << err_y
+                # Create VTK files for output
+                if save_err_y:
+                    vtkfile_err_y = File(foldname + '/err/' + 'rel_err_y.pvd')
+                    vtkfile_err_y << rel_err_y
 
                 # Make cell function
-                err_y_thresh = np.median(err_y.vector())
-                cell_markers = CellFunction("bool", mesh)
+                cell_markers = MeshFunction("bool", mesh, mesh.topology().dim())
                 cell_markers.set_all(False)
-                # for cell in cells(mesh):
+                rel_err_y_thresh = np.percentile(rel_err_y.vector(),refine_percentile)
+
                 for cell_idx in xrange(mesh.num_cells()):
-                    # set cell_markers[cell] = True if the cell's error
-                    # indicator is greater than some criterion.
                     cell = Cell(mesh, cell_idx)
-                    if err_y.vector()[cell_idx] > err_y_thresh:
+                    if rel_err_y.vector()[cell_idx] >= rel_err_y_thresh:
                         cell_markers[cell] = True
 
                 # Refine mesh
                 mesh = refine(mesh, cell_markers)
+                V = FunctionSpace(mesh, elem)
 
     return
 
