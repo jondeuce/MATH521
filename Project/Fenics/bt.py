@@ -306,13 +306,12 @@ def get_dual_init(psi, V):
     M_form = M_bilinear(U,Z)
     M_mat = assemble(M_form)
 
-    # M_action_form = action(mass_form, Constant(1))
-    #
     # M_lumped = M_mat
     # M_lumped.zero()
-    # M_lumped.set_diagonal(assemble(mass_action_form))
+    # M_action_form = action(M_form, Constant(1.0))
+    # M_lumped.set_diagonal(assemble(M_action_form))
 
-    solver = KrylovSolver(M_mat,'gmres','ilu') # 1.95s/loop
+    solver = KrylovSolver(M_mat,'cg','icc') # 1.95s/loop
     solver.parameters.absolute_tolerance = 1E-12
     solver.parameters.relative_tolerance = 1E-10
     solver.parameters.maximum_iterations = 1000
@@ -320,7 +319,6 @@ def get_dual_init(psi, V):
 
     # solve M*phi = psi
     phi = Function(V, name="InitDualMag")
-    # phi.assign(psi)
     solver.solve(phi.vector(),psi.vector())
 
     return phi
@@ -551,8 +549,8 @@ def run_bt():
 
 def run_adaptive_bt():
     # isvesselunionlist = [True]
-    isvesselunionlist = [False]
-    # isvesselunionlist = [True, False]
+    # isvesselunionlist = [False]
+    isvesselunionlist = [True, False]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
@@ -572,35 +570,36 @@ def run_adaptive_bt():
     N_exlist, nslice_exlist = [200], [64]
     # N_exlist, nslice_exlist = [100, 200], [32, 64]
 
-    stepper_list = ['be']
-    # stepper_list = ['be', 'trbdf2']
+    # stepper_list = ['be']
+    stepper_list = ['be', 'trbdf2']
 
-    dt_list = [0.5e-3] # [s]
+    # dt_list = [1.0e-3] # [s]
     # dt_list = [0.5e-3, 0.25e-3] # [s]
-    # dt_list = [4.0e-3, 2.0e-3, 1.0e-3]
+    dt_list = [4.0e-3, 2.0e-3, 1.0e-3, 0.5e-3]
 
-    vesselradius_list = [250.0] # [μm]
+    vesselradius_list = [250.0, 125.0] # [μm]
     Dcoeff_list = [3037.0] # [mm²/s]
     T_list = [40.0e-3] # [s]
 
-    # parent_foldname = 'bt/adapt/results'
-    parent_foldname = 'bt/adapt/tmp'
+    parent_foldname = 'bt/adapt/results'
+    # parent_foldname = 'bt/adapt/tmp'
     max_mesh_refinements = 4
-    refine_percentile = 66.667 # cutoff percentile above which cell is refined
+    refine_percentile = 70.0 # cutoff percentile above which cell is refined
+    refine_thresh = 1e-4 * (3000.0)**3
 
     compute_high_accuracy = True # High accuracy solution to compare to
-    skip_last_dual = False # skip last dual iteration (won't print last |e⋅ψ|/S)
+    skip_last_dual = True # skip last dual iteration (won't print last |e⋅ψ|/S)
     exactprnt = True
-    forwprnt = False
-    dualprnt = False
-    save_eta_y = True
+    forwprnt = True
+    dualprnt = True
 
-    save_forw_signal = False
-    save_dual_signal = False
-    save_highprec_signal = False
+    save_forw_signal = True
+    save_dual_signal = True
+    save_highprec_signal = True
     save_forw_mag = False
     save_dual_mag = False
     save_highprec_mag = False
+    save_eta_y = False
 
     def print_u_detailed(U,S0=1.0):
         Sx, Sy, S = S_signal(U)
@@ -646,7 +645,7 @@ def run_adaptive_bt():
 
                 U0 = Function(V, name='InitMag')
                 U0.assign(Constant((0.0, 1.0))) # π/2-pulse
-                _, _, S0 = S_signal(U0)
+                Sx0, Sy0, S0 = S_signal(U0)
 
                 ExArgs = {'dt':dt, 'T':T, 'stepper':stepper, 'prnt':exactprnt,
                           'savesignal':save_highprec_signal, 'savemag':save_highprec_mag,
@@ -712,7 +711,7 @@ def run_adaptive_bt():
                 # psi_norm = np.linalg.norm(psi.vector())
                 # psi.vector()[:] /= psi_norm # normalize psi
 
-                foldname = results_foldname + '/Dual/dt_' + str(dt).replace('.','p')
+                foldname = results_foldname + '/Dual/dt_' + str(dt).replace('.','p') + '/iter' + str(k)
                 DualArgs = {'isdual':True, 'stepper':stepper, 'dt':dt, 'T':T,
                             'accumulator':accum_dual, 'prnt':dualprnt,
                             'savesignal':save_dual_signal, 'savemag':save_dual_mag, 'foldname':foldname}
@@ -724,14 +723,18 @@ def run_adaptive_bt():
                 Sy_err0 = Eu * int_phi_norm
                 Sy_err1 = Eu * sqrt(T) * np.sqrt(np.sum(int_phi_vec_sq.vector().get_local()))
 
-                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err0/Sy_ex, "\n")
-                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err1/Sy_ex, "\n")
-                print("\n", "|error bound|/|true error| = ", Sy_err1/abs(Sy-Sy_ex), "\n")
+                SY = Sy_ex if compute_high_accuracy else Sy
+                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err0/SY, "\n")
+                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err1/SY, "\n")
+
+                if compute_high_accuracy:
+                    print("\n", "|error bound|/|true error| = ", Sy_err1/abs(Sy-SY), "\n")
 
                 # Create indicators
                 eta_x, eta_y = int_phi_vec_sq.split()
                 DG = FunctionSpace(mesh, 'DG', 0)
                 Eta_y = interpolate(eta_y, DG)
+                Eta_y.vector()[:] = Eu * sqrt(T) * np.sqrt(Eta_y.vector())
 
                 # Create VTK files for output
                 if save_eta_y:
@@ -744,16 +747,23 @@ def run_adaptive_bt():
                 # Make cell function
                 cell_markers = MeshFunction("bool", mesh, mesh.topology().dim())
                 cell_markers.set_all(False)
-                err_y_sq_thresh = np.percentile(Eta_y.vector(),refine_percentile)
 
+                Eta_y_thresh = np.percentile(Eta_y.vector(),refine_percentile)
+                Eta_y_thresh = np.maximum(Eta_y_thresh, refine_thresh)
+
+                is_any_true = False
                 for cell_idx in xrange(mesh.num_cells()):
                     cell = Cell(mesh, cell_idx)
-                    if Eta_y.vector()[cell_idx] >= err_y_sq_thresh:
+                    if Eta_y.vector()[cell_idx] >= Eta_y_thresh:
                         cell_markers[cell] = True
+                        is_any_true = True
 
                 # Refine mesh
-                mesh = refine(mesh, cell_markers)
-                V = FunctionSpace(mesh, elem)
+                if is_any_true:
+                    mesh = refine(mesh, cell_markers)
+                    V = FunctionSpace(mesh, elem)
+                else:
+                    break
 
     return
 
