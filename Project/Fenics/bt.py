@@ -34,13 +34,13 @@ c2 = 0.5*(1.0 - sqrt(2.0));
 # Global constants for calculating frequency ω
 # ------------------------------------------------------------------------ #
 dChi_CA_per_mM = 0.3393e-6 #[(T/T)/mM]
-dChi_Blood_CA = dChi_CA_per_mM * CA # Susceptibility difference due to contrast agent
+dChi_Blood_CA = dChi_CA_per_mM * CA # δχ due to contrast agent
 
 # Susceptibilty of blood relative to tissue due to blood oxygenation and
 # hematocrit concentration is given by:
 #   dChi_Blood_Oxy := Hct * (1-Y) * 2.26e-6 [T/T]
 dChi_Blood_Oxy = 2.26e-6 * Hct * (1-Y)
-dChi_Blood = dChi_Blood_Oxy + dChi_Blood_CA # Total susceptibility difference in blood vs. tissue
+dChi_Blood = dChi_Blood_Oxy + dChi_Blood_CA # Total δχ in blood vs. tissue
 
 # ------------------------------------------------------------------------ #
 # Global constants for calculating relaxation rate R₂
@@ -59,6 +59,10 @@ dR2_Blood_CA = dR2_CA_per_mM * CA # R2 change due to CA [ms]
 R2_Blood = dR2_Blood_Oxy + dR2_Blood_CA # Total R2 [ms]
 R2_Tissue = 1000.0/T2_Tissue_Base # [ms] -> [Hz]
 
+def get_mesh_str(N,nslice,vesselrad):
+    mesh_str = 'cylinder_N' + str(N) + '_ns' + str(nslice) + \
+                '_r' + str(int(round(vesselrad)))
+    return mesh_str
 
 def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
     L = 3000.0, vesselrad = 250.0, isvesselunion = False):
@@ -68,7 +72,7 @@ def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
     #    N          [100]    approx. num. cells along box edge (mesh resolution)
     #    nslice     [32]     num. edges used to construct cylinder boundary
 
-    mesh_str = 'cylinder_N' + str(N) + '_ns' + str(nslice) + '_r' + str(int(round(vesselrad)))
+    mesh_str = get_mesh_str(N,nslice,vesselrad)
     geom_foldname = 'bt/geom/union' if isvesselunion else 'bt/geom/hollow';
     mesh_foldname = geom_foldname + '/' + mesh_str
     mesh_filename = mesh_foldname + '/' + mesh_str + '.xml.gz'
@@ -82,7 +86,8 @@ def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
 
         # cylindrical vessel radius [um]
         voxel = Box(Point(-Lx/2, -Ly/2, -Lz/2), Point(Lx/2, Ly/2, Lz/2))
-        vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2), vesselrad, vesselrad, segments = nslice)
+        vessel = Cylinder(Point(0,0,-Lz/2), Point(0,0,Lz/2),
+            vesselrad, vesselrad, segments = nslice)
 
         if isvesselunion:
             domain = voxel + vessel
@@ -171,7 +176,8 @@ def create_bt_gamma(V, mesh, a = 250.0, force_outer = True):
     if force_outer:
         r2decay = Constant(R2_Tissue)
     else:
-        r2decay = Expression(R2DecayCode, degree = 0, R2_Tissue = R2_Tissue, R2_Blood = R2_Blood)
+        r2decay = Expression(R2DecayCode, degree = 0,
+            R2_Tissue = R2_Tissue, R2_Blood = R2_Blood)
 
     return omega, r2decay
 
@@ -181,8 +187,8 @@ def bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=False):
     #   M*dU/dt = -A*U
     #
     # U is a two-element Function or TrialFunction, Z is a two-element
-    # TestFunction, Dcoeff is the diffusion coefficient, r2decay is the decay rate,
-    # and omega is the precession rate
+    # TestFunction, Dcoeff is the diffusion coefficient, r2decay is the
+    # transverse decay rate, and omega is the precession rate
 
     u, v = split(U) # "trial function" -> components
     w, z = split(Z) # test function -> components
@@ -194,6 +200,7 @@ def bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=False):
         A = dot(Dcoeff*grad(u),grad(w))*dx + (r2decay*u*w - omega*v*w)*dx + \
             dot(Dcoeff*grad(v),grad(z))*dx + (r2decay*v*z + omega*u*z)*dx
     else:
+        # [u,v] <--> [w,z], or equivalently, ω --> -ω
         A = dot(Dcoeff*grad(w),grad(u))*dx + (r2decay*w*u - omega*z*u)*dx + \
             dot(Dcoeff*grad(z),grad(v))*dx + (r2decay*z*v + omega*w*v)*dx
 
@@ -214,70 +221,148 @@ def S_signal(U):
     return Sx, Sy, S
 
 def print_u(U, S0=1.0):
-    # print the magnetization vector U = (u, v)
-    # u, v = U.split(deepcopy=True)
-    # u, v = u.vector().get_local(), v.vector().get_local()
-    # u_magn = np.sqrt(np.square(u) + np.square(v))
-    #
-    # print('  u range: [', u.min(), ', ', u.max(), ']')
-    # print('  v range: [', v.min(), ', ', v.max(), ']')
-    #
-    # print('||u|| range: [', np.min(u_magn), ', ', np.max(u_magn), ']')
-    # print('||u|| mean:   ', np.mean(u_magn))
-
-    # u, v = U.split(deepcopy=true)
-    # print('u range: [', u.vector().get_local().min(), ', ', u.vector().get_local().max(), ']')
-    # print('v range: [', v.vector().get_local().min(), ', ', v.vector().get_local().max(), ']')
-
     Sx, Sy, S = S_signal(U)
     print('  [Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
-    # print('        S  =  ', S)
 
     return
 
-def accum_max_normdiff(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay,norm_type='L2'):
-    # Integrates the square of the function F
+def accum_max(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
+    # Records the maximum of successive F's observed
     if acc is None:
         acc = 0.0
     else:
-        acc = np.maximum(acc, errornorm(Flast, F, norm_type=norm_type))
+        acc = np.maximum(acc, F)
+
+    return acc
+
+def accum_max_normdiff(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay,norm_type='L2'):
+    # Records the maximum difference in norm between successive F's
+    f = 0.0 if acc is None else errornorm(Flast, F, norm_type=norm_type)
+    acc = accum_max(acc,None,f,dt,k,N,Dcoeff,omega,r2decay)
+
+    # if acc is None:
+    #     acc = 0.0
+    # else:
+    #     acc = np.maximum(acc, errornorm(Flast, F, norm_type=norm_type))
 
     return acc
 
 def accum_max_vecnormdiff(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
-    # Integrates the square of the function F
-    if acc is None:
-        acc = 0.0
-    else:
-        acc = np.maximum(acc, np.linalg.norm(F.vector()-Flast.vector()))
+    # Records the maximum difference in vector norm between successive F's
+    f = 0.0 if acc is None else np.linalg.norm(F.vector()-Flast.vector())
+    acc = accum_max(acc,None,f,dt,k,N,Dcoeff,omega,r2decay)
+
+    # if acc is None:
+    #     acc = 0.0
+    # else:
+    #     acc = np.maximum(acc, np.linalg.norm(F.vector()-Flast.vector()))
 
     return acc
 
-def accum_int_square(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
-    # Integrates the square of the function F
+def accum_int_Function(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
+    # Integrates F using the trapezoidal rule
     if acc is None:
+        # Initialize accumulator; F is the inital signal U0
         acc = Function(F.function_space())
-        acc.vector()[:] = (0.5*dt)*np.square(F.vector())
+        acc.vector()[:] = (0.5*dt)*F.vector()
     elif k+1 == N:
-        acc.vector()[:] += (0.5*dt)*np.square(F.vector())
+        acc.vector()[:] += (0.5*dt)*F.vector()
     else:
-        acc.vector()[:] += dt*np.square(F.vector())
+        acc.vector()[:] += dt*F.vector()
 
     return acc
 
-def accum_int_dualderivsquared(acc,U0,U,dt,k,N,Dcoeff,omega,r2decay):
-    # Integrates the square of the function F
+def accum_int_Scalar(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
+    # Integrates F using the trapezoidal rule
+    if acc is None:
+        # Initialize accumulator; F is the inital signal U0
+        acc = 0.0
+        acc = (0.5*dt)*F
+    elif k+1 == N:
+        acc += (0.5*dt)*F
+    else:
+        acc += dt*F
+
+    return acc
+
+def accum_dual(acc,Ulast,U,dt,k,N,Dcoeff,omega,r2decay):
+    # Integrates the square of the dual solution derivative times the mass
+    # matrix, i.e. the RHS of: M*dU/dt = -A*U
     Z = TestFunction(U.function_space())
     dU = Function(U.function_space())
 
     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
-    dU.vector()[:] = assemble(At_U)
+    dU.vector()[:] = assemble(-At_U) # M*dU/dt = -A*U
 
-    acc = accum_int_square(acc,None,dU,dt,k,N,Dcoeff,omega,r2decay)
+    # if acc is None:
+    #     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
+    #     dU.vector()[:] = assemble(At_U)
+    # else:
+    #     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
+    #     dU.vector()[:] = assemble(-At_U) # M*dphi/dt = -A*phi
+    #     print("\ndphi/dt (exact):\n")
+    #     print(dU.vector().get_local())
+    #
+    #     dU_h = Function(U.function_space())
+    #     dU_h.vector()[:] = (U.vector().get_local() - Ulast.vector().get_local())/dt
+    #     dU_h.vector()[:] = assemble(M_bilinear(dU_h,Z)) # dU -> M*dU
+    #     print("\ndphi/dt (forward diff):\n")
+    #     print(dU_h.vector().get_local())
+    #
+    #     def err_h(x,y):
+    #         return np.abs(x - y)/np.maximum(np.abs(x),np.abs(y))
+    #
+    #     print("\n|dphi/dt - dphi_h/dt|/|dphi/dt|:\n")
+    #     print(err_h(dU.vector().get_local(), dU_h.vector().get_local()))
+    #
+    #     if k >= 0:
+    #         raise ValueError('exiting...')
 
+    if acc is None:
+        acc1, acc2 = None, None
+    else:
+        acc1, acc2 = acc
+
+    dUsq = Function(dU.function_space())
+    dUsq.vector()[:] = np.square(dU.vector().get_local())
+    acc1 = accum_int_Function(acc1,None,dUsq,dt,k,N,Dcoeff,omega,r2decay)
+    # acc1 = accum_int_square(acc,None,dU,dt,k,N,Dcoeff,omega,r2decay)
+
+    dUnorm = np.linalg.norm(dU.vector().get_local())
+    # dUnorm = np.sqrt(np.sum(dUsq.vector().get_local()))
+    acc2 = accum_int_Scalar(acc2,None,dUnorm,dt,k,N,Dcoeff,omega,r2decay)
+
+    acc = (acc1, acc2)
     return acc
 
-def bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, t0 = 0.0, T = 40.0e-3, dt = 1.0e-3,
+def get_dual_init(psi, V):
+    U = TrialFunction(V)
+    Z = TestFunction(V)
+
+    M_form = M_bilinear(U,Z)
+    M_mat = assemble(M_form)
+
+    # M_action_form = action(mass_form, Constant(1))
+    #
+    # M_lumped = M_mat
+    # M_lumped.zero()
+    # M_lumped.set_diagonal(assemble(mass_action_form))
+
+    solver = KrylovSolver(M_mat,'gmres','ilu') # 1.95s/loop
+    solver.parameters.absolute_tolerance = 1E-12
+    solver.parameters.relative_tolerance = 1E-10
+    solver.parameters.maximum_iterations = 1000
+    solver.parameters.nonzero_initial_guess = False
+
+    # solve M*phi = psi
+    phi = Function(V, name="InitDualMag")
+    # phi.assign(psi)
+    solver.solve(phi.vector(),psi.vector())
+
+    return phi
+
+def bt_solver(U0, V, mesh, Dcoeff, omega, r2decay,
+              t0 = 0.0, T = 40.0e-3, dt = 1.0e-3,
               stepper = 'be', accumulator = None, isdual = False,
               prnt = True, savesignal = False, savemag = False,
               foldname = 'solver/tmp'):
@@ -348,8 +433,8 @@ def bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, t0 = 0.0, T = 40.0e-3, dt = 1
 
     if savemag:
         # Create VTK files for visualization output and save initial state
-        vtkfile_u = File(foldname + '/mag/' + 'u.pvd')
-        vtkfile_v = File(foldname + '/mag/' + 'v.pvd')
+        vtkfile_u = File(foldname + '/mag/u.pvd')
+        vtkfile_v = File(foldname + '/mag/v.pvd')
         u0, v0 = U0.split()
         vtkfile_u << (u0, t0)
         vtkfile_v << (v0, t0)
@@ -502,8 +587,8 @@ def run_bt():
 
 def run_adaptive_bt():
     # isvesselunionlist = [True]
-    # isvesselunionlist = [True]
-    isvesselunionlist = [True, False]
+    isvesselunionlist = [False]
+    # isvesselunionlist = [True, False]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
@@ -511,34 +596,47 @@ def run_adaptive_bt():
     # Nlist, nslicelist = [50], [32]
     # Nlist, nslicelist = [25], [16]
     # Nlist, nslicelist = [10], [8]
-    # Nlist, nslicelist = [10], [32]
-    Nlist, nslicelist = [10, 10], [32, 64]
+    Nlist, nslicelist = [10], [32]
+    # Nlist, nslicelist = [10], [64]
+    # Nlist, nslicelist = [10, 10], [32, 64]
 
     # High accuracy solution to compare to:
     # N_exlist, nslice_exlist = [100], [8]
     # N_exlist, nslice_exlist = [100], [32]
-    N_exlist, nslice_exlist = [100, 200], [32, 64]
+    # N_exlist, nslice_exlist = [50], [32]
+    N_exlist, nslice_exlist = [50], [32]
+    # N_exlist, nslice_exlist = [200], [64]
+    # N_exlist, nslice_exlist = [100, 200], [32, 64]
 
-    # stepper_list = ['be']
-    stepper_list = ['be', 'trbdf2']
+    stepper_list = ['be']
+    # stepper_list = ['be', 'trbdf2']
 
-    # dt_list = [2.0e-3] # [s]
-    dt_list = [4.0e-3, 2.0e-3, 1.0e-3, 0.5e-3]
+    dt_list = [0.5e-3] # [s]
+    # dt_list = [0.5e-3, 0.25e-3] # [s]
+    # dt_list = [4.0e-3, 2.0e-3, 1.0e-3]
+
+    vesselradius_list = [250.0] # [μm]
+    Dcoeff_list = [3037.0] # [mm²/s]
+    T_list = [40.0e-3] # [s]
 
     parent_foldname = 'bt/adapt/results'
     # parent_foldname = 'bt/adapt/tmp'
-    compute_high_accuracy = False # High accuracy solution to compare to:
+    max_mesh_refinements = 3
+    refine_percentile = 66.667 # cutoff percentile above which cell is refined
+
+    compute_high_accuracy = True # High accuracy solution to compare to
+    skip_last_dual = False # skip last dual iteration (won't print last |e⋅ψ|/S)
     exactprnt = True
-    forwprnt = True
+    forwprnt = False
     dualprnt = False
     save_err_y = False
 
-    max_mesh_refinements = 6
-    refine_percentile = 50.0 # cutoff percentile above which cell is refined
-
-    vesselradius = 250.0 # [μm]
-    Dcoeff = 3037.0 # [mm²/s]
-    T = 40.0e-3 # [s]
+    save_forw_signal = False
+    save_dual_signal = False
+    save_highprec_signal = False
+    save_forw_mag = False
+    save_dual_mag = False
+    save_highprec_mag = False
 
     def print_u_detailed(U,S0=1.0):
         Sx, Sy, S = S_signal(U)
@@ -547,19 +645,24 @@ def run_adaptive_bt():
         print("Sx = ", Sx)
         print("Sy = ", Sy)
         print("S  = ", S)
-        print("|Sx_err|/Sx = ", abs(Sx-Sx_ex)/Sx)
-        print("|Sy_err|/Sy = ", abs(Sy-Sy_ex)/Sy)
-        print(" |S_err|/S  = ", abs(S-S_ex)/S)
+        print("|Sx_err|/Sx = ", abs(Sx-Sx_ex)/Sx_ex)
+        print("|Sy_err|/Sy = ", abs(Sy-Sy_ex)/Sy_ex)
+        print(" |S_err|/S  = ", abs(S-S_ex)/S_ex)
         print("\n")
         return
 
-    param_lists = (isvesselunionlist,dt_list,stepper_list)
+    param_lists = (dt_list, T_list, stepper_list, isvesselunionlist, vesselradius_list, Dcoeff_list)
 
     for params in itertools.product(*param_lists):
 
-        isvesselunion, dt, stepper = params
+        # Unpack parameters
+        dt, T, stepper, isvesselunion, vesselradius, Dcoeff = params
+        union_or_hollow = 'union' if isvesselunion else 'hollow'
+        sub_foldname = union_or_hollow + '/' + stepper;
 
         for N, nslice, N_ex, nslice_ex in zip(Nlist,nslicelist,N_exlist,nslice_exlist):
+
+            mesh_str = get_mesh_str(N,nslice,vesselradius)
 
             if compute_high_accuracy:
                 # ---------------------------------------------------------------- #
@@ -568,7 +671,11 @@ def run_adaptive_bt():
                 print("\n", "High Precision Solution (", stepper, "): dt = ", dt, "\n")
 
                 Geomargs = {'N':N_ex, 'nslice':nslice_ex, 'vesselrad':vesselradius, 'isvesselunion':isvesselunion}
-                V, elem, mesh, mesh_str = get_bt_geom(**Geomargs)
+                V, elem, mesh, mesh_str_ex = get_bt_geom(**Geomargs)
+
+                results_foldname_ex = parent_foldname + '/' + sub_foldname + '/' + mesh_str
+                foldname_ex = results_foldname_ex + '/Forw/dt_' + str(dt).replace('.','p') + \
+                              '/exact/' + mesh_str_ex
 
                 Gammaargs = {'a':vesselradius, 'force_outer':not isvesselunion}
                 omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
@@ -578,7 +685,8 @@ def run_adaptive_bt():
                 _, _, S0 = S_signal(U0)
 
                 ExArgs = {'dt':dt, 'T':T, 'stepper':stepper, 'prnt':exactprnt,
-                          'savesignal':False, 'savemag':False, 'foldname':''}
+                          'savesignal':save_highprec_signal, 'savemag':save_highprec_mag,
+                          'foldname':foldname_ex}
                 U_ex, _ = bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, **ExArgs)
                 Sx_ex, Sy_ex, S_ex = S_signal(U_ex)
                 print_u_detailed(U_ex,S0=S0)
@@ -586,7 +694,7 @@ def run_adaptive_bt():
             print("\n", "isvesselunion = ", isvesselunion, ", N = ", N, ", nslice = ", nslice, "\n")
 
             Geomargs = {'N':N, 'nslice':nslice, 'vesselrad':vesselradius, 'isvesselunion':isvesselunion}
-            V, elem, mesh, mesh_str = get_bt_geom(**Geomargs)
+            V, elem, mesh, _ = get_bt_geom(**Geomargs)
 
             # Generate initial geometry
             for k in range(max_mesh_refinements+1): # first run is unrefined
@@ -595,23 +703,22 @@ def run_adaptive_bt():
                 Gammaargs = {'a':vesselradius, 'force_outer':not isvesselunion}
                 omega, r2decay = create_bt_gamma(V, mesh, **Gammaargs)
 
-                sub_foldname = 'union' if isvesselunion else 'hollow';
-                results_foldname = parent_foldname + '/' + sub_foldname + '/' + mesh_str + '/iter' + str(k)
-
+                results_foldname = parent_foldname + '/' + sub_foldname + '/' + mesh_str
                 # ------------------------------------------------------------ #
                 # Solve forward problem using backward Euler method
                 # ------------------------------------------------------------ #
                 print("\n", "Forward problem: dt = ", dt, "\n")
 
-                U0 = Function(V, name='InitMag')
-                U0.assign(Constant((0.0, 1.0))) # π/2-pulse
-                _, _, S0 = S_signal(U0)
+                U = Function(V, name='InitMag')
+                U.assign(Constant((0.0, 1.0))) # π/2-pulse
+                Sx0, Sy0, S0 = S_signal(U)
 
-                foldname = results_foldname + '/Forw/dt_' + str(dt).replace('.','p')
+                foldname = results_foldname + '/Forw/dt_' + str(dt).replace('.','p') + '/iter' + str(k)
                 ForwArgs = {'isdual':False, 'stepper':stepper, 'dt':dt, 'T':T,
                             'accumulator':accum_max_vecnormdiff, 'prnt':forwprnt,
-                            'savesignal':True, 'savemag':False, 'foldname':foldname}
-                U, Eu = bt_solver(U0, V, mesh, Dcoeff, omega, r2decay, **ForwArgs)
+                            'savesignal':save_forw_signal, 'savemag':save_forw_mag, 'foldname':foldname}
+                U, Eu = bt_solver(U, V, mesh, Dcoeff, omega, r2decay, **ForwArgs)
+                Sx, Sy, S = S_signal(U)
 
                 # ------------------------------------------------------------ #
                 # Compare with high accuracy solution
@@ -619,10 +726,9 @@ def run_adaptive_bt():
                 if compute_high_accuracy:
                     print_u_detailed(U,S0=S0)
                 else:
-                    Sx, Sy, S = S_signal(U)
                     print('[Sx/S, Sy/S] = [', Sx/S0, ', ', Sy/S0, ']')
 
-                if k == max_mesh_refinements:
+                if skip_last_dual and (k == max_mesh_refinements):
                     break
 
                 # ------------------------------------------------------------ #
@@ -630,47 +736,64 @@ def run_adaptive_bt():
                 # ------------------------------------------------------------ #
                 print("\n", "Dual problem: dt = ", dt, "\n")
 
-                psi = Function(V, name='DualMag')
                 Z = TestFunction(V)
                 w, z = split(Z) # test function -> components
 
                 # Assemble the inital vector psi for the dual problem. psi is a
                 # vector containing quadrature weights for computing Sy, i.e.:
                 #   dot(psi, U) = integral(v dx)
+                psi = Function(V, name='InitDualMag')
                 psi.vector()[:] = assemble(z*dx)
-                psi_norm = np.linalg.norm(psi.vector())
-                psi.vector()[:] /= psi_norm # normalize psi
+                # psi_norm = np.linalg.norm(psi.vector())
+                # psi.vector()[:] /= psi_norm # normalize psi
+
+                # phi = Function(V, name='DualMag')
+                # phi.assign(psi)
+                phi = get_dual_init(psi, V)
 
                 foldname = results_foldname + '/Dual/dt_' + str(dt).replace('.','p')
                 DualArgs = {'isdual':True, 'stepper':stepper, 'dt':dt, 'T':T,
-                            'accumulator':accum_int_dualderivsquared, 'prnt':dualprnt,
-                            'savesignal':False, 'savemag':False, 'foldname':foldname}
-                phi, eta = bt_solver(psi, V, mesh, Dcoeff, omega, r2decay, **DualArgs)
-
-                eta_x, eta_y = eta.split(deepcopy=True)
-                Sy_err = Eu*np.sqrt(T*np.sum(eta_y.vector().get_local()))
-                print("\n", "|e⋅ψ| < ", str(Sy_err), "\n")
+                            'accumulator':accum_dual, 'prnt':dualprnt,
+                            'savesignal':save_dual_signal, 'savemag':save_dual_mag, 'foldname':foldname}
+                phi, acc = bt_solver(phi, V, mesh, Dcoeff, omega, r2decay, **DualArgs)
+                int_phi_vec_sq, int_phi_norm = acc
 
                 # Get cellwise errors
+                # DG = FunctionSpace(mesh, 'DG', 0)
+                # DGv = TestFunction(DG)
+                # err_y_sq = Function(DG)
+                #
+                # eta_x, eta_y = int_phi_vec_sq.split(deepcopy=True)
+                # assemble(Eu**2 * T / CellVolume(mesh) * inner(eta_y, DGv) * dx,
+                #     tensor = err_y_sq.vector())
+                # Sy_err = Eu*np.sqrt(T*np.sum(eta_y.vector().get_local()))
+
+
+                Sy_err0 = Eu * int_phi_norm
+                Sy_err1 = Eu * sqrt(T) * np.sqrt(np.sum(int_phi_vec_sq.vector().get_local()))
+
+                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err0/Sy_ex, "\n")
+                print("\n", "|e⋅ψ|/|Sy| = |Sy_err|/|Sy| < ", Sy_err1/Sy_ex, "\n")
+                print("\n", "|error bound|/|true error| = ", Sy_err1/abs(Sy-Sy_ex), "\n")
+
+                # Create indicators
+                eta_x, eta_y = int_phi_vec_sq.split()
                 DG = FunctionSpace(mesh, 'DG', 0)
-                DGv = TestFunction(DG)
-                rel_err_y = Function(DG)
-                avg_err_y = (Eu*sqrt(T)/S0)/CellVolume(mesh)*inner(eta_y, DGv)*dx
-                assemble(avg_err_y, tensor=rel_err_y.vector())
+                err_y_sq = interpolate(eta_y, DG)
 
                 # Create VTK files for output
                 if save_err_y:
-                    vtkfile_err_y = File(foldname + '/err/' + 'rel_err_y.pvd')
-                    vtkfile_err_y << rel_err_y
+                    vtkfile_err_y = File(foldname + '/err/' + 'err_y_sq.pvd')
+                    vtkfile_err_y << err_y_sq
 
                 # Make cell function
                 cell_markers = MeshFunction("bool", mesh, mesh.topology().dim())
                 cell_markers.set_all(False)
-                rel_err_y_thresh = np.percentile(rel_err_y.vector(),refine_percentile)
+                err_y_sq_thresh = np.percentile(err_y_sq.vector(),refine_percentile)
 
                 for cell_idx in xrange(mesh.num_cells()):
                     cell = Cell(mesh, cell_idx)
-                    if rel_err_y.vector()[cell_idx] >= rel_err_y_thresh:
+                    if err_y_sq.vector()[cell_idx] >= err_y_sq_thresh:
                         cell_markers[cell] = True
 
                 # Refine mesh
