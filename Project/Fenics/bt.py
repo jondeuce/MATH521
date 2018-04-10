@@ -59,10 +59,9 @@ dR2_Blood_CA = dR2_CA_per_mM * CA # R2 change due to CA [ms]
 R2_Blood = dR2_Blood_Oxy + dR2_Blood_CA # Total R2 [ms]
 R2_Tissue = 1000.0/T2_Tissue_Base # [ms] -> [Hz]
 
-def get_mesh_str(N,nslice,vesselrad):
-    mesh_str = 'cylinder_N' + str(N) + '_ns' + str(nslice) + \
-                '_r' + str(int(round(vesselrad)))
-    return mesh_str
+def get_mesh_str(N,nslice,rad):
+    rad = int(round(rad))
+    return 'cylinder_N' + str(N) + '_ns' + str(nslice) + '_r' + str(rad)
 
 def get_bt_geom(loadmesh = True, savemesh = True, N = 100, nslice = 32,
     L = 3000.0, vesselrad = 250.0, isvesselunion = False):
@@ -222,7 +221,7 @@ def S_signal(U):
 
 def print_u(U, S0=1.0):
     Sx, Sy, S = S_signal(U)
-    print('  [Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
+    print('[Sx, Sy] = [', Sx/S0, ', ', Sy/S0, ']')
 
     return
 
@@ -240,22 +239,12 @@ def accum_max_normdiff(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay,norm_type='L2'):
     f = 0.0 if acc is None else errornorm(Flast, F, norm_type=norm_type)
     acc = accum_max(acc,None,f,dt,k,N,Dcoeff,omega,r2decay)
 
-    # if acc is None:
-    #     acc = 0.0
-    # else:
-    #     acc = np.maximum(acc, errornorm(Flast, F, norm_type=norm_type))
-
     return acc
 
 def accum_max_vecnormdiff(acc,Flast,F,dt,k,N,Dcoeff,omega,r2decay):
     # Records the maximum difference in vector norm between successive F's
     f = 0.0 if acc is None else np.linalg.norm(F.vector()-Flast.vector())
     acc = accum_max(acc,None,f,dt,k,N,Dcoeff,omega,r2decay)
-
-    # if acc is None:
-    #     acc = 0.0
-    # else:
-    #     acc = np.maximum(acc, np.linalg.norm(F.vector()-Flast.vector()))
 
     return acc
 
@@ -294,32 +283,8 @@ def accum_dual(acc,Ulast,U,dt,k,N,Dcoeff,omega,r2decay):
     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
     dU.vector()[:] = assemble(-At_U) # M*dU/dt = -A*U
 
-    # if acc is None:
-    #     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
-    #     dU.vector()[:] = assemble(At_U)
-    # else:
-    #     At_U = bt_bilinear(U,Z,Dcoeff,r2decay,omega,isdual=True)
-    #     dU.vector()[:] = assemble(-At_U) # M*dphi/dt = -A*phi
-    #     print("\ndphi/dt (exact):\n")
-    #     print(dU.vector().get_local())
-    #
-    #     dU_h = Function(U.function_space())
-    #     dU_h.vector()[:] = (U.vector().get_local() - Ulast.vector().get_local())/dt
-    #     dU_h.vector()[:] = assemble(M_bilinear(dU_h,Z)) # dU -> M*dU
-    #     print("\ndphi/dt (forward diff):\n")
-    #     print(dU_h.vector().get_local())
-    #
-    #     def err_h(x,y):
-    #         return np.abs(x - y)/np.maximum(np.abs(x),np.abs(y))
-    #
-    #     print("\n|dphi/dt - dphi_h/dt|/|dphi/dt|:\n")
-    #     print(err_h(dU.vector().get_local(), dU_h.vector().get_local()))
-    #
-    #     if k >= 0:
-    #         raise ValueError('exiting...')
-
     if acc is None:
-        acc1, acc2 = None, None
+        acc1 = acc2 = None
     else:
         acc1, acc2 = acc
 
@@ -328,8 +293,7 @@ def accum_dual(acc,Ulast,U,dt,k,N,Dcoeff,omega,r2decay):
     acc1 = accum_int_Function(acc1,None,dUsq,dt,k,N,Dcoeff,omega,r2decay)
     # acc1 = accum_int_square(acc,None,dU,dt,k,N,Dcoeff,omega,r2decay)
 
-    dUnorm = np.linalg.norm(dU.vector().get_local())
-    # dUnorm = np.sqrt(np.sum(dUsq.vector().get_local()))
+    dUnorm = np.sqrt(np.sum(dUsq.vector().get_local()))
     acc2 = accum_int_Scalar(acc2,None,dUnorm,dt,k,N,Dcoeff,omega,r2decay)
 
     acc = (acc1, acc2)
@@ -596,16 +560,16 @@ def run_adaptive_bt():
     # Nlist, nslicelist = [50], [32]
     # Nlist, nslicelist = [25], [16]
     # Nlist, nslicelist = [10], [8]
-    Nlist, nslicelist = [10], [32]
-    # Nlist, nslicelist = [10], [64]
+    # Nlist, nslicelist = [10], [32]
+    Nlist, nslicelist = [10], [64]
     # Nlist, nslicelist = [10, 10], [32, 64]
 
     # High accuracy solution to compare to:
     # N_exlist, nslice_exlist = [100], [8]
     # N_exlist, nslice_exlist = [100], [32]
     # N_exlist, nslice_exlist = [50], [32]
-    N_exlist, nslice_exlist = [50], [32]
-    # N_exlist, nslice_exlist = [200], [64]
+    # N_exlist, nslice_exlist = [100], [32]
+    N_exlist, nslice_exlist = [200], [64]
     # N_exlist, nslice_exlist = [100, 200], [32, 64]
 
     stepper_list = ['be']
@@ -619,9 +583,9 @@ def run_adaptive_bt():
     Dcoeff_list = [3037.0] # [mm²/s]
     T_list = [40.0e-3] # [s]
 
-    parent_foldname = 'bt/adapt/results'
-    # parent_foldname = 'bt/adapt/tmp'
-    max_mesh_refinements = 3
+    # parent_foldname = 'bt/adapt/results'
+    parent_foldname = 'bt/adapt/tmp'
+    max_mesh_refinements = 4
     refine_percentile = 66.667 # cutoff percentile above which cell is refined
 
     compute_high_accuracy = True # High accuracy solution to compare to
@@ -629,7 +593,7 @@ def run_adaptive_bt():
     exactprnt = True
     forwprnt = False
     dualprnt = False
-    save_err_y = False
+    save_eta_y = True
 
     save_forw_signal = False
     save_dual_signal = False
@@ -741,33 +705,21 @@ def run_adaptive_bt():
 
                 # Assemble the inital vector psi for the dual problem. psi is a
                 # vector containing quadrature weights for computing Sy, i.e.:
-                #   dot(psi, U) = integral(v dx)
+                #   U⋅ψ = ∫vdx
+                # where U = (u,v)
                 psi = Function(V, name='InitDualMag')
                 psi.vector()[:] = assemble(z*dx)
                 # psi_norm = np.linalg.norm(psi.vector())
                 # psi.vector()[:] /= psi_norm # normalize psi
 
-                # phi = Function(V, name='DualMag')
-                # phi.assign(psi)
-                phi = get_dual_init(psi, V)
-
                 foldname = results_foldname + '/Dual/dt_' + str(dt).replace('.','p')
                 DualArgs = {'isdual':True, 'stepper':stepper, 'dt':dt, 'T':T,
                             'accumulator':accum_dual, 'prnt':dualprnt,
                             'savesignal':save_dual_signal, 'savemag':save_dual_mag, 'foldname':foldname}
+
+                phi = get_dual_init(psi, V)
                 phi, acc = bt_solver(phi, V, mesh, Dcoeff, omega, r2decay, **DualArgs)
                 int_phi_vec_sq, int_phi_norm = acc
-
-                # Get cellwise errors
-                # DG = FunctionSpace(mesh, 'DG', 0)
-                # DGv = TestFunction(DG)
-                # err_y_sq = Function(DG)
-                #
-                # eta_x, eta_y = int_phi_vec_sq.split(deepcopy=True)
-                # assemble(Eu**2 * T / CellVolume(mesh) * inner(eta_y, DGv) * dx,
-                #     tensor = err_y_sq.vector())
-                # Sy_err = Eu*np.sqrt(T*np.sum(eta_y.vector().get_local()))
-
 
                 Sy_err0 = Eu * int_phi_norm
                 Sy_err1 = Eu * sqrt(T) * np.sqrt(np.sum(int_phi_vec_sq.vector().get_local()))
@@ -779,21 +731,24 @@ def run_adaptive_bt():
                 # Create indicators
                 eta_x, eta_y = int_phi_vec_sq.split()
                 DG = FunctionSpace(mesh, 'DG', 0)
-                err_y_sq = interpolate(eta_y, DG)
+                Eta_y = interpolate(eta_y, DG)
 
                 # Create VTK files for output
-                if save_err_y:
-                    vtkfile_err_y = File(foldname + '/err/' + 'err_y_sq.pvd')
-                    vtkfile_err_y << err_y_sq
+                if save_eta_y:
+                    vtkfile_err_y = File(foldname + '/err/' + 'Eta_y.pvd')
+                    vtkfile_err_y << Eta_y
+
+                if k == max_mesh_refinements:
+                    break
 
                 # Make cell function
                 cell_markers = MeshFunction("bool", mesh, mesh.topology().dim())
                 cell_markers.set_all(False)
-                err_y_sq_thresh = np.percentile(err_y_sq.vector(),refine_percentile)
+                err_y_sq_thresh = np.percentile(Eta_y.vector(),refine_percentile)
 
                 for cell_idx in xrange(mesh.num_cells()):
                     cell = Cell(mesh, cell_idx)
-                    if err_y_sq.vector()[cell_idx] >= err_y_sq_thresh:
+                    if Eta_y.vector()[cell_idx] >= err_y_sq_thresh:
                         cell_markers[cell] = True
 
                 # Refine mesh
