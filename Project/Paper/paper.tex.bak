@@ -89,23 +89,35 @@ The transverse magnetization $\Mt{}$ will be simulated within a cubic domain $\O
 
 This geometry is chosen for two reasons.
 First, biologically it represents a single vessel present within a cubic imaging voxel.
-Second, there exists an exact solution for \ww{} given the magnetic susceptibility $\chi$ of the cylindrical blood vessel.
+Second, there exists an exact solution for \ww{} given the magnetic susceptibility $\chi$ of the cylindrical blood vessel~\cite{cheng_limitations_2009}.
 For a cylinder of radius $a$, we have that
 %
 \begin{equation}\label{omega}
 \ww{} = 
 \begin{cases}
-\frac{\chi B_0}{2}\sin^2\theta \frac{a^2}{x^2+y^2} \frac{y^2-x^2}{x^2+y^2}, \hspace{0.2cm} \text{inside cylinder}\\%x^2 + y^2 \geq a^2 \\
-\frac{\chi B_0}{6} \left(3\cos^2\theta - 1\right), \qquad \text{outside cylinder}\\%x^2 + y^2 < a^2
+\frac{\chi B_0}{2}\sin^2\theta \frac{a^2}{x^2+y^2} \frac{y^2-x^2}{x^2+y^2}, \hspace{0.17cm} \text{outside cylinder}\\
+\frac{\chi B_0}{6} \left(3\cos^2\theta - 1\right), \qquad \text{inside cylinder}
 \end{cases}
 \end{equation}
 %
 where $\theta$ is the angle between the cylinder axis and \Bo{}.
 An example cross section of \ww{} can be seen in Figure~\ref{fig:geometry}.
+Note that $\ww{}$ is constant within the cylinder, and jumps discontinuously to a smooth solution outside of the cylinder.
 
-\section*{Methods}
-Finite difference methods, splitting methods, and finite element methods will be investigated.
-First, some basic properties of the Bloch-Torrey equation are described.
+The transverse relaxation rate \rr{} is taken to be piecewise constant values inside and outside of the cylinder,
+\begin{equation}\label{r2decay}
+\rr{} = 
+\begin{cases}
+R_{\text{tissue}}, \quad \text{outside cylinder} \\
+R_{\text{blood}}, \quad\hspace{0.02cm} \text{inside cylinder.}
+\end{cases}
+\end{equation}
+where $0 < R_{\text{tissue}} < R_{\text{blood}}$ are positive constants.
+%Both \ww{} and \rr{} are piecewise smooth with sharp discontinuities at the cylinder boundary.
+
+\section*{Properties of the Bloch-Torrey equation}
+%Finite difference methods, splitting methods, and finite element methods will be investigated.
+%First, some basic properties of the Bloch-Torrey equation are described.
 
 \subsection*{Static solution}
 
@@ -121,46 +133,68 @@ In this form, it is clear to see that the magnitude $\ab{\Mxy} = \Norm{\Mt{}}$ o
 If $\CDecay = 0$, then~\eqref{BTreal} reduces to two uncoupled heat equations in the transverse magnetization components $u$ and $v$.
 This is equivalent to the limit as the magnetic field $B_0 \rightarrow 0$, as the magnetic moments of the spins are not forced to realign with an external field and instead are free to diffuse unhindered.
 
-Mathematically, we should expect that solutions to the Bloch-Torrey equation exhibit some of the same properties as solutions of the heat equation, such as exponential suppression of eigenmodes corresponding to large negative eigenvalues.
+Mathematically, we should expect that solutions to the Bloch-Torrey equation exhibit some of the same properties as solutions of the heat equation, such as exponential suppression of high frequency eigenmodes.
 
-\subsection*{Positive definiteness}
-
+\subsection*{Weak form}
 The coupled system of PDEs~\eqref{BTreal} can be written as
 \begin{align}\label{BTvec}
 \begin{cases}
 \ddt{\uu{}} = -A \uu{} \quad\text{ in }\Omega,\quad t>0 \\
-\uu{}_0 = \v{g} \qquad\hspace{5.5pt} \text{ in }\Omega
+\hspace{3.5pt}\uu{} = \v{g} \qquad\hspace{6pt} \text{ in }\Omega,\quad t=0
 \end{cases}
 \end{align}
-where $\uu{} = [u,v]^T$, zero Neumann conditions are taken on the boundary $\partial\Omega$, and
+where $\uu{} = [u,v]^T$ and
 \begin{align}
     A = \begin{pmatrix}
     -D \Laplacian{} + R & -\omega \\ 
     \omega & -D \Laplacian{} + R
     \end{pmatrix}.
 \end{align}
-The operator $A$, although asymmetric, is positive definite as
-\begin{align*}
-\langle \uu{}, A \uu{} \rangle
-&= \int_\Omega -D u \Laplacian{u} + R u^2 - D v \Laplacian{v} + R v^2 \dx{x} \\
-&= \int_\Omega D \, (||\nabla u||^2 + ||\nabla v||^2) + R \, (u^2 + v^2) \dx{x} \\
-&\geq 0 \quad \text{(} >0 \text{ for } \uu{} \not\equiv \v{0}\text{)}
-\end{align*}
-where we have used the zero Neumann boundary conditions to drop the boundary terms.
 
-From this, it is then easy to show that the $L^2$-norm of the solution decreases in time:
+Now, consider the vector test function $\v{v} = [w,z]^T$ where $w,z \in H^1$.
+Then, the weak form of~\eqref{BTvec} is given by
+\begin{align}\label{BTweak}
+\langle \v{v}, \ddt{\uu{}} \rangle
+&= - \langle \v{v}, A \uu{} \rangle, \quad \forall \v{v} \in H^1 \times H^1
+\end{align}
+where
 \begin{align*}
-\langle \uu{}, \ddt{\uu{}} \rangle
-&= \int_\Omega u \ddt{u} + v \ddt{v} \dx{x} \\
-&= \frac{1}{2} \pd{}{t} \left( \int_\Omega u^2 + v^2 \dx{x} \right) \\
-&= \frac{1}{2} \pd{}{t} \LTwoNorm{\Mxy}^2,
+\langle \v{v}, A \uu{} \rangle
+= \int_\Omega &\left\{-D w \Laplacian{u} + R w u - \omega w v \right. \\
+&\left. -D z \Laplacian{v} + R z v + \omega z u \right\} \, \dx{x}.
 \end{align*}
-and so, for non-zero \uu{} we have that
+Applying zero Neumann boundary conditions on the boundary $\partial\Omega$, this simplifies to
+\begin{align}\label{Abilinear}
+\langle \v{v}, A \uu{} \rangle
+= \int_\Omega & D \left(\Gradient{w}\cdot\Gradient{u} + \Gradient{z}\cdot\Gradient{v}\right) + \\
+&R(w u + z v) + \omega (z u - w v) \, \dx{x}. \nonumber
+\end{align}
+
+\subsection*{Coercivity and local magnetization decay}
+%The bilinear form $\langle \v{v}, A\uu{} \rangle$ is continuous, as
+%\begin{align}\label{Acontinuous}
+%Something
+%\end{align}
+The bilinear form $\langle \v{v}, A\uu{} \rangle$ is coercive, as
+\begin{align}\label{Acoercive}
+\langle \uu{}, A \uu{} \rangle
+&= \int_\Omega D \, (||\nabla u||^2 + ||\nabla v||^2) + R \, (u^2 + v^2) \dx{x} \nonumber \\
+&\geq \left(\min_\v{x} \rr{}\right) \LTwoNorm{\uu{}}
+\end{align}
+with $\min_\v{x} \rr{} = R_{\text{tissue}} > 0$.
+From this, it is then easy to show that the $L^2$-norm of the solution decreases in time:
+\begin{equation*}
+\langle \uu{}, \ddt{\uu{}} \rangle
+= \int_\Omega u \ddt{u} + v \ddt{v} \dx{x}
+= \frac{1}{2} \pd{}{t} \int_\Omega u^2 + v^2 \dx{x}
+= \frac{1}{2} \pd{}{t} \LTwoNorm{\Mxy}^2,
+\end{equation*}
+and so, for non-zero \uu{}, we have that
 \begin{align*}
 \frac{1}{2} \pd{}{t} \LTwoNorm{\Mxy(\v{x},t)}
 = \langle \uu{}, \ddt{\uu{}} \rangle = - \langle \uu{}, A\uu{} \rangle < 0
 \end{align*}
-and therefore $\LTwoNorm{\Mxy}^2$ decreases monotonically with time.
+and therefore $\LTwoNorm{\Mxy}^2$ decreases monotonically with time when starting from a non-zero $\Mxy_0$.
 Note that this does not imply that $S(t)$ decreases monotonically as well, although it does of course go to zero in the limit as $t\rightarrow\infty$.
 %In fact, it is possible for $S(t)$ to increase if the sign of \ww{} is reversed.
 %This occurs in \textit{spin echo} scans, but will not be detailed in this study.
@@ -169,19 +203,144 @@ Note that this does not imply that $S(t)$ decreases monotonically as well, altho
 Suppose for contradiction that $\uu{}_1$ and $\uu{}_2$ are different solutions to~\eqref{BTvec} zero Neumann boundary conditions on $\partial\Omega$.
 
 Then, let $\v{w} = \uu{}_1-\uu{}_2$.
-By linearity, we have $\v{w}$ solves
+By linearity, we have that $\v{w}$ solves
 \begin{align*}
 \begin{cases}
 \ddt{\v{w}} = -A \v{w} \quad\text{ in }\Omega,\quad t>0 \\
-\v{w}_0 = \v{0} \qquad\hspace{7.2pt} \text{ in }\Omega.
+\hspace{3.2pt}\v{w} = \v{0} \qquad\hspace{8.3pt} \text{ in }\Omega,\quad t = 0.
 \end{cases}
 \end{align*}
-Now, we have that $\LTwoNorm{\v{w}} = 0$, and since we have shown that $\LTwoNorm{\uu{}}$ is non-increasing for all solutions \uu{} to~\eqref{BTvec}, it must be that $\LTwoNorm{\v{w}} \equiv 0$ and therefore $\uu{}_1$ must equal $\uu{}_2$ almost everywhere for all time, a contradiction.
+Now, we have that $\LTwoNorm{\v{w}} = 0$, and since we have shown that $\LTwoNorm{\uu{}}$ is non-increasing for all solutions \uu{} to~\eqref{BTvec}, it must be that $\LTwoNorm{\v{w}} \equiv 0$ for all time and therefore $\uu{}_1$ must equal $\uu{}_2$ almost everywhere for all time, a contradiction.
 
+%\subsection*{Existence}
+%\paragraph*{Theorem (Existence of Weak Solutions):}
+%Let $V,H$, be Hilbert spaces such that $V \subset H = H^* \subset V^*$ are dense inclusions, and let $A(\cdot,\cdot)$ be a continuous and coercive bilinear form on $V$.
+%Then the parabolic problem
+%\begin{align*}
+%\langle \ddt{u}, v \rangle_{V^*,V} + A(u,v) &= \langle f(t), v \rangle_{V^*,V} \\
+%u(0) &= u_0 \quad \text{in } H
+%\end{align*}
+%for almost all $t \in ]0,T[$ admits a solution $u \in W(0,T,V) = \left\{ u \in L^2(0,T,V) \,\vert\, \partial_t u \in L^2(0,T,V^*)\right\}$ .
+%\paragraph*{Proof:} Theorem $7.1.3$ in~\cite{evans10}.
 
+\subsection*{Continuous dependence on data}
+\TODO{this}
+
+\section*{Methods}
+
+\subsection*{Finite difference methods}
+
+The simplest method for solving equation~\eqref{BTcplx} is through a simple application of the method of lines to discretise the negative Laplacian $-\Delta$ using standard second order consistent centred differences, resulting in $-\Delta^h$ such that
+\begin{equation}\label{DiscreteLap}
+-\Delta^h \Mxy(\v{x}_i) = \frac{6 \Mxy(\v{x}_i) - \Sigma_{j\in\mathcal{I}_i} \Mxy(\v{x}_j)}{h^2} + \mathcal{O}(h^2)
+\end{equation}
+where $h$ is the uniform grid spacing and the sum is over the six neighbours of $\v{x}_i$ indexed by $\mathcal{I}_i$.
+It should be noted that this second order consistency will not actually be observed in practice, as due to the discontinuities in \rr{} and \ww{} we expect that the solution may have jumps in the gradient on the cylinder boundary.
+
+Boundary conditions are taken to be periodic on the boundaries of the unit cube~\cite{nguyen_finite_2014}, as opposed to Neumann boundary conditions on the boundary of the cube and cylinder.
+This is due to simplicity of implementation and the inherent limitations of finite differences methods on irregular domains.
+Additionally, $\CDecay$ is discretised to the diagonal matrix operator $\CDecay^h$ such that $\CDecay^h_{ii}$ = $\CDecay(\v{x_i})$, where $\v{x_i}$ is a point on the discretised grid.
+What results is the discrete system 
 %
-%That is, if diffusion is neglected and spins are fixed in place, the effect of the Bloch-Torrey equation is the 
-%This is indeed an important heat equation-like properties of the Bloch, but more importantly 
+\begin{align}
+    \frac{\partial}{\partial t} \Mxy^h(t) &= -A^h \, \Mxy^h(t)\label{ImagSchrod_MatrixOdeSys} \\
+    \Rightarrow \Mxy^h(t) &= e^{-A^ht} \, \Mxy^h(0),
+ \label{ImagSchrod_MatrixExpSoln}
+\end{align}
+%
+where $A^h = -D \Delta^h + \CDecay^h$ and the notation $e^{-A^ht}$ represents the \textit{matrix exponential}~\cite{moler_nineteen_1978} of the matrix $-A^ht$.
+In our case, although $A^h \in \mathbb{C}^{N^3\times N^3}$ where $N$ may be large, we need only compute the matrix exponential vector product - also known as the \textit{action} of the matrix exponential - and not $\exp(-A^ht)$ itself, which is in general full despite $A^h$ being
+sparse~\cite{moler_nineteen_1978}.
+Algorithms for computing the action of the matrix exponential are known~\cite{caliari_comparison_nodate,moler_nineteen_2003}.
+I use the algorithm described by Higham et al.\@ in~\cite{al-mohy_computing_2011}, as well as their \textsc{Matlab}
+code \textit{expmv}.
+
+Note that although the periodic Laplacian operator $\Delta^h$ is singular due to the fact that the constant solution has eigenvalue zero, adding $\CDecay^h$ shifts the positive constant diagonal $6/h^2$ up by $R(\v{x}_i) + i \omega(\v{x}_i)$, thereby making the matrix $A^h$ strongly diagonally dominant and therefore non-singular by the Gershgorin circle theorem~\cite{Ger31}.
+Therefore, the solution~\eqref{ImagSchrod_MatrixExpSoln} to the system~\eqref{ImagSchrod_MatrixOdeSys} exists and is unique.
+
+The resulting signal $S^h(T)$ is computed by integrating the discrete solution $\Mxy^h(T) = e^{-A^h T}\Mxy^h_0$ using the trapezoidal rule.
+
+\subsection*{Operator splitting methods}
+
+Operator splitting methods for parabolic PDEs are useful when a differential operator has no closed form operator exponential, but can be split into a sum of operators which do.
+The operator exponential is the formal equivalent of the matrix exponential for differential operators, namely it is the operator defined such that $\uu{}(\v{x},t) = e^{-At}\uu{}_0(\v{x})$, where $\partial_t\uu(\v{x}) = -A\uu{}(\v{x})$ with $\uu{}_0(\v{x})$ given.
+
+Suppose a differential operator $A = T + V$ is given such that the action of the operator exponential $e^{-A t}\uu{}$ has no closed form, but the actions $e^{-T t}\uu{}$ and $e^{-V t}\uu{}$ do.
+Then, one can use the so-called \textit{Strang splitting}~\cite{strang_construction_1968,macnamara_operator_2016} to approximate the action of the operator exponential of $A$ with that of $T$ and $V$:
+%
+\begin{align}
+    e^{-A\delta t} &= e^{-(T + V)\delta t} \label{Evol_NoSplit} \\
+                     &= e^{-T \delta t} e^{-V \delta t} + \mathcal{O}(\delta t^2) \label{EvolSplit_Order2} \\
+                     &= e^{-V \delta t/2} e^{-T \delta t} e^{-V \delta t/2} + \mathcal{O}(\delta t^3) \label{EvolSplit_Order3}
+\end{align}
+%
+where the approximation errors are incurred due to the fact that $T$ and $V$ are assumed to not commute, i.e. $T(V\uu{}) \neq V(T\uu{})$.
+Were they to commute, both of these approximations would be exact.
+
+In our case, from equation~\eqref{BTcplx} we may take $A = T + V$ where $T = -D \Laplacian{}$ with periodic boundary conditions, and $V = \CDecay$.
+Then, the action of the evolution operators $e^{Dt\Delta}$ and
+$e^{-\CDecay t}$ in
+approximations~\eqref{EvolSplit_Order2}~and~\eqref{EvolSplit_Order3} are
+known~\cite{guardiola_monte_1998}
+%
+\begin{alignat}{2}
+    e^{Dt\Delta} \Mxy_0(\v{x}) &= \Phi(\v{x},t) \conv \Mxy_0(\v{x}) \label{Evolution_Kinetic} \\
+    e^{-\CDecay t} \Mxy_0(\v{x}) &= e^{-\CDecay(\v{x})t} \, \Mxy_0(\v{x}), \label{Evolution_Potential}
+\end{alignat}
+%
+where $\Phi(\v{x},t)$ is the Gaussian kernel defined as
+\begin{equation}\label{Gaussian_Kernel}
+    \Phi(\v{x},t) \coloneqq \frac{1}{(4\pi D t)^{3/2}} e^{-\v{x}^2/4Dt}
+\end{equation}
+%
+and $\conv$ denotes the convolution over space.
+Note that, as opposed to the solution~\eqref{ImagSchrod_MatrixExpSoln}, the solution~\eqref{Evolution_Kinetic} and~\eqref{Evolution_Potential} is extremely fast to compute.
+Equation~\eqref{Evolution_Kinetic} simply convolves the initial state with the Gaussian kernel,% (or equivalently, it applies uniform smoothing of width $\sigma = \sqrt{2Dt}$).
+which can be computed efficiently using the Fast Fourier Transform (FFT), since the boundary conditions are periodic.
+Equation~\eqref{Evolution_Potential} only involves exponentiation and multiplication, and thus is even faster to compute.
+
+The resulting signal $S^h(T)$, as in the case of the finite differences, is computed by integrating the resulting discrete solution $M^h(T)$ using the trapezoidal rule.
+%The approximate solutions given by equations~\eqref{EvolSplit_Order2}
+%and~\eqref{EvolSplit_Order3} can be thought of as follows: instead of
+%allowing decay and diffusion to occur simultaneously using $\hat{A}$,
+%the signal undergoes pure decay due to $\CDecay$ and pure diffusion
+%due to $D\Laplacian$ in an alternating fashion over small time steps of
+%order $\delta t$, repeating until the desired time $t$ is
+%reached.
+
+\subsection*{Finite element methods}
+
+\section*{Numerical experiments}
+
+\section*{Results}
+
+\section*{Discussion}
+
+We are now in a position to solve the Bloch-Torrey equation
+efficiently. We begin by discretizing the
+$3\times 3\times \SI{3}{\milli\meter^3}$
+voxel into $N^3$ subvoxels. The subvoxels need to be
+small enough that diffusion effects can be captured during each time
+step, but large enough that solving the system is still
+computationally feasible. The root mean square distance travelled by a
+freely diffusing particle in $n$-dimensions
+is~\cite{ursell_diffusion_2007}
+%
+\begin{equation}\label{RMS_Distance}
+    d_{rms} = \sqrt{2 n D \delta t}.
+\end{equation}
+%
+If we choose $\delta t$ = TE/30 = $\unit[2]{ms}$ and the diffusion
+constant D = 3.037
+$\mu\text{m}^2$/ms~\cite{holz_temperature-dependent_2000}, the mean
+free diffusion distance in $n=3$ dimensions is $d$ = 6.04
+$\mu$m. Choosing $N$ = 512 gives a subvoxel size of 5.86 $\mu$m,
+capturing diffusion effects while being computationally feasible.
+
+Algorithm~\ref{fig:algorithm1} details how to compute the signal at
+time TE using the approximate evolution equation
+\eqref{EvolSplit_Order2}.
+
 %
 %In the brain's white matter these simulations are challenging to perform due to structures such as blood vessels and capillaries having different magnetic properties than the surrounding tissue, causing \rr{} and \ww{} to be only piecewise smooth with sharp changes at blood-tissue boundaries.
 %
@@ -201,19 +360,6 @@ Now, we have that $\LTwoNorm{\v{w}} = 0$, and since we have shown that $\LTwoNor
 %Currently, the best trade-off of accuracy vs. speed which I have encountered are splitting methods(4,5) %TODO ref
 %based on the equivalence of the BT equation and the imaginary-time Schrödinger equation(6). %TODO ref
 %These methods are fast and simple to implement, but still require a very fine grid on which to compute the solution.
-
-\subsection*{Experimental Procedures}
-Experimental Procedures
-
-\section*{Results}
-Results
-
-\section*{Discussion}
-\subsection*{Solution of the Bloch-Torrey Equation}
-Solution of the Bloch-Torrey Equation
-
-\subsection*{Limitations}
-Limitations
 
 \section*{Conclusion}
 Conclusion
@@ -280,22 +426,22 @@ Acknowledgements
     \algsetup{indent=3em}
     \vspace{0.25cm}
     \STATE \text{\LARGE{}Initialize:} $\Mxy_0 \coloneqq i$,
-    $\Delta t \coloneqq \text{TE}/30$, $k \coloneqq 0$
+    $\delta t \coloneqq \text{TE}/30$, $k \coloneqq 0$
 
-    \WHILE{ $k \Delta t < \text{TE}$ }
+    \WHILE{ $k \delta t < \text{TE}$ }
     
     \STATE $\Mxy_{k+\frac{1}{2}} \coloneqq 
-    e^{-\CDecay(\v{x}) \Delta t} \, \Mxy_k$
-    %\COMMENT{$\Delta t \rightarrow \Delta t/2$}
+    e^{-\CDecay(\v{x}) \delta t} \, \Mxy_k$
+    %\COMMENT{$\delta t \rightarrow \delta t/2$}
 
     \STATE $\Mxy_{k+1} \coloneqq 
-    \Phi(\v{x},\Delta t) \conv \Mxy_{k+\frac{1}{2}}$
+    \Phi(\v{x},\delta t) \conv \Mxy_{k+\frac{1}{2}}$
     %\COMMENT{$\Mxy_{k+1} \rightarrow \Mxy_{k+\frac{1}{2}}$}
 
     %\STATE \Comment{$\Mxy_{k+1} \coloneqq
-    %e^{-\CDecay(\v{x}) \Delta t/2} \Mxy_{k+\frac{1}{2}}$}
+    %e^{-\CDecay(\v{x}) \delta t/2} \Mxy_{k+\frac{1}{2}}$}
 
-    \IF{ $(k+1) \Delta t = \text{TE}/2$ }
+    \IF{ $(k+1) \delta t = \text{TE}/2$ }
     \STATE $\Mxy_{k+1} \coloneqq \conj{\Mxy}_{k+1}$
     \ENDIF
     
@@ -319,13 +465,13 @@ Acknowledgements
     All four free parameters are encoded solely in the complex decay rate 
     $\CDecay(\v{x})$; the rest of the algorithm does not depend on them.
     The notation $\Mxy_\nu$ is shorthand for 
-    $\Mxy(\v{x},\nu \Delta t)$ throughout the algorithm.
-    If the $\mathcal{O}(\Delta t^3)$ order evolution 
-    equation \eqref{EvolSplit_Order3} were used instead,
-    line 3 should be modified to decay for only a half time step $\Delta t/2$,
+    $\Mxy(\v{x},\nu \delta t)$ throughout the algorithm.
+    If the $\mathcal{O}(\delta t^3)$ order evolution 
+    equation~\eqref{EvolSplit_Order3} were used instead,
+    line 3 should be modified to decay for only a half time step $\delta t/2$,
     line 4 should perform the Gaussian convolution in-place,
     and an extra line should be added directly following the convolution which
-    decays for another half time step $\Delta t/2$.}
+    decays for another half time step $\delta t/2$.}
     \label{fig:algorithm1}
 \end{minipage}
 \end{figure}
