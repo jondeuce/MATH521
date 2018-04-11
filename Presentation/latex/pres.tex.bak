@@ -298,7 +298,8 @@
 \end{align*}
 \vspace{-0.5cm}
 \begin{enumerate}
-    \item Solutions to the Bloch-Torrey equation decay exponentially in time and smooth high frequency modes
+%    \item Solutions to the Bloch-Torrey equation decay exponentially in time and smooth high frequency modes
+    \item The Bloch-Torrey smooths high frequency modes
 %    \begin{align*}
 %        - \begin{pmatrix} \v{u}^T \, \v{v}^T \end{pmatrix}
 %        \begin{pmatrix}

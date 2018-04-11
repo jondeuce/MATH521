@@ -1,0 +1,164 @@
+%% ------------------------------------------------------ %%
+%% ------------ Additional Packages/Commands ------------ %%
+%% ------------------------------------------------------ %%
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{eucal}
+\usepackage{units}
+\usepackage{siunitx}
+\usepackage{color}
+\usepackage{bm} % for bold vectors
+\usepackage{upgreek} % for bold greek-letter vectors
+%\usepackage{algorithmicx}
+\usepackage{algorithm,algorithmic,setspace} % http://ctan.org/pkg/algorithms
+%\usepackage[noend]{algpseudocode} % http://ctan.org/pkg/algorithmicx
+\usepackage[section]{placeins}
+\usepackage{afterpage} % for clearing page after figure
+\usepackage{titling} % for title
+\usepackage{caption} % for caption in minipage environment
+\usepackage{authblk} % for affiliations
+\usepackage{parskip} % Removes indentation from paragraphs
+%\usepackage[bottom]{footmisc}
+%\raggedbottom % allow paragraphs to end before page bottom
+%\usepackage{graphicx}
+%\usepackage{textpos} %for positioning logo
+%\usepackage{animate} %for animated gif
+%\usepackage{xcolor,xspace,soul} % Colour, spacing, and highlighting
+
+% ************************************************
+% ***************** NEW COMMANDS *****************
+% ************************************************
+
+%\renewcommand{\labelenumi}{(\alph{enumi})} % Use letters for enumerate
+\let\vaccent=\v % rename builtin command \v{} to \vaccent{}
+
+%% MRI Specific
+\newcommand{\conj}[1]{\overline{#1}}
+%\newcommand{\Mxy}{\widetilde{M}_{xy}}
+%\newcommand{\Mxy}{\widetilde{M}}
+\newcommand{\Mxy}{\mathcal{M}}
+\newcommand{\CDecay}{\Gamma}
+\newcommand{\MM}{\ensuremath{\v{M}}}
+\newcommand{\Mt}{\ensuremath{\v{M}_{\bot}}}
+\newcommand{\BB}{\ensuremath{\v{B}}}
+\newcommand{\Bo}{\ensuremath{\v{B_0}}}
+\newcommand{\rr}{\ensuremath{R(\v{x})}}
+\newcommand{\ww}{\ensuremath{\omega(\v{x})}}
+\newcommand{\uu}{\ensuremath{\v{u}}}
+
+
+%% MISC
+\newcommand{\ab}[1]{\left| #1 \right|} % for absolute value
+\newcommand{\avg}[1]{\left< #1 \right>} % for average
+\let\underdot=\d % rename builtin command \d{} to \underdot{}
+\let\baraccent=\= % rename builtin command \= to \baraccent
+\renewcommand{\=}[1]{\stackrel{#1}{=}} % for putting numbers above =
+\providecommand{\fr}{\frac}
+\providecommand{\RR}{\mathbb{R}}
+\providecommand{\CC}{\mathbb{C}}
+\providecommand{\NN}{\mathbb{N}}
+\providecommand{\e}{\epsilon}
+\DeclareMathOperator{\di}{d\!}
+\DeclareMathOperator{\Arg}{Arg}
+\newcommand*\ieval[3]{\left.#1\right\rvert_{#2}^{#3}}
+
+%% Vectors
+\renewcommand{\v}[1]{\ensuremath{\mathbf{#1}}} 
+\newcommand{\gv}[1]{\ensuremath{\mbox{\boldmath$ #1 $}}} % for vectors of Greek letters
+\newcommand{\uv}[1]{\ensuremath{\mathbf{\hat{#1}}}} % for unit vector
+\providecommand{\wave}[1]{\v{\tilde{#1}}}
+
+%% DERIVATIVES
+\renewcommand{\d}[2]{\frac{d #1}{d #2}} % for derivatives
+\newcommand{\dubd}[2]{\frac{d^2 #1}{d #2^2}} % for double derivatives
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}} % for partial derivatives
+\newcommand{\ddt}[1]{\ensuremath{{#1}_t}}
+\newcommand{\pdd}[2]{\frac{\partial^2 #1}{\partial #2^2}} % for double partial derivatives
+\newcommand{\dx}[1]{\ensuremath{\operatorname{d}\!{#1}}}
+
+%% Operators
+\newcommand{\Gradient}{\ensuremath{\mbox{\boldmath$\nabla$}}} % gradient
+\newcommand{\Laplacian}{\ensuremath{\mbox{$\Delta$}}} % laplacian
+%\newcommand{\Lap}{\nabla^2}
+%\newcommand{\conv}{\ensuremath{\mbox{\ast}}} % convolution
+\newcommand{\conv}{\ast} % convolution
+
+%% Norms
+\newcommand{\Norm}[1]{\ensuremath{\left\lVert #1 \right\rVert}} % generic norm
+\newcommand{\ANorm}[2]{\ensuremath{\left\lVert #1 \right\rVert_{#2}}} % norm with respect to specified A
+\newcommand{\LTwoNorm}[1]{\ensuremath{\left\lVert #1 \right\rVert_{L^2}}} % L2 norm
+\newcommand{\HOneNorm}[1]{\ensuremath{\left\lVert #1 \right\rVert_{H^1}}} % H1 norm
+
+%% Math Operators
+\DeclareMathOperator{\spann}{span}
+
+% ***************************************************
+% ******************* TEXT AND CODE *****************
+% ***************************************************
+
+%% Text
+\newcommand{\mathcolorbox}[2]{\colorbox{#1}{$\displaystyle #2$}}
+\newcommand{\hlfancy}[3]{\textcolor{#1}{\sethlcolor{#2}\hl{#3}}}
+\newcommand{\TODO}[1]{\hlfancy{red}{yellow}{\textbf{TODO: #1}}}
+
+%% Code
+%\newcommand{\code}[1]{\mintinline{C}{#1}}
+%\newcommand{\code}[1]{\texttt{#1}}
+%\newcommand{\code}[1]{\lstinline[columns=fixed]{#1}}
+%\newcommand{\includecode}[1]{\lstinputlisting{#1}}
+
+% ***************************************************
+% **************** SPIN-ECHO COMMANDS ***************
+% ***************************************************
+
+% Remove algorithm number label, as there is only one
+%\captionsetup[algorithm]{labelformat=empty}
+
+%\newcommand{\vect[1]}{\vec{#1}} %vectors using arrows
+%\newcommand{\vect}[1]{\mathbf{#1}} %vectors using boldface
+%\newcommand{\bvect}[1]{\bm{#1}} % \mathbf doesn't work for greek/mathcal letters
+%\newcommand{\bvect}[1]{#1} % looks better without bold
+
+\newcommand{\matr}[1]{\mathbf{#1}} % matrix: undergraduate algebra version
+%\newcommand{\matr}[1]{\bm{#1}}    % matrix: ISO complying version
+
+%\newcommand{\tensor}[1]{\overleftrightarrow{\matr{#1}}} % for diffusion tensor
+%\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\matr{#1}}}
+\newcommand{\tensor}[1]{\matr{#1}} % for diffusion tensor
+%\def\tensor#1{\protect\@ontopof{#1}{\leftrightarrow}{1.15}\mathord{\box2}}
+
+% for capital 'M' for molar
+%\DeclareSIUnit\Molar{\text{M}}
+
+%% Prevent inline equations from breaking over lines
+%\relpenalty=9999 %10000 means never, 9999 means almost never
+%\binoppenalty=9999
+%
+%% Prevent over hyphenation of words across lines
+%\pretolerance=2000 %10000 means never, 9999 means almost never
+%\tolerance=2000 
+%\emergencystretch=10pt % maximum width of allowed extra space is 10pt
+
+%% Begin added or changed by Alex Rauscher
+\renewcommand{\floatpagefraction}{0.8} % so that pictures don't occupy an entire column
+
+% force figures to be at the top of the page, not float in the middle
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
+%\DeclareUnicodeCharacter{01E7}{ǧ} % does NOT work; pdflatex halts
+%\newunicodechar{ǧ}{\u{g}} % not sure why, but this needs to be defined
+
+% For a regular tilde...
+\newcommand{\mytilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+\newcommand{\myast}{\lower.17ex\hbox{*}}

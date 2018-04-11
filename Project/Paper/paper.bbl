@@ -1,0 +1,12 @@
+\begin{thebibliography}{1}
+
+\bibitem{torrey_bloch_1956}
+H.~C. Torrey, ``Bloch {Equations} with {Diffusion} {Terms},'' {\em Phys. Rev.},
+  vol.~104, pp.~563--565, Nov. 1956.
+
+\bibitem{al-mohy_computing_2011}
+A.~Al-Mohy and N.~Higham, ``Computing the {Action} of the {Matrix}
+  {Exponential}, with an {Application} to {Exponential} {Integrators},'' {\em
+  SIAM J. Sci. Comput.}, vol.~33, pp.~488--511, Jan. 2011.
+
+\end{thebibliography}
