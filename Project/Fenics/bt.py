@@ -567,15 +567,15 @@ def run_adaptive_bt():
     # N_exlist, nslice_exlist = [100], [32]
     # N_exlist, nslice_exlist = [50], [32]
     # N_exlist, nslice_exlist = [100], [32]
-    N_exlist, nslice_exlist = [200], [64]
+    N_exlist, nslice_exlist = [250], [64]
     # N_exlist, nslice_exlist = [100, 200], [32, 64]
 
     # stepper_list = ['be']
     stepper_list = ['be', 'trbdf2']
 
     # dt_list = [1.0e-3] # [s]
-    dt_list = [0.25e-3] # [s]
-    # dt_list = [4.0e-3, 2.0e-3, 1.0e-3, 0.5e-3]
+    # dt_list = [0.5e-3, 0.25e-3] # [s]
+    dt_list = [4.0e-3, 2.0e-3, 1.0e-3]
 
     vesselradius_list = [250.0, 125.0] # [μm]
     Dcoeff_list = [3037.0] # [mm²/s]
