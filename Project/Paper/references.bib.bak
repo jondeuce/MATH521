@@ -1,0 +1,1409 @@
+@article{stanisz2005t1,
+  title={T1, T2 relaxation and magnetization transfer in tissue at 3T},
+  author={Stanisz, Greg J and Odrobina, Ewa E and Pun, Joseph and Escaravage, Michael and Graham, Simon J and Bronskill, Michael J and Henkelman, R Mark},
+  journal={Magnetic resonance in medicine},
+  volume={54},
+  number={3},
+  pages={507--512},
+  year={2005},
+  publisher={Wiley Online Library}
+}
+
+@article{uludag2017,
+  title={Linking brain vascular physiology to hemodynamic response in ultra-high field MRI},
+  author={Uluda{\u{g}}, K{\^a}mil and Blinder, Pablo},
+  journal={NeuroImage},
+  year={2017},
+  publisher={Elsevier}
+}
+
+@article{ogawa1990brain,
+  title={Brain magnetic resonance imaging with contrast dependent on blood oxygenation},
+  author={Ogawa, Seiji and Lee, Tso-Ming and Kay, Alan R and Tank, David W},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={87},
+  number={24},
+  pages={9868--9872},
+  year={1990},
+  publisher={National Acad Sciences}
+}
+
+@article{Pflugfelder2011,
+  title={On the numerically predicted spatial BOLD fMRI specificity for spin echo sequences},
+  author={Pflugfelder, Daniel and Vahedipour, Kaveh and Uluda{\u{g}}, Kamil and Shah, N Jon and St{\"o}cker, Tony},
+  journal={Magnetic resonance imaging},
+  volume={29},
+  number={9},
+  pages={1195--1204},
+  year={2011},
+  publisher={Elsevier}
+}
+
+
+@article{yacoub2001imaging,
+  title={Imaging brain function in humans at 7 Tesla},
+  author={Yacoub, Essa and Shmuel, Amir and Pfeuffer, Josef and De Moortele, Van and Adriany, Gregor and Andersen, Peter and Vaughan, J Thomas and Merkle, Hellmut and U{\u{g}}urbil, Kamil and Hu, Xiaoping and others},
+  journal={Magnetic Resonance in Medicine},
+  volume={45},
+  number={4},
+  pages={588--594},
+  year={2001},
+  publisher={Wiley Online Library}
+}
+
+@article{yacoub2003spin,
+  title={Spin-echo fMRI in humans using high spatial resolutions and high magnetic fields},
+  author={Yacoub, Essa and Duong, Timothy Q and De Moortele, Van and Lindquist, Martin and Adriany, Gregor and Kim, Seong-Gi and U{\u{g}}urbil, K{\^a}mil and Hu, Xiaoping and others},
+  journal={Magnetic resonance in medicine},
+  volume={49},
+  number={4},
+  pages={655--664},
+  year={2003},
+  publisher={Wiley Online Library}
+}
+
+@article{an2002cerebral,
+  title={Cerebral venous and arterial blood volumes can be estimated separately in humans using magnetic resonance imaging},
+  author={An, Hongyu and Lin, Weili},
+  journal={Magnetic resonance in medicine},
+  volume={48},
+  number={4},
+  pages={583--588},
+  year={2002},
+  publisher={Wiley Online Library}
+}
+
+@article{pollard1996validation,
+  title={Validation in volunteers of a near-infrared spectroscope for monitoring brain oxygenation in vivo},
+  author={Pollard, Valerie and Prough, Donald S and DeMelo, A Eric and Deyo, Donald J and Uchida, Tatsuo and Stoddart, Hugh F},
+  journal={Anesthesia \& Analgesia},
+  volume={82},
+  number={2},
+  pages={269--277},
+  year={1996},
+  publisher={LWW}
+}
+
+
+@article{Sedlacik2007,
+  title={Obtaining blood oxygenation levels from MR signal behavior in the presence of single venous vessels},
+  author={Sedlacik, Jan and Rauscher, Alexander and Reichenbach, J{\"u}rgen R},
+  journal={Magnetic resonance in medicine},
+  volume={58},
+  number={5},
+  pages={1035--1044},
+  year={2007},
+  publisher={Wiley Online Library}
+}
+
+
+@article{duvernoy1981,
+  title={Cortical blood vessels of the human brain},
+  author={Duvernoy, Henri M and Delon, S and Vannson, JL},
+  journal={Brain research bulletin},
+  volume={7},
+  number={5},
+  pages={519--579},
+  year={1981},
+  publisher={Elsevier}
+}
+
+@article{rauscher2005a,
+  title={Nonnvasive assessment of vascular architecture and function during modulated blood oxygenation using susceptibility weighted magnetic resonance imaging},
+  author={Rauscher, Alexander and Sedlacik, Jan and Barth, Markus and Haacke, E Mark and R Reichenbach, J{\"u}rgen},
+  journal={Magnetic resonance in medicine},
+  volume={54},
+  number={1},
+  pages={87--95},
+  year={2005},
+  publisher={Wiley Online Library}
+}
+
+
+@article{ogawa1992,
+  title={Intrinsic signal changes accompanying sensory stimulation: functional brain mapping with magnetic resonance imaging},
+  author={Ogawa, Seiji and Tank, David W and Menon, Ravi and Ellermann, Jutta M and Kim, Seong G and Merkle, Helmut and Ugurbil, Kamil},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={89},
+  number={13},
+  pages={5951--5955},
+  year={1992},
+  publisher={National Acad Sciences}
+}
+
+
+@article{weber2008,
+  title={The microvascular system of the striate and extrastriate visual cortex of the macaque},
+  author={Weber, Bruno and Keller, Anna Lena and Reichold, Johannes and Logothetis, Nikos K},
+  journal={Cerebral cortex},
+  volume={18},
+  number={10},
+  pages={2318--2330},
+  year={2008},
+  publisher={Oxford University Press}
+}
+
+@article{petzold2011,
+  title={Role of astrocytes in neurovascular coupling},
+  author={Petzold, Gabor C and Murthy, Venkatesh N},
+  journal={Neuron},
+  volume={71},
+  number={5},
+  pages={782--797},
+  year={2011},
+  publisher={Elsevier}
+}
+
+@article{smith2002,
+  title={Cerebral energetics and spiking frequency: the neurophysiological basis of fMRI},
+  author={Smith, Arien J and Blumenfeld, Hal and Behar, Kevin L and Rothman, Douglas L and Shulman, Robert G and Hyder, Fahmeed},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={99},
+  number={16},
+  pages={10765--10770},
+  year={2002},
+  publisher={National Acad Sciences}
+}
+
+@article{barbaresi2014,
+  title={Characterization of NO-producing neurons in the rat corpus callosum},
+  author={Barbaresi, Paolo and Fabri, Mara and Mens{\`a}, Emanuela},
+  journal={Brain and behavior},
+  volume={4},
+  number={3},
+  pages={317--336},
+  year={2014},
+  publisher={Wiley Online Library}
+}
+
+
+@Article{Peer2017,
+  author = 	 {Peer, M. and Nitzan, M. and Bick, A.S. and Levin, N. and Arzy, S},
+  title = 	 {Evidence for functional networks within the human brain's white matter},
+  journal = 	 {J Neurosci},
+  year = 	 {2017},
+  OPTkey = 	 {},
+  volume = 	 {37},
+  number = 	 {27},
+  pages = 	 {6394-6407},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+@article{fabri2011topographical,
+  title={Topographical organization of human corpus callosum: an fMRI mapping study},
+  author={Fabri, Mara and Polonara, Gabriele and Mascioli, Giulia and Salvolini, Ugo and Manzoni, Tullio},
+  journal={Brain research},
+  volume={1370},
+  pages={99--111},
+  year={2011},
+  publisher={Elsevier}
+}
+
+
+@article{fraser2012white,
+  title={White versus gray matter: fMRI hemodynamic responses show similar characteristics, but differ in peak amplitude},
+  author={Fraser, Leanne M and Stevens, M Tynan and Beyea, Steven D and D’Arcy, Ryan CN},
+  journal={BMC neuroscience},
+  volume={13},
+  number={1},
+  pages={91},
+  year={2012},
+  publisher={BioMed Central}
+}
+
+
+@Article{Uludag2009,
+  author = 	 {Uluda{\u{g}}, K and M\"uller-Bierl, B and U{\u{g}}urbil, K },
+  title = 	 {An integrative model for neuronal activity-induced
+                  signal changes for gradient and spin echo functional
+                  imaging.  Uluda{\u{g}} K1, Müller-Bierl B, U{\u{g}}urbil K.},
+  journal = 	 {Neuroimage},
+  year = 	 {2009},
+  OPTkey = 	 {},
+  volume = 	 {48},
+  number = 	 {1},
+  pages = 	 {150-165},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+@Article{Gawryluk2014,
+  author = 	 {Gawryluk, J. and Mazerolle, E. and D’Arcy, R},
+  title = 	 {Does functional MRI detect activation in white
+                  matter? A review of emerging evidence, issues, and
+                  future directions},
+  journal = 	 {Front Neurosci},
+  year = 	 {2014},
+  OPTkey = 	 {},
+  volume = 	 {8},
+  OPTnumber = 	 {},
+  pages = 	 {239-},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+@Article{Mouridsen2006,
+  author = 	 {Mouridsen, K. and Friston K. and Hjort N. and Gylensted L. and Ostergaard L. and Kiebel S.},
+  title = 	 {Bayesian estimation of cerebral perfusion using a physiological model of microvasculature},
+  journal = 	 {Neuroimage},
+  year = 	 {2006},
+  OPTkey = 	 {},
+  volume = 	 {22},
+  OPTnumber = 	 {},
+  pages = 	 {570-579},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+
+@Article{Markuerkiaga2016,
+  author = 	 {Markuerkiaga, I and Barth, M and Norris, DG},
+  title = 	 {A cortical vascular model for examining the specificity of the laminar BOLD signal.},
+  journal = 	 {Neuroimage},
+  year = 	 {2016},
+  OPTkey = 	 {},
+  volume = 	 {132},
+  OPTnumber = 	 {},
+  pages = 	 {491-498},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+
+
+@Article{Norris2012,
+  author = 	 {Norris, D},
+  title = 	 {Spin-echo fMRI: The poor relation?},
+  journal = 	 {Neuroimage},
+  year = 	 {2012},
+  OPTkey = 	 {},
+  volume = 	 {15},
+  OPTnumber = 	 {},
+  pages = 	 {1109-1115},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+
+@article{mouridsen_reliable_2014,
+	title = {Reliable estimation of capillary transit time distributions using {DSC}-{MRI}},
+	volume = {34},
+	issn = {0271-678X},
+	url = {http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4158667/},
+	doi = {10.1038/jcbfm.2014.111},
+	abstract = {The regional availability of oxygen in brain tissue is traditionally inferred from the magnitude of cerebral blood flow (CBF) and the concentration of oxygen in arterial blood. Measurements of CBF are therefore widely used in the localization of neuronal response to stimulation and in the evaluation of patients suspected of acute ischemic stroke or flow-limiting carotid stenosis. It was recently demonstrated that capillary transit time heterogeneity (CTH) limits maximum oxygen extraction fraction (OEFmax) that can be achieved for a given CBF. Here we present a statistical approach for determining CTH, mean transit time (MTT), and CBF using dynamic susceptibility contrast magnetic resonance imaging (DSC-MRI). Using numerical simulations, we demonstrate that CTH, MTT, and OEFmax can be estimated with low bias and variance across a wide range of microvascular flow patterns, even at modest signal-to-noise ratios. Mean transit time estimated by singular value decomposition (SVD) deconvolution, however, is confounded by CTH. The proposed technique readily identifies malperfused tissue in acute stroke patients and appears to highlight information not detected by the standard SVD technique. We speculate that this technique permits the non-invasive detection of tissue with impaired oxygen delivery in neurologic disorders such as acute ischemic stroke and Alzheimer's disease during routine diagnostic imaging.},
+	number = {9},
+	urldate = {2017-05-10},
+	journal = {J Cereb Blood Flow Metab},
+	author = {Mouridsen, Kim and Hansen, Mikkel Bo and Østergaard, Leif and Jespersen, Sune Nørhøj},
+	month = sep,
+	year = {2014},
+	pmid = {24938401},
+	pmcid = {PMC4158667},
+	pages = {1511--1521},
+	file = {PubMed Central Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/RBEWKZW3/Mouridsen et al. - 2014 - Reliable estimation of capillary transit time dist.pdf:application/pdf}
+}
+
+@Article{Lee1999,
+  author = 	 {Lee, SP. and Silva, AC. and Ugurbil, SK and Kim, SG},
+  title = 	 {Diffusion-weighted spin-echo fMRI at 9.4 T: microvascular/tissue contribution to BOLD signal changes},
+  journal = 	 {Magn Reson Med},
+  year = 	 {1999},
+  OPTkey = 	 {},
+  volume = 	 {42},
+  number = 	 {5},
+  pages = 	 {919-28},
+  OPTmonth = 	 {},
+  OPTnote = 	 {},
+  OPTannote = 	 {}
+}
+
+@article{duong_microvascular_2003,
+	title = {Microvascular {BOLD} contribution at 4 and 7 {T} in the human brain: {Gradient}-echo and spin-echo {fMRI} with suppression of blood effects},
+	volume = {49},
+	issn = {1522-2594},
+	shorttitle = {Microvascular {BOLD} contribution at 4 and 7 {T} in the human brain},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.10472/abstract},
+	doi = {10.1002/mrm.10472},
+	abstract = {The BOLD signal consists of an intravascular (IV) and an extravascular (EV) component from both small and large vessels. Their relative contributions are dependent on field strength, imaging technique, and echo time. The IV and EV contributions were investigated in the human visual cortex at 4 and 7 T using spin-echo and gradient-echo BOLD fMRI with and without suppression of blood effects. Spin-echo acquisition suppresses EV BOLD from large veins and reflects predominantly blood T2 changes and EV BOLD signal from small blood vessels. At a short echo time (32 ms), diffusion gradient-based suppression of blood signals resulted in a 75\% and 20\% decrease in spin-echo BOLD changes at 4 T and 7 T, respectively. However, at echo times (55–65 ms) approximating tissue T2 typically used for optimal BOLD contrast, these gradients had much smaller effects at both fields, consistent with the decreasing blood T2 with increasing field strength. Gradient-echo BOLD percent changes, with relatively long echo times at both fields, were virtually unaffected by gradients that attenuated the blood contribution because the EV BOLD surrounding both large and small vessels dominated. These results suggest that spin-echo BOLD fMRI at 4 and 7 T, with TE approximating tissue T2, significantly reduces nonspecific mapping signals from large vessels and significantly accentuates microvasculature contributions. Magn Reson Med 49:1019–1027, 2003. © 2003 Wiley-Liss, Inc.},
+	language = {en},
+	number = {6},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Duong, Timothy Q. and Yacoub, Essa and Adriany, Gregory and Hu, Xiaoping and U{\u{g}}urbil, Kâmil and Kim, Seong-Gi},
+	month = jun,
+	year = {2003},
+	keywords = {brain mapping, diffusion-weighting, high magnetic fields, spatial specificity},
+	pages = {1019--1027},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/QVN8HGKK/Duong et al. - 2003 - Microvascular BOLD contribution at 4 and 7 T in th.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/ZZV5IVM2/abstract.html:text/html}
+}
+
+@article{nonaka_microvasculature_2003,
+	title = {The microvasculature of the cerebral white matter: arteries of the subcortical white matter},
+	volume = {62},
+	issn = {0022-3069},
+	shorttitle = {The microvasculature of the cerebral white matter},
+	abstract = {The microvascular architecture of the human cerebral subcortical white matter was studied. Most of the subcortical arteries ran straight through the cortex, but upon entering the white matter, they began to coil, loop, and spiral. Vascular stains showed wide spaces between the adventitial sheaths and blood vessels. The blood vessels coiled, looped, and spiraled within these wide adventitial spaces. This phenomenon was observed in the brains from persons ranging from the first to ninth decades of life and there were no statistically significant age-related correlations. Furthermore, there was no evidence of a reduction in the volume of white matter after fixation. Therefore, the observed tortuosity does not appear to be the result of shrinkage of brain tissue following fixation. While the mechanisms responsible for the subcortical arteries circuitry remain undetermined, this coiling architecture may serve as a trap for tumor cells and microorganisms passing through the blood stream, suggesting that these coiling arterial blood vessels may play a significant role in the pathogenesis of tumor metastasis and the brain abscess that frequently occurs in the gray-white matter junction.},
+	language = {eng},
+	number = {2},
+	journal = {J. Neuropathol. Exp. Neurol.},
+	author = {Nonaka, Hiroko and Akima, Michio and Hatori, Tsutomu and Nagayama, Tadashi and Zhang, Zean and Ihara, Fumie},
+	month = feb,
+	year = {2003},
+	pmid = {12578225},
+	keywords = {Adolescent, Adult, Aged, Aged, 80 and over, Aging, Brain Abscess, Capillaries, Cerebral Arteries, Cerebral Cortex, Child, Child, Preschool, Humans, Infant, Microcirculation, Microscopy, Electron, Scanning, Middle Aged, Neoplasm Metastasis, Nerve Fibers, Myelinated, Postmortem Changes, Tissue Fixation},
+	pages = {154--161}
+}
+
+@article{hernandez-torres_anisotropic_2016,
+	title = {Anisotropic cerebral vascular architecture causes orientation dependency in cerebral blood flow and volume measured with dynamic susceptibility contrast magnetic resonance imaging},
+	issn = {0271-678X, 1559-7016},
+	url = {http://jcb.sagepub.com/content/early/2016/06/02/0271678X16653134},
+	doi = {10.1177/0271678X16653134},
+	abstract = {Measurements of cerebral perfusion using dynamic susceptibility contrast magnetic resonance imaging rely on the assumption of isotropic vascular architecture. However, a considerable fraction of vessels runs in parallel with white matter tracts. Here, we investigate the effects of tissue orientation on dynamic susceptibility contrast magnetic resonance imaging. Tissue orientation was measured using diffusion tensor imaging and dynamic susceptibility contrast was performed with gradient echo planar imaging. Perfusion parameters and the raw dynamic susceptibility contrast signals were correlated with tissue orientation. Additionally, numerical simulations were performed for a range of vascular volumes of both the isotropic vascular bed and anisotropic vessel components, as well as for a range of contrast agent concentrations. The effect of the contrast agent was much larger in white matter tissue perpendicular to the main magnetic field compared to white matter parallel to the main magnetic field. In addition, cerebral blood flow and cerebral blood volume were affected in the same way with angle-dependent variations of up to 130\%. Mean transit time and time to maximum of the residual curve exhibited weak orientation dependency of 10\%. Numerical simulations agreed with the measured data, showing that one-third of the white matter vascular volume is comprised of vessels running in parallel with the fibre tracts.},
+	language = {en},
+	urldate = {2016-11-24},
+	journal = {J Cereb Blood Flow Metab},
+	author = {Hernández-Torres, Enedino and Kassner, Nora and Forkert, Nils Daniel and Wei, Luxi and Wiggermann, Vanessa and Daemen, Madeleine and Machan, Lindsay and Traboulsee, Anthony and Li, David and Rauscher, Alexander},
+	month = jun,
+	year = {2016},
+	pmid = {27259344},
+	keywords = {anisotropy, blood vessels, cerebral blood flow, cerebral blood volume, diffusion tensor imaging, multiple sclerosis, white matter},
+	pages = {0271678X16653134},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/DE4P9PEI/Hernández-Torres et al. - 2016 - Anisotropic cerebral vascular architecture causes .pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/3SRT3VU5/0271678X16653134.html:text/html}
+}
+
+@article{cai_feasibility_2015,
+	title = {The feasibility of quantitative {MRI} of perivascular spaces at 7 {T}},
+	volume = {256},
+	issn = {0165-0270},
+	url = {http://www.sciencedirect.com/science/article/pii/S016502701500326X},
+	doi = {10.1016/j.jneumeth.2015.09.001},
+	abstract = {Background
+Dilated brain perivascular spaces (PVSs) are found to be associated with many conditions, including aging, dementia, and Alzheimer's disease (AD). Conventionally, PVS assessment is mainly based on subjective observations of the number, size and shape of PVSs in MR images collected at clinical field strengths (≤3 T). This study tests the feasibility of imaging and quantifying brain PVS with an ultra-high 7 T whole-body MRI scanner.
+New method
+3D high resolution T2-weighted brain images from healthy subjects (n = 3) and AD patients (n = 5) were acquired on a 7 T whole-body MRI scanner. To automatically segment the small hyperintensive fluid-filling PVS structures, we also developed a quantitative program based on algorithms for spatial gradient, component connectivity, edge-detection, k-means clustering, etc., producing quantitative results of white matter PVS volume densities.
+Results
+The 3D maps of automatically segmented PVS show an apparent increase in PVS density in AD patients compared to age-matched healthy controls due to the PVS dilation (8.0 ± 2.1 v/v\% in AD vs. 4.9 ± 1.3 v/v\% in controls, p \&lt; 0.05).
+Comparison with existing method
+We demonstrated that 7 T provides sufficient SNR and resolution for quantitatively measuring PVSs in deep white matter that is challenging with clinical MRI systems (≤3 T). Compared to the conventional visual counting and rating for the PVS assessment, the quantitation method we developed is automatic and objective.
+Conclusions
+Quantitative PVS MRI at 7 T may serve as a non-invasive and endogenous imaging biomarker for diseases with PVS dilation.},
+	urldate = {2017-03-31},
+	journal = {Journal of Neuroscience Methods},
+	author = {Cai, Kejia and Tain, Rongwen and Das, Sandhitsu and Damen, Frederick C. and Sui, Yi and Valyi-Nagy, Tibor and Elliott, Mark A. and Zhou, Xiaohong J.},
+	month = dec,
+	year = {2015},
+	keywords = {Alzheimer's disease, MRI, Perivascular drainage, Perivascular space},
+	pages = {151--156},
+	file = {ScienceDirect Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/NWVAD879/Cai et al. - 2015 - The feasibility of quantitative MRI of perivascula.pdf:application/pdf;ScienceDirect Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/A5CM7D8U/S016502701500326X.html:text/html}
+}
+
+@article{bouma_relationship_1990,
+	title = {Relationship between cardiac output and cerebral blood flow in patients with intact and with impaired autoregulation},
+	volume = {73},
+	issn = {0022-3085},
+	url = {http://thejns.org/doi/full/10.3171/jns.1990.73.3.0368},
+	doi = {10.3171/jns.1990.73.3.0368},
+	number = {3},
+	urldate = {2017-03-31},
+	journal = {Journal of Neurosurgery},
+	author = {Bouma, Gerrit J. and Muizelaar, J. Paul},
+	month = sep,
+	year = {1990},
+	pages = {368--374},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/AHGSUAXT/Bouma and Muizelaar - 1990 - Relationship between cardiac output and cerebral b.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/G8QUU8WN/jns.1990.73.3.html:text/html}
+}
+
+@article{holz_temperature-dependent_2000,
+	title = {Temperature-dependent self-diffusion coefficients of water and six selected molecular liquids for calibration in accurate 1H {NMR} {PFG} measurements},
+	volume = {2},
+	issn = {1463-9084},
+	url = {http://pubs.rsc.org/en/content/articlelanding/2000/cp/b005319h},
+	doi = {10.1039/B005319H},
+	abstract = {Pulsed magnetic field gradient (PFG) NMR is today a routine method for the determination of self-diffusion coefficients, D. However, a remaining goal is the improvement of the precision of the method. The best procedure for the determination of accurate diffusion coefficients by PFG NMR is a calibration with a sample of precisely known D-value. In continuation of our previous work on calibration at 25°C (M. Holz and H. Weingärtner, J. Magn. Reson., 1991, 92, 115) we present reference data as a function of temperature. Since H2O plays an outstanding role as liquid and as primary standard, we carefully measured self-diffusion coefficients of water by 1H PFG NMR in the temperature range from + 5 to + 55°C and added literature data obtained from tracer methods in the range between 0 and + 100°C. This comparatively large collection of data could then be fitted to a Speedy–Angell power law, showing the excellent congruence of the results of two completely different methods and proofing the certainty of the absolute values for water. In this manner reliable primary standard values with error limits of \&lt;1\% were obtained, allowing us to adapt the temperature of the standard water to the sample temperature of interest. We further give 1H PFG NMR self-diffusion reference data in the range from + 5 to + 55°C for six easily accessible solvents, which we propose as secondary calibration standards, namely cyclohexane, dioxane, dodecane, DMSO, tetradecane and pentanol, covering a large range of absolute D-values and allowing us to match in addition the absolute D-values of calibration sample and sample under investigation. Furthermore, the gained accurate self-diffusion data are suited for an elaborate check of theoretical approaches in the physics of molecular liquids.},
+	language = {en},
+	number = {20},
+	urldate = {2016-11-25},
+	journal = {Phys. Chem. Chem. Phys.},
+	author = {Holz, Manfred and Heil, Stefan R. and Sacco, Antonio},
+	month = jan,
+	year = {2000},
+	pages = {4740--4742},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/7JSXP4VW/Holz et al. - 2000 - Temperature-dependent self-diffusion coefficients .pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/9MTCZQPU/b005319h.html:text/html}
+}
+
+@article{leenders_cerebral_1990,
+	title = {Cerebral blood flow, blood volume and oxygen utilization. {Normal} values and effect of age},
+	volume = {113 ( Pt 1)},
+	issn = {0006-8950},
+	abstract = {Regional cerebral blood flow (CBF), oxygen extraction ratio (OER), oxygen utilization (CMRO2) and blood volume (CBV) were measured in a group of 34 healthy volunteers (age range 22-82 yrs) using the 15O steady-state inhalation method and positron emission tomography. Between subjects CBF correlated positively with CMRO2, although the interindividual variability of the measured values was large. OER was not dependent on CMRO2, but highly negatively correlated with CBF. CBV correlated positively with CBF. When considering the values of all the regions of interest within a single subject, a strict coupling between CMRO2 and CBF, and between CBF and CBV was found, while OER was constant and independent of CBF and CMRO2. In 'pure' grey and white matter regions CMRO2, CBF and CBV decreased with age approximately 0.50\% per year. In other regions the decline was less evident, most likely due to partial volume effects. OER did not change or showed a slight increase with age (maximum in the grey matter region 0.35\%/yr). The results suggest diminished neuronal firing or decreased dendritic synaptic density with age.},
+	language = {eng},
+	journal = {Brain},
+	author = {Leenders, K. L. and Perani, D. and Lammertsma, A. A. and Heather, J. D. and Buckingham, P. and Healy, M. J. and Gibbs, J. M. and Wise, R. J. and Hatazawa, J. and Herold, S.},
+	month = feb,
+	year = {1990},
+	pmid = {2302536},
+	keywords = {Adult, Aged, Aged, 80 and over, Aging, Blood volume, brain, Female, Humans, Male, Middle Aged, Oxygen, Radionuclide Imaging, Reference Values, Regional Blood Flow, Regression Analysis},
+	pages = {27--47}
+}
+
+@article{cavaglia_regional_2001,
+	title = {Regional variation in brain capillary density and vascular response to ischemia},
+	volume = {910},
+	issn = {0006-8993},
+	url = {http://www.sciencedirect.com/science/article/pii/S0006899301026373},
+	doi = {10.1016/S0006-8993(01)02637-3},
+	abstract = {Differences in brain neuroarchitecture have been extensively studied and recent results demonstrated that regional differences in the physiological properties of glial cells are equally common. Relatively little is known on the topographic differences in vascular supply, distribution and density of brain capillaries in different CNS regions. We developed a simple method consisting of intravascular injection of fluorescent dyes coupled to immunocytochemical techniques that allows for simultaneous observation of glia–neuronal–vascular interactions in immersion-fixed brain specimens from small rodents. This technique permits quantitative evaluation of regional differences in glial/neuronal distribution and the study of their relationship to vascular densities. Variations of this technique also allow the detection of abnormal microvasculature (i.e. ‘leaky’ vessels), a useful feature for studies of blood–brain barrier function in health and disease. By use of quantitative confocal microscopy, the three-dimensional geometry of cortical and hippocampal structures revealed remarkable differences in vascularization between cortical gray/white matter junction, and hippocampal formation (CA1 and CA3 regions). Significant differences were also observed within the same investigative region: CA1 was characterized by low capillary density compared to neighboring CA3. Following an ischemic insult, CA1 vessels had more extensive blood–brain barrier leakage than CA3 vessels. We conclude that in addition to neuronal and glial heterogeneity, cortical structures are also endowed with region-specific vascular patterns characterized by distinct pathophysiological responses.},
+	number = {1–2},
+	urldate = {2017-03-31},
+	journal = {Brain Research},
+	author = {Cavaglia, Marco and Dombrowski, Stephen M and Drazba, Judith and Vasanji, Amit and Bokesch, Paula M and Janigro, Damir},
+	month = aug,
+	year = {2001},
+	keywords = {Blood–brain barrier, CA1, cerebral blood flow, Cerebrovascular disorder, Hippocampus, Selective vulnerability, Vasculogenesis},
+	pages = {81--93},
+	file = {ScienceDirect Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/6X39T2QJ/Cavaglia et al. - 2001 - Regional variation in brain capillary density and .pdf:application/pdf;ScienceDirect Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/TEZBWT7V/S0006899301026373.html:text/html}
+}
+
+@article{torrey_bloch_1956,
+	title = {Bloch {Equations} with {Diffusion} {Terms}},
+	volume = {104},
+	url = {https://link.aps.org/doi/10.1103/PhysRev.104.563},
+	doi = {10.1103/PhysRev.104.563},
+	abstract = {The phenomenological Bloch equations in nuclear magnetic resonance are generalized by the addition of terms due to the transfer of magnetization by diffusion. The revised equations describe phenomena under conditions of inhomogeneity in magnetic field, relaxation rates, or initial magnetization. As an example the equations are solved in the case of the free precession of magnetic moment in the presence of an inhomogeneous magnetic field following the application of a 90° pulse with subsequent applications of a succession of 180° pulses. The spin-echo amplitudes agree with the results of Carr and Purcell from a random walk theory.},
+	number = {3},
+	urldate = {2017-03-31},
+	journal = {Phys. Rev.},
+	author = {Torrey, H. C.},
+	month = nov,
+	year = {1956},
+	pages = {563--565},
+	file = {APS Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/4FZ2FMIV/PhysRev.104.html:text/html;PhysRev.104.563.pdf:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/VGSVV8KU/PhysRev.104.563.pdf:application/pdf}
+}
+
+@article{hansen_experimentally_2013,
+	title = {Experimentally and computationally fast method for estimation of a mean kurtosis},
+	volume = {69},
+	issn = {1522-2594},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.24743/abstract},
+	doi = {10.1002/mrm.24743},
+	abstract = {Purpose
+
+Results from several recent studies suggest the magnetic resonance diffusion-derived metric mean kurtosis (MK) to be a sensitive marker for tissue pathology; however, lengthy acquisition and postprocessing time hamper further exploration. The purpose of this study is to introduce and evaluate a new MK metric and a rapid protocol for its estimation.
+
+
+Methods
+
+The protocol requires acquisition of 13 standard diffusion-weighted images, followed by linear combination of log diffusion signals, thus avoiding nonlinear optimization. The method was evaluated on an ex vivo rat brain and an in vivo human brain. Parameter maps were compared with MK estimated from a standard diffusion kurtosis imaging (DKI) data set comprising 160 diffusion-weighted images.
+
+
+Results
+
+The new MK displays remarkably similar contrast to MK, and the proposed protocol acquires the necessary data in less than 1 min for full human brain coverage, with a postprocessing time of a few seconds. Scan–rescan reproducibility was comparable with MK.
+
+
+Conclusion
+
+The framework offers a robust and rapid method for estimating MK, with a protocol easily adapted on commercial scanners, as it requires only minimal modification of standard diffusion-weighting protocols. These properties make the method feasible in practically any clinical setting.},
+	language = {en},
+	number = {6},
+	urldate = {2017-03-31},
+	journal = {Magn Reson Med},
+	author = {Hansen, Brian and Lund, Torben E. and Sangill, Ryan and Jespersen, Sune Nørhøj},
+	month = jun,
+	year = {2013},
+	keywords = {Diffusion, higher-order tensors, kurtosis, orientational sampling},
+	pages = {1754--1760},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/CEU3EE6T/Hansen et al. - 2013 - Experimentally and computationally fast method for.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/EATSC5CW/abstract.html:text/html}
+}
+
+@article{boxerman_mr_1995,
+	title = {{MR} contrast due to intravascular magnetic susceptibility perturbations},
+	volume = {34},
+	issn = {0740-3194},
+	abstract = {A particularly powerful paradigm for functional MR imaging of microvascular hemodynamics incorporates paramagnetic materials that create significant image contrast. These include exogenous (lanthanide chelates) and endogenous (deoxygenated hemoglobin) agents for mapping cerebral blood volume and neuronal activity, respectively. Accurate interpretation of these maps requires an understanding of the biophysics of susceptibility-based image contrast. The authors developed a novel Monte Carlo model with which the authors quantified the relationship between microscopic tissue parameters, NMR imaging parameters, and susceptibility contrast in vivo. The authors found vascular permeability to water and the flow of erythrocytes to be relatively unimportant contributors to susceptibility-induced delta R2. However, pulse sequence, echo time, and concentration of contrast agent have profound effects on the vessel size dependence of delta R2. For a model vasculature containing both capillaries and venules, the authors predicted a linear volume fraction dependence for physiological volume changes based on recruitment and dilation, and a concentration dependence that is nonlinear and pulse sequence dependent. Using the model, the authors demonstrated that spin echo functional images have greater microvascular sensitivity than gradient echo images, and that the specifies of the volume fraction and concentration dependence of transverse relaxivity change should allow for robust mapping of relative blood volume. The authors also demonstrated excellent agreement between the predictions of their model and experimental data obtained from the serial injection of superparamagnetic contrast agent in a rat model.},
+	language = {eng},
+	number = {4},
+	journal = {Magn Reson Med},
+	author = {Boxerman, J. L. and Hamberg, L. M. and Rosen, B. R. and {R. M. Weisskoff}},
+	month = oct,
+	year = {1995},
+	pmid = {8524024},
+	keywords = {Animals, blood vessels, Blood volume, Capillaries, Capillary Permeability, Cerebrovascular Circulation, Chelating Agents, Contrast Media, Dextrans, Erythrocytes, Ferrosoferric Oxide, Forecasting, Hemodynamics, Hemoglobins, Image Enhancement, Iron, Magnetic Resonance Imaging, Magnetic Resonance Spectroscopy, Magnetics, Magnetite Nanoparticles, Metals, Rare Earth, Microcirculation, Models, Cardiovascular, Monte Carlo Method, Neurons, Oxides, Rats, Rats, Wistar, Tissue Distribution, Venules, Water},
+	pages = {555--566}
+}
+
+@article{jenkinson_fsl_2012,
+	series = {20 {YEARS} {OF} {fMRI}20 {YEARS} {OF} {fMRI}},
+	title = {{FSL}},
+	volume = {62},
+	issn = {1053-8119},
+	url = {http://www.sciencedirect.com/science/article/pii/S1053811911010603},
+	doi = {10.1016/j.neuroimage.2011.09.015},
+	abstract = {FSL (the FMRIB Software Library) is a comprehensive library of analysis tools for functional, structural and diffusion MRI brain imaging data, written mainly by members of the Analysis Group, FMRIB, Oxford. For this NeuroImage special issue on “20 years of fMRI” we have been asked to write about the history, developments and current status of FSL. We also include some descriptions of parts of FSL that are not well covered in the existing literature. We hope that some of this content might be of interest to users of FSL, and also maybe to new research groups considering creating, releasing and supporting new software packages for brain image analysis.},
+	number = {2},
+	urldate = {2017-03-31},
+	journal = {NeuroImage},
+	author = {Jenkinson, Mark and Beckmann, Christian F. and Behrens, Timothy E. J. and Woolrich, Mark W. and Smith, Stephen M.},
+	month = aug,
+	year = {2012},
+	keywords = {FSL, Software},
+	pages = {782--790},
+	file = {ScienceDirect Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/XP4ICBXM/Jenkinson et al. - 2012 - FSL.pdf:application/pdf;ScienceDirect Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/IRWDQ3J3/S1053811911010603.html:text/html}
+}
+
+@article{arakawa_ischemic_2006,
+	title = {Ischemic {Thresholds} for {Gray} and {White} {Matter}},
+	volume = {37},
+	copyright = {© 2006},
+	issn = {0039-2499, 1524-4628},
+	url = {http://stroke.ahajournals.org/content/37/5/1211},
+	doi = {10.1161/01.STR.0000217258.63925.6b},
+	abstract = {Background and Purpose— Although gray matter (GM) and white matter (WM) have differing neurochemical responses to ischemia in animal models, it is unclear whether this translates into differing thresholds for infarction. We studied this issue in ischemic stroke patients using magnetic resonance (MR) techniques.
+Methods— MR studies were performed in patients with acute hemispheric ischemic stroke occurring within 24 hours and at 3 months. Cerebral blood flow (CBF), cerebral blood volume (CBV), mean transit time (MTT), and apparent diffusion coefficient (ADC) were calculated. After segmentation based on a probabilistic map of GM and WM, tissue-specific diffusion and perfusion thresholds for infarction were established.
+Results— Twenty-one patients were studied. Infarction thresholds for CBF were significantly higher in GM (median 34.6 mL/100 g per minute, interquartile range 26.0 to 38.8) than in WM (20.8 mL/100 g per minute; interquartile range 18.0 to 25.9; P{\textless}0.0001). Thresholds were also significantly higher in GM than WM for CBV (GM: 1.67 mL/100 g; interquartile range 1.39 to 2.17; WM: 1.19 mL/100 g; interquartile range 0.94 to 1.53; P{\textless}0.0001), ADC (GM: 918×10−6 mm2/s; 868 to 975×10−6; WM: 805×10−6; 747 to 870×10−6; P{\textless}0.001), and there was a trend toward a shorter MTT in GM (GM 4.94 s, 4.44 to 5.38; WM 5.15, 4.11 to 5.68; P=0.11).
+Conclusions— GM has a higher infarction threshold for CBF, CBV, and ADC than WM in patients within 24 hours of ischemic stroke onset. Hence, when assessing patients for potential therapies, tissue-specific rather than whole-brain thresholds may be a more precise measure of predicting the likelihood of infarction.},
+	language = {en},
+	number = {5},
+	urldate = {2017-03-31},
+	journal = {Stroke},
+	author = {Arakawa, Shuji and Wright, Peter M. and Koga, Masatoshi and Phan, Thanh G. and Reutens, David C. and Lim, Indra and Gunawan, Marveyles R. and Ma, Henry and Perera, Nilupul and Ly, John and Zavala, Jorge and Fitt, Gregory and Donnan, Geoffery A.},
+	month = may,
+	year = {2006},
+	pmid = {16574931},
+	keywords = {magnetic resonance imaging, diffusion-weighted, magnetic resonance imaging, perfusion-weighted, penumbra, stroke, acute, white matter},
+	pages = {1211--1216},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/SM4PZA2I/Arakawa et al. - 2006 - Ischemic Thresholds for Gray and White Matter.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/WFUHEXJU/1211.html:text/html}
+}
+
+@article{deistung_susceptibility_2008,
+	title = {Susceptibility weighted imaging at ultra high magnetic field strengths: {Theoretical} considerations and experimental results},
+	volume = {60},
+	issn = {1522-2594},
+	shorttitle = {Susceptibility weighted imaging at ultra high magnetic field strengths},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.21754/abstract},
+	doi = {10.1002/mrm.21754},
+	abstract = {We present numerical simulations and experimental results for susceptibility weighted imaging (SWI) at 7 T. Magnitude, phase, and SWI contrast were simulated for different voxel geometries and imaging parameters, resulting in an echo time of 14 msec for optimum contrast between veins and surrounding tissue. Slice thickness of twice the in-plane voxel size or more resulted in optimum vessel visibility. Phantom and in vivo data are in very good agreement with the simulations and the delineation of vessels at 7 T was superior compared to lower field strengths. The phase of the complex data reveals anatomical details that are complementary to the corresponding magnitude images. Susceptibility weighted imaging at very high field strengths is a promising technique because of its high sensitivity to tissue susceptibility, its low specific absorption rate, and the phase's negligible sensitivity to B1 inhomogeneities. Magn Reson Med 60:1155–1168, 2008. © Wiley-Liss, Inc.},
+	language = {en},
+	number = {5},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Deistung, Andreas and Rauscher, Alexander and Sedlacik, Jan and Stadler, Jörg and Witoszynskyj, Stephan and Reichenbach, Jürgen R.},
+	month = nov,
+	year = {2008},
+	keywords = {7T, magnetic susceptibility, MRI, phase, SWI},
+	pages = {1155--1168},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/W7DXP8V3/Deistung et al. - 2008 - Susceptibility weighted imaging at ultra high magn.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/G87PCIUG/abstract.html:text/html}
+}
+
+@article{ostergaard_high_1996,
+	title = {High resolution measurement of cerebral blood flow using intravascular tracer bolus passages. {Part} {II}: {Experimental} comparison and preliminary results},
+	volume = {36},
+	issn = {1522-2594},
+	shorttitle = {High resolution measurement of cerebral blood flow using intravascular tracer bolus passages. {Part} {II}},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.1910360511/abstract},
+	doi = {10.1002/mrm.1910360511},
+	abstract = {This report evaluates several methods to map relative cerebral blood flow (rCBF) by applying both parametric and non-parametric techniques to deconvolve high resolution dynamic MRI measurements of paramagnetic bolus passages with noninvasively determined arterial inputs. We found a nonparametric (singular value decomposition (SVD)) deconvolution technique produced the most robust results, giving mean gray:white flow ratio of 2.7 ± 0.5 (SEM) in six normal volunteers, in excellent agreement with recent PET literature values for age-matched subjects. Similar results were obtained by using a model-dependent approach that assumes an exponential residue function, but not for a Gaussian-shaped residue function or for either Fourier or regularization-based model-independent approaches. Pilot studies of our CBF mapping techniques in patients with tumor, stroke, and migraine aura demonstrated that these techniques can be readily used on data routinely acquired by using current echo planar imaging technology. By using these techniques, the authors visualized important regional hemodynamic changes not detectable with rCBV mapping algorithms.},
+	language = {en},
+	number = {5},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Østergaard, Leif and Sorensen, Alma Gregory and Kwong, Kenneth K. and Weisskoff, Robert M. and Gyldensted, Carsten and Rosen, Bruce R.},
+	month = nov,
+	year = {1996},
+	keywords = {cerebral blood flow (CBF), dynamic magnetic resonance imaging (MRI), Humans, susceptibility contrast},
+	pages = {726--736},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/I36UI2JG/Østergaard et al. - 1996 - High resolution measurement of cerebral blood flow.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/CX64M27B/abstract.html:text/html}
+}
+
+@article{denk_susceptibility_2010,
+	title = {Susceptibility weighted imaging with multiple echoes},
+	volume = {31},
+	issn = {1522-2586},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/jmri.21995/abstract},
+	doi = {10.1002/jmri.21995},
+	abstract = {Purpose:
+
+To extend susceptibility weighted imaging (SWI) to multiple echoes with an adapted homodyne filtering of phase images for the computation of venograms with improved signal to noise ratio (SNR) and contrast to noise ratio (CNR) and to produce high resolution maps of R2* relaxation.
+
+
+Materials and Methods:
+
+Three-dimensional multi echo gradient echo data were acquired with five equidistant echoes ranging from 13 to 41 ms. The phase images of each echo were filtered with filter parameters adjusted to the echo time, converted into a phase mask, and combined with the corresponding magnitude images to obtain susceptibility weighted images. The individual images were then averaged. Conventional single echo data were acquired for comparison. Maps of R2* relaxation rates were computed from the magnitude data. Field maps derived from the phase data were used to correct R2* for the influences from background inhomogeneities of the static magnetic field.
+
+
+Results:
+
+Compared with the single echo images, the combined images had an increase in SNR by 46\% and an improvement in CNR by 34 to 80\%, improved visibility of small venous vessels and reduced blurring along the readout direction. The R2* values of different tissue types are in good agreement with values from the literature.
+
+
+Conclusion:
+
+Acquisition of SWI with multiple echoes leads to an increase in SNR and CNR and it allows the computation of high resolution maps of R2* relaxation. J. Magn. Reson. Imaging 2010;31:185–191. © 2009 Wiley-Liss, Inc.},
+	language = {en},
+	number = {1},
+	urldate = {2017-03-31},
+	journal = {J. Magn. Reson. Imaging},
+	author = {Denk, Christian and Rauscher, Alexander},
+	month = jan,
+	year = {2010},
+	keywords = {brain, magnetic susceptibility, MRI, phase, R2*, relaxation},
+	pages = {185--191},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/5KHRZ6K6/Denk and Rauscher - 2010 - Susceptibility weighted imaging with multiple echo.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/P6GVD2NT/abstract.html:text/html}
+}
+
+@article{bleeker_optimal_2009,
+	title = {Optimal {Location} for {Arterial} {Input} {Function} {Measurements} near the {Middle} {Cerebral} {Artery} in {First}-{Pass} {Perfusion} {MRI}},
+	volume = {29},
+	issn = {0271-678X},
+	url = {http://dx.doi.org/10.1038/jcbfm.2008.155},
+	doi = {10.1038/jcbfm.2008.155},
+	abstract = {One of the main difficulties in obtaining quantitative perfusion values from dynamic susceptibility contrast-magnetic resonance imaging is a correct arterial input function (AIF) measurement, as partial volume effects can lead to an erroneous shape and amplitude of the AIF. Cerebral blood flow and volume scale linearly with the area under the AIF, but shape changes of the AIF can lead to large, nonlinear errors. Current manual and automated AIF selection procedures do not guarantee the exclusion of partial volume effects from AIF measurements. This study uses a numerical model, validated by phantom experiments, for predicting the optimal location for AIF measurements in the vicinity of the middle cerebral artery (MCA). Three different sequences were investigated and evaluated on a voxel-by-voxel basis by comparison with the ground truth. Subsequently, the predictions were evaluated in an in vivo example. The findings are fourfold: AIF measurements should be performed in voxels completely outside the artery, here a linear relation should be assumed between ΔR*2 and the concentration contrast agent, the exact optimal location differs per acquisition type, and voxels including a small MCA yield also correct AIF measurements for segmented echo planar imaging when a short echo time was used.},
+	language = {en},
+	number = {4},
+	urldate = {2017-03-31},
+	journal = {Journal of Cerebral Blood Flow \& Metabolism},
+	author = {Bleeker, Egbert JW and van Buchem, Mark A and van Osch, Matthias JP},
+	month = apr,
+	year = {2009},
+	pages = {840--852},
+	file = {SAGE PDF Full Text:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/G2SGS3TV/Bleeker et al. - 2009 - Optimal Location for Arterial Input Function Measu.pdf:application/pdf}
+}
+
+@article{yablonskiy_theory_1994,
+	title = {Theory of {NMR} signal behavior in magnetically inhomogeneous tissues: {The} static dephasing regime},
+	volume = {32},
+	issn = {1522-2594},
+	shorttitle = {Theory of {NMR} signal behavior in magnetically inhomogeneous tissues},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.1910320610/abstract},
+	doi = {10.1002/mrm.1910320610},
+	abstract = {This paper is devoted to a theory of the NMR signal behavior in biological tissues in the presence of static magnetic field inhomogeneities. We have developed an approach that analytically describes the NMR signal in the static dephasing regime where diffusion phenomena may be ignored. This approach has been applied to evaluate the NMR signal in the presence of a blood vessel network (with an application to functional imaging), bone marrow (for two specific trabecular structures, asymmetrical and columnar) and a ferrite contrast agent. All investigated systems have some common behavior. If the echo time TE is less than a known characteristic time tc for a given system, then the signal decays exponentially with an argument which depends quadratically on TE. This is equivalent to an R2* relaxation rate which is a linear function of TE. In the opposite case, when TE is greater than tc, the NMR signal follows a simple exponential decay and the relaxation rate does not depend on the echo time. For this time interval, R2* is a linear function of a) volume fraction ζ occupied by the field-creating objects, b) magnetic field B0 or just the objects' magnetic moment for ferrite particles, and c) susceptibility difference Δχ between the objects and the medium.},
+	language = {en},
+	number = {6},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Yablonskiy, Dmitriy A. and Haacke, E. Mark},
+	month = dec,
+	year = {1994},
+	keywords = {bone marrow, contrast agents, functional imaging, susceptibility effects},
+	pages = {749--763},
+	file = {Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/NR5IB5EE/abstract.html:text/html}
+}
+
+@article{zhao_oxygenation_2007,
+	title = {Oxygenation and hematocrit dependence of transverse relaxation rates of blood at 3T},
+	volume = {58},
+	issn = {1522-2594},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.21342/abstract},
+	doi = {10.1002/mrm.21342},
+	abstract = {Knowledge of the transverse relaxation rates R2 and R 2* of blood is relevant for quantitative assessment of functional MRI (fMRI) results, including calibration of blood oxygenation and measurement of tissue oxygen extraction fractions (OEFs). In a temperature controlled circulation system, these rates were measured for blood in vitro at 3T under conditions akin to the physiological state. Single spin echo (SE) and gradient echo (GRE) sequences were used to determine R2 and R 2*, respectively. Both rates varied quadratically with deoxygenation, and changes in R 2* were found to be due predominantly to changes in R2. These data were used to estimate intravascular blood oxygenation level dependent (BOLD) contributions during visual activation. Due to the large R 2* in venous blood, intravascular SE BOLD signal changes were larger than GRE effects at echo times above 30 ms. When including extravascular effects to estimate the total BOLD effect, GRE BOLD dominated due to the large tissue volume fraction. Magn Reson Med 58:592–596, 2007. © 2007 Wiley-Liss, Inc.},
+	language = {en},
+	number = {3},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Zhao, Jason M. and Clingman, Chekesha S. and Närväinen, M. Johanna and Kauppinen, Risto A. and van Zijl, Peter C.M.},
+	month = sep,
+	year = {2007},
+	keywords = {blood, BOLD, extravascular, intravascular, oxygenation, transverse relaxation},
+	pages = {592--597},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/6TZBJCUB/Zhao et al. - 2007 - Oxygenation and hematocrit dependence of transvers.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/FM8VNJMV/abstract.html:text/html}
+}
+
+@article{marques_using_2008,
+	title = {Using forward calculations of the magnetic field perturbation due to a realistic vascular model to explore the {BOLD} effect},
+	volume = {21},
+	issn = {1099-1492},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/nbm.1224/abstract},
+	doi = {10.1002/nbm.1224},
+	abstract = {This paper assesses the reliability of the infinite cylinder model used previously in the literature to simulate blood oxygenation level dependent (BOLD) signal changes. A three-dimensional finite element method was applied to a realistic model of the cortical vasculature, and the results compared with those generated from a simple model of the vasculature as a set of independent, randomly oriented, infinite cylinders. The realistic model is based on scanning electron microscopy measurements of the terminal vascular bed in the superficial cortex of the rat. Good agreement is found between the two models with regard to the extravascular R2* and R2 dependence on the cerebral blood volume and blood oxygenation fraction. Using the realistic model, it is also possible to gain further understanding of the relative importance of intravascular and extravascular BOLD contrast. A simple parameterisation of the dependence of the relaxation rates on relative cerebral blood volume and blood–tissue susceptibility difference was carried out, allowing discussion of the variation in the form of the haemodynamic response with field strength. Copyright © 2007 John Wiley \& Sons, Ltd.},
+	language = {en},
+	number = {6},
+	urldate = {2017-03-31},
+	journal = {NMR Biomed.},
+	author = {Marques, José P. and Bowtell, R. W.},
+	month = jul,
+	year = {2008},
+	keywords = {3D, BOLD contrast, BOLD parameterisation, numerical simulations, realistic vasculature model, three-dimensional},
+	pages = {553--565},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/BSRZQIN7/Marques and Bowtell - 2008 - Using forward calculations of the magnetic field p.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/2GHUVID8/abstract.html:text/html}
+}
+
+@article{wong_comparison_2014,
+	title = {Comparison of three-dimensional pseudo-continuous arterial spin labeling perfusion imaging with gradient-echo and spin-echo dynamic susceptibility contrast {MRI}},
+	volume = {39},
+	issn = {1522-2586},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/jmri.24178/abstract},
+	doi = {10.1002/jmri.24178},
+	abstract = {Purpose
+
+To compare the relative cerebral blood flow (CBF) obtained by pseudo-continuous arterial spin labeling sequence incorporated with volumetric fast spin-echo readout (3D-PCASL) with those by gradient-echo (GE) and spin-echo (SE) dynamic susceptibility contrast (DSC) MRI.
+
+
+Materials and Methods
+
+Thirty patients with various neurological diseases participated in this study. In addition to 3D-PCASL, 15 patients received GE-DSC and the others received SE-DSC imaging on a 3 Tesla scanner. A cortical gray matter (GM) to white matter (WM) and a thalamus (TM) to WM CBF ratio were determined from each perfusion scan. In addition, histograms of relative CBF distributions were obtained from each method for comparison.
+
+
+Results
+
+Significant correlations of CBF ratios were found between 3D-PCASL and the two DSC methods (P {\textless} 0.05). The 3D-PCASL resulted in GM/WM CBF ratios similar to SE-DSC but significantly smaller than GE-DSC (P = 2.3 × 10−7). TM/WM CBF ratio obtained by 3D-PCASL was significantly smaller than those by GE- and SE-DSC (P = 4.1 × 10−7 and 1.2 × 10−6, respectively). The histogram of relative CBF maps obtained from SE-DSC, after applied spatial smoothing, agreed well with that from 3D-PCASL.
+
+
+Conclusion
+
+This study suggested that perfusion images obtained from 3D-PCASL exhibited significant correlations with DSC-MRI, with greater microvascular weighting like SE-DSC. J. Magn. Reson. Imaging 2014;39:427–433. © 2013 Wiley Periodicals, Inc.},
+	language = {en},
+	number = {2},
+	urldate = {2017-03-31},
+	journal = {J. Magn. Reson. Imaging},
+	author = {Wong, Alex M. and Yan, Feng-Xian and Liu, Ho-Ling},
+	month = feb,
+	year = {2014},
+	keywords = {arterial spin labeling (ASL), dynamic susceptibility contrast (DSC), MRI, perfusion, pseudo-continuous ASL (PCASL)},
+	pages = {427--433},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/4JR62A2P/Wong et al. - 2014 - Comparison of three-dimensional pseudo-continuous .pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/QA4G9DN7/abstract.html:text/html}
+}
+
+@article{reichenbach_high-resolution_2001,
+	title = {High-resolution {BOLD} venographic imaging: a window into brain function},
+	volume = {14},
+	issn = {1099-1492},
+	shorttitle = {High-resolution {BOLD} venographic imaging},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/nbm.722/abstract},
+	doi = {10.1002/nbm.722},
+	abstract = {This paper reviews the recent development of a new high-resolution magnetic resonance imaging approach to visualizing small veins in the human brain with diameters in the sub-millimeter range, which is smaller than a voxel. It briefly introduces the physical background of the underlying bulk magnetic susceptibility effects, on which this approach is based, and it demonstrates the successful application of the method for imaging different intracranial lesions, like venous anomalies, arteriovenous malformations and brain tumors. The susceptibility difference between venous blood and the surrounding tissue is used to generate contrast. Using this method it is possible to visualize draining veins in lesions better than conventional magnetic resonance imaging methods, which often require application of a contrast medium or even conventional catheter angiography. Limitations of the method are discussed. The ability to highlight deoxygenated blood with high spatial resolution yields important vascular parameters which may be helpful for improved modeling of MR signal changes during functional brain activation, it may lead to a better understanding of brain function in diseased states, or it may even offer the possibility of differentiating benign from malignant tumors non-invasively. Copyright © 2001 John Wiley \& Sons, Ltd.},
+	language = {en},
+	number = {7-8},
+	urldate = {2017-03-31},
+	journal = {NMR Biomed.},
+	author = {Reichenbach, Jürgen R. and Haacke, E. Mark},
+	month = nov,
+	year = {2001},
+	keywords = {arteriovenous malformation, BOLD, brain, brain tumor, Magnetic Resonance Imaging, MR venography, susceptibility, venous anomaly},
+	pages = {453--467},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/AD486MKV/Reichenbach and Haacke - 2001 - High-resolution BOLD venographic imaging a window.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/6EAHKBVW/abstract.html:text/html}
+}
+
+@article{nguyen_finite_2014,
+	title = {A finite elements method to solve the {Bloch}–{Torrey} equation applied to diffusion magnetic resonance imaging},
+	volume = {263},
+	issn = {0021-9991},
+	url = {http://www.sciencedirect.com/science/article/pii/S0021999114000308},
+	doi = {10.1016/j.jcp.2014.01.009},
+	abstract = {The complex transverse water proton magnetization subject to diffusion-encoding magnetic field gradient pulses in a heterogeneous medium can be modeled by the multiple compartment Bloch–Torrey partial differential equation (PDE). In addition, steady-state Laplace PDEs can be formulated to produce the homogenized diffusion tensor that describes the diffusion characteristics of the medium in the long time limit. In spatial domains that model biological tissues at the cellular level, these two types of PDEs have to be completed with permeability conditions on the cellular interfaces. To solve these PDEs, we implemented a finite elements method that allows jumps in the solution at the cell interfaces by using double nodes. Using a transformation of the Bloch–Torrey PDE we reduced oscillations in the searched-for solution and simplified the implementation of the boundary conditions. The spatial discretization was then coupled to the adaptive explicit Runge–Kutta–Chebyshev time-stepping method. Our proposed method is second order accurate in space and second order accurate in time. We implemented this method on the FEniCS C++ platform and show time and spatial convergence results. Finally, this method is applied to study some relevant questions in diffusion MRI.},
+	urldate = {2016-11-30},
+	journal = {Journal of Computational Physics},
+	author = {Nguyen, Dang Van and Li, Jing-Rebecca and Grebenkov, Denis and Le Bihan, Denis},
+	month = apr,
+	year = {2014},
+	keywords = {Bloch–Torrey equation, Diffusion magnetic resonance imaging, Double-node, Finite elements, Interface problem, Pseudo-periodic, RKC},
+	pages = {283--302},
+	file = {ScienceDirect Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/BDKFWQTN/Nguyen et al. - 2014 - A finite elements method to solve the Bloch–Torrey.pdf:application/pdf;ScienceDirect Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/UMWCQC7Z/S0021999114000308.html:text/html}
+}
+
+@article{okudera_micro-angiographical_1999,
+	title = {Micro-angiographical studies of the medullary venous system of the cerebral hemisphere},
+	volume = {19},
+	issn = {1440-1789},
+	url = {http://onlinelibrary.wiley.com/doi/10.1046/j.1440-1789.1999.00215.x/abstract},
+	doi = {10.1046/j.1440-1789.1999.00215.x},
+	abstract = {In order to identify the zones of convergence of the medullary veins of the cerebral white matter, gelatin-mixed barium sulfate was injected into normal brains at autopsy. A catheter was inserted into the internal jugular veins or the carotid and vertebral arteries. Serial soft tissue roentgenograms of whole brains and brain slices were used to determine the zones of convergence. The deep med-ullary veins had four zones of covergence before draining into the subependymal veins: the first (superficial), second (candelabra), third (palmate) and fourth (subependymal). The zones of various convergence within the white matter were due to the crossing of nerve fiber tracts (e.g. the pes of the corona radiata, the radiation of the corpus callosum, the superior occipitofrontal fasciculus, the tapetum and the sagittal strata). Similar but less conspicuous information about the parenchymal arteries was observed in the arterial injection studies. These results suggest that micro-angiographical studies of the medullary veins of the cerebral white matter provide detailed information on veno-architecture and convergence zones. This information may help in understanding the pathogenesis of medullary venous malformations.},
+	language = {en},
+	number = {1},
+	urldate = {2017-03-31},
+	journal = {Neuropathology},
+	author = {Okudera, Toshio and Huang, Yun Peng and Fukusumi, Akio and Nakamura, Yasuhiro and Hatazawa, Jun and Uemura, Kazuo},
+	month = jan,
+	year = {1999},
+	keywords = {angio-architecture, arteries, cerebrum, med-ullary, micro-angiography, veins},
+	pages = {93--111},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/QZ7SXSRV/Okudera et al. - 1999 - Micro-angiographical studies of the medullary veno.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/MEQUXDWG/abstract.html:text/html}
+}
+
+@article{beaulieu_determinants_1994,
+	title = {Determinants of anisotropic water diffusion in nerves},
+	volume = {31},
+	issn = {1522-2594},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.1910310408/abstract},
+	doi = {10.1002/mrm.1910310408},
+	abstract = {We report NMR diffusion measurements of water in three central nervous system models, namely the nonmyelinated olfactory, and the myelinated trigeminal and optic nerves of the spotted and long-nosed garfish. A similar degree of anisotropy of the average diffusion coefficients (DNMR) is observed for all three freshly excised nerve types (DNMR parallel)/DNMR-(perpendicular) is 3.6 ± 1.2, 3.2 ± 0.9, and 2.6 ± 0.4 for the olfactory, trigeminal, and optic nerves, respectively). The anisotropy of DNHR for the nonmyelinated olfactory nerve argues strongly that myelin is not a necessary determinant of diffusional anisotropy in ordered axonal systems (even though it may contribute when present). Garfish nerves treated with vinblastine, in order to depolymerize microtubules and inhibit fast axonal transport, also exhibit diffusional anisotropy \{\vphantom{\}}DNMR(parallel)/DNMR (perpendicular) is 2.6 ± 0.4,2.8 ± 0.8, and 2.2 ± 0.7 for the olfactory, trigeminal, and optic nerves, respectively) thus excluding a significant role for microtubules and fast axonal transport in that observed anisotropy.},
+	language = {en},
+	number = {4},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Beaulieu, Christian and Allen, Peter S.},
+	month = apr,
+	year = {1994},
+	keywords = {Diffusion, nerves, NMR},
+	pages = {394--400},
+	file = {Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/BUXXA62D/abstract.html:text/html}
+}
+
+@article{gagnon_quantifying_2015,
+	title = {Quantifying the {Microvascular} {Origin} of {BOLD}-{fMRI} from {First} {Principles} with {Two}-{Photon} {Microscopy} and an {Oxygen}-{Sensitive} {Nanoprobe}},
+	volume = {35},
+	issn = {0270-6474},
+	url = {http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4339366/},
+	doi = {10.1523/JNEUROSCI.3555-14.2015},
+	abstract = {The blood oxygenation level-dependent (BOLD) contrast is widely used in functional magnetic resonance imaging (fMRI) studies aimed at investigating neuronal activity. However, the BOLD signal reflects changes in blood volume and oxygenation rather than neuronal activity per se. Therefore, understanding the transformation of microscopic vascular behavior into macroscopic BOLD signals is at the foundation of physiologically informed noninvasive neuroimaging. Here, we use oxygen-sensitive two-photon microscopy to measure the BOLD-relevant microvascular physiology occurring within a typical rodent fMRI voxel and predict the BOLD signal from first principles using those measurements. The predictive power of the approach is illustrated by quantifying variations in the BOLD signal induced by the morphological folding of the human cortex. This framework is then used to quantify the contribution of individual vascular compartments and other factors to the BOLD signal for different magnet strengths and pulse sequences.},
+	number = {8},
+	urldate = {2017-03-31},
+	journal = {J Neurosci},
+	author = {Gagnon, Louis and Sakadžić, Sava and Lesage, Frédéric and Musacchia, Joseph J. and Lefebvre, Joël and Fang, Qianqian and Yücel, Meryem A. and Evans, Karleyton C. and Mandeville, Emiri T. and Cohen-Adad, Jülien and Polimeni, Jon̈athan R. and Yaseen, Mohammad A. and Lo, Eng H. and Greve, Douglas N. and Buxton, Richard B. and Dale, Anders M. and Devor, Anna and Boas, David A.},
+	month = feb,
+	year = {2015},
+	pmid = {25716864},
+	pmcid = {PMC4339366},
+	pages = {3663--3675},
+	file = {PubMed Central Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/UHFWJPPE/Gagnon et al. - 2015 - Quantifying the Microvascular Origin of BOLD-fMRI .pdf:application/pdf}
+}
+
+@article{hernandez-torres_orientation_2015,
+	title = {Orientation {Dependent} {MR} {Signal} {Decay} {Differentiates} between {People} with {MS}, {Their} {Asymptomatic} {Siblings} and {Unrelated} {Healthy} {Controls}},
+	volume = {10},
+	issn = {1932-6203},
+	url = {http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0140956},
+	doi = {10.1371/journal.pone.0140956},
+	abstract = {R2* relaxometry of the brain is a quantitative magnetic resonance technique which is influenced by iron and myelin content across different brain regions. Multiple sclerosis (MS) is a common inflammatory, demyelinating disease affecting both white and grey matter regions of the CNS. Using R2*, increased iron deposition has been described in deep gray matter of MS patients. Iron accumulation might promote oxidative stress in the brain, which can lead to cell death and neurodegeneration. However, recent histological work indicates that iron may be reduced within the normal appearing white matter (WM) in MS. In the present study we analyzed the R2* signal across the white matter in 39 patients with MS, 31 asymptomatic age matched siblings of patients and 30 age-matched controls. The measurement of R2* in white matter is affected by the signal's dependency on white matter fibre orientation with respect to the main magnetic field which can be accounted using diffusion tensor imaging. We observed a clear separation of the three study groups in R2*. The values in the MS group were significantly lower compared to the siblings and controls, while the siblings group presented with significantly higher R2* values than both unrelated healthy controls and patients. Furthermore, we found significantly decreased normal-appearing white matter R2* values in patients with more severe disease course. Angle resolved analysis of R2* improves the sensitivity for detecting subtle differences in WM R2* compared to standard histogram based analyses. Our findings suggest that the decreased R2* values in MS are due to diffuse tissue damage and decreased myelin in the normal appearing and diffusely abnormal WM. The increased R2* in unaffected siblings may identify a predisposition to increased iron and the potential for oxidative stress as a risk factor for developing MS.},
+	number = {10},
+	urldate = {2016-11-25},
+	journal = {PLOS ONE},
+	author = {Hernández-Torres, Enedino and Wiggermann, Vanessa and Hametner, Simon and Baumeister, Tobias R. and Sadovnick, A. Dessa and Zhao, Yinshan and Machan, Lindsay and Li, David K. B. and Traboulsee, Anthony and Rauscher, Alexander},
+	month = oct,
+	year = {2015},
+	keywords = {anisotropy, Brain damage, Central nervous system, Data processing, diffusion tensor imaging, Lesions, Magnetic fields, multiple sclerosis},
+	pages = {e0140956},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/HUC3H3NU/Hernández-Torres et al. - 2015 - Orientation Dependent MR Signal Decay Differentiat.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/NISWECJF/article.html:text/html}
+}
+
+@article{ursell_diffusion_2007,
+	title = {The {Diffusion} {Equation} {A} {Multi}-dimensional {Tutorial}},
+	journal = {California Institute of Technology, Pasadena, Tech. Rep},
+	author = {Ursell, Tristan S.},
+	year = {2007},
+	file = {diffusion_rms_distance.pdf:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/W2H76BNC/diffusion_rms_distance.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/R46I8R6U/scholar.html:text/html}
+}
+
+@article{jochimsen_whole-brain_2010,
+	title = {Whole-brain mapping of venous vessel size in humans using the hypercapnia-induced {BOLD} effect},
+	volume = {51},
+	issn = {1053-8119},
+	url = {http://www.sciencedirect.com/science/article/pii/S1053811910002053},
+	doi = {10.1016/j.neuroimage.2010.02.037},
+	abstract = {Measuring the morphology of the cerebral microvasculature by vessel-size imaging (VSI) is a promising approach for clinical applications, such as the characterization of tumor angiogenesis and stroke. Despite the great potential of VSI, this method has not yet found widespread use in practice due to the lack of experience in testing it on healthy humans. Since this limitation derives mainly from the need for an invasive injection of a contrast agent, this work explores the possibility to employ instead the easily accessible blood oxygenation level dependent (BOLD) effect for VSI of the venous microstructure. It is demonstrated that BOLD-VSI in humans can be realized by a hypercapnic challenge using a fast gradient-echo (GE) and spin-echo (SE) sequence at 7 T. Reproducible maps of the mean venous vessel radius, based on the BOLD-induced changes in GE and SE relaxation rates, could be obtained within a scan time of 10 min. Moreover, the method yields maps of venous blood volume and vessel density. Owing to its non-invasive character, BOLD-VSI provides a low-risk method to analyze the venous microstructure, which will not only be useful in clinical applications, but also provide a better understanding of BOLD effect.},
+	number = {2},
+	urldate = {2016-11-25},
+	journal = {NeuroImage},
+	author = {Jochimsen, Thies H. and Ivanov, Dimo and Ott, Derek V. M. and Heinke, Wolfgang and Turner, Robert and Möller, Harald E. and Reichenbach, Jürgen R.},
+	month = jun,
+	year = {2010},
+	keywords = {Blood volume, BOLD, Hypercapnia, Vessel density, Vessel-size imaging},
+	pages = {765--774},
+	file = {ScienceDirect Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/C4I2U55S/Jochimsen et al. - 2010 - Whole-brain mapping of venous vessel size in human.pdf:application/pdf;ScienceDirect Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/NEVKFPPV/S1053811910002053.html:text/html}
+}
+
+@article{ostergaard_high_1996-1,
+	title = {High resolution measurement of cerebral blood flow using intravascular tracer bolus passages. {Part} {I}: {Mathematical} approach and statistical analysis},
+	volume = {36},
+	issn = {1522-2594},
+	shorttitle = {High resolution measurement of cerebral blood flow using intravascular tracer bolus passages. {Part} {I}},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/mrm.1910360510/abstract},
+	doi = {10.1002/mrm.1910360510},
+	abstract = {The authors review the theoretical basis of determination of cerebral blood flow (CBF) using dynamic measurements of nondiffusible contrast agents, and demonstrate how parametric and nonparametric deconvolution techniques can be modified for the special requirements of CBF determination using dynamic MRI. Using Monte Carlo modeling, the use of simple, analytical residue models is shown to introduce large errors in flow estimates when actual, underlying vascular characteristics are not sufficiently described by the chosen function. The determination of the shape of the residue function on a regional basis is shown to be possible only at high signal-to-noise ratio. Comparison of several nonparametric deconvolution techniques showed that a nonparametric deconvolution technique (singular value decomposition) allows estimation of flow relatively independent of underlying vascular structure and volume even at low signal-to-noise ratio associated with pixel-by-pixel deconvolution.},
+	language = {en},
+	number = {5},
+	urldate = {2017-03-31},
+	journal = {Magn. Reson. Med.},
+	author = {Østergaard, Leif and Weisskoff, Robert M. and Chesler, David A. and Gyldensted, Carsten and Rosen, Bruce R.},
+	month = nov,
+	year = {1996},
+	keywords = {cerebral blood flow (CBF), dynamic magnetic resonance imaging (MRI), nonparametric deconvolution, susceptibility contrast},
+	pages = {715--725},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/IE9F7K8U/Østergaard et al. - 1996 - High resolution measurement of cerebral blood flow.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/32M635WP/abstract.html:text/html}
+}
+
+@article{helenius_cerebral_2003,
+	title = {Cerebral {Hemodynamics} in a {Healthy} {Population} {Measured} by {Dynamic} {Susceptibility} {Contrast} {Mr} {Imaging}},
+	volume = {44},
+	issn = {0284-1851},
+	url = {http://www.tandfonline.com/doi/abs/10.1080/j.1600-0455.2003.00104.x},
+	doi = {10.1080/j.1600-0455.2003.00104.x},
+	abstract = {Purpose: To establish reference data and to study age-dependency for cerebral perfusion in various regions of the brain in a healthy population. Material and Methods: Eighty healthy subjects of both genders from 22 to 85 years of age were studied with spin echo echo-planar dynamic susceptibility contrast MR imaging (DSC MRI) at 1.5 T. Cerebral blood volume (CBV), cerebral blood flow (CBF), and contrast agent mean transit time (MTT) were calculated bilaterally for 20 distinct neuroanatomic structures. Results: In gray matter, the following values were found (mean ± SD): CBV (4.6 ± 1.0 ml/100 g), CBF (94.2 ± 23.0 ml/100 g/min), and MTT (3.0 ± 0.6 s), and in white matter: CBV (1.3 ± 0.4 ml/100 g), CBF (19.6 ± 5.8 ml/100 g/min), and MTT (4.3 ± 0.7 s). The perfusion parameters did not change with age, except for a tendency to an increase in gray matter MTT and CBV. Males exhibited higher MTT and CBV than females. No hemispheric difference was found in either gender. Conclusion: Cerebral hemodynamics can be assessed with DSC MRI. Age itself seems to have only a marginal effect on cerebral perfusion in healthy population.},
+	number = {5},
+	urldate = {2017-03-31},
+	journal = {Acta Radiologica},
+	author = {Helenius, J. and Perkiö, J. and Soinne, L. and Østergaard, L. and Carano, R. A. D. and Salonen, O. and Savolainen, S. and Kaste, M. and Aronen, H. J. and Tatlisumak, T.},
+	month = jan,
+	year = {2003},
+	keywords = {age, brain, gender, MR imaging, perfusion},
+	pages = {538--546},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/2A354D5W/Helenius et al. - 2003 - Cerebral Hemodynamics in a Healthy Population Meas.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/KZTA4CWG/j.1600-0455.2003.00104.html:text/html}
+}
+
+@article{nonaka_microvasculature_2003-1,
+	title = {Microvasculature of the human cerebral white matter: {Arteries} of the deep white matter},
+	volume = {23},
+	issn = {1440-1789},
+	shorttitle = {Microvasculature of the human cerebral white matter},
+	url = {http://onlinelibrary.wiley.com/doi/10.1046/j.1440-1789.2003.00486.x/abstract},
+	doi = {10.1046/j.1440-1789.2003.00486.x},
+	abstract = {The vascular architecture of the human cerebral deep white matter was studied using soft X-ray and diaphanized specimens, achieved by intra-arterial injection of barium and vascular stain respectively, and also by electron microscopic examination of the corrosion cast of arteries in normal adult brains. The deep white matter arteries passed through the cerebral cortex with a few branches to the cortex and ran straight through the white matter. The arteries concentrated ventriculopetally to the white matter around the lateral ventricle. Anastomoses were noted around the ventricular wall at the terminals of the deep white matter arteries. No centrifugal branches irrigating the periventricular white matter from the lenticulo-striate arteries were observed in the present study. The presence of anastomoses among the terminal branches of deep white matter arteries protects against ischemic change or infarction in this area from an occlusion of a single deep white matter artery. This may lead to development of terminal zone infarction from ischemia or vascular diseases, affecting multiple deep white matter arteries. The subcortical and deep white matter arteries had thick adventitial sheaths and large adventitial spaces in the white matter but not in the cortex. The presence or absence of the adventitial space is regarded as another characteristic difference between the arteries in the white matter and cortex. This difference may influence pathological changes in vascular lesions in these respective areas.},
+	language = {en},
+	number = {2},
+	urldate = {2016-11-30},
+	journal = {Neuropathology},
+	author = {Nonaka, Hiroko and Akima, Michio and Hatori, Tsutomu and Nagayama, Tadashi and Zhang, Zean and Ihara, Fumie},
+	month = jun,
+	year = {2003},
+	keywords = {cerebral white matter, corrosion cast, human brain, microvasculature, scanning electron microscopy},
+	pages = {111--118},
+	file = {Full Text PDF:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/X32ZFZQ2/Nonaka et al. - 2003 - Microvasculature of the human cerebral white matte.pdf:application/pdf;Snapshot:/home/jon/.mozilla/firefox/ryxvnmbq.default/zotero/storage/ZGBZ845G/abstract.html:text/html}
+}
+
+@book{matlab_version_2015,
+	address = {Natick, Massachusetts},
+	title = {version 8.6 ({R}2015b), {Optimization} {Toolbox} version 7.3},
+	publisher = {The MathWorks Inc.},
+	author = {{MATLAB}},
+	year = {2015}
+}
+
+@article{wick_properties_1954,
+	title = {Properties of {Bethe}-{Salpeter} {Wave} {Functions}},
+	volume = {96},
+	url = {https://link.aps.org/doi/10.1103/PhysRev.96.1124},
+	doi = {10.1103/PhysRev.96.1124},
+	abstract = {A boundary condition at t=±∞ (t being the "relative" time variable) is obtained for the four-dimensional wave function of a two-body system in a bound state. It is shown that this condition implies that the wave function can be continued analytically to complex values of the "relative time" variable; similarly the wave function in momentum space can be continued analytically to complex values of the "relative energy" variable p0. In particular one is allowed to consider the wave function for purely imaginary values of t, or respectively p0, i.e., for real values of x4=ict and p4=ip0. A wave equation satisfied by this function is obtained by rotation of the integration path in the complex plane of the variable p0, and it is further shown that the formulation of the eigenvalue problem in terms of this equation presents several advantages in that many of the ordinary mathematical methods become available.},
+	number = {4},
+	urldate = {2017-07-25},
+	journal = {Phys. Rev.},
+	author = {Wick, G. C.},
+	month = nov,
+	year = {1954},
+	pages = {1124--1134},
+	file = {APS Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/6A73SF6Q/PhysRev.96.html:text/html;Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/9WGMBUPN/Wick - 1954 - Properties of Bethe-Salpeter Wave Functions.pdf:application/pdf}
+}
+
+@article{bader_solving_2013,
+	title = {Solving the {Schrödinger} eigenvalue problem by the imaginary time propagation technique using splitting methods with complex coefficients},
+	volume = {139},
+	issn = {0021-9606},
+	url = {http://aip.scitation.org/doi/abs/10.1063/1.4821126},
+	doi = {10.1063/1.4821126},
+	number = {12},
+	urldate = {2017-07-19},
+	journal = {The Journal of Chemical Physics},
+	author = {Bader, Philipp and Blanes, Sergio and Casas, Fernando},
+	month = sep,
+	year = {2013},
+	pages = {124117},
+	file = {2013JChemPhys.pdf:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/4JMEBSWS/2013JChemPhys.pdf:application/pdf;Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/NE8QC22M/1.html:text/html}
+}
+
+@book{bruus_many-body_2004,
+	title = {Many-{Body} {Quantum} {Theory} in {Condensed} {Matter} {Physics}: {An} {Introduction}},
+	isbn = {978-0-19-856633-5},
+	shorttitle = {Many-{Body} {Quantum} {Theory} in {Condensed} {Matter} {Physics}},
+	abstract = {This book is an introduction to the techniques of many-body quantum theory with a large number of applications to condensed matter physics. The basic idea of the book is to provide a self-contained formulation of the theoretical framework without losing mathematical rigor, while at the same time providing physical motivation and examples. The examples are taken from applications in electron systems and transport theory. On the formal side, the book covers an introduction to second quantization, many-body Green's function, finite temperature Feynman diagrams and bosonization. The applications include traditional transport theory in bulk as well as mesoscopic systems, where both the Landau-Büttiker formalism and recent developments in correlated transport phenomena in mesoscopic systems and nano-structures are covered. Other topics include interacting electron gases, plasmons, electron-phonon interactions, superconductivity and a final chapter on one-dimensional systems where a detailed treatment of Luttinger liquid theory and bosonization techniques is given. Having grown out of a set of lecture notes, and containing many pedagogical exercises, this book is designed as a textbook for an advanced undergraduate or graduate course, and is also well suited for self-study.},
+	language = {en},
+	publisher = {OUP Oxford},
+	author = {Bruus, Henrik and Flensberg, Karsten},
+	month = sep,
+	year = {2004},
+	note = {Google-Books-ID: CktuBAAAQBAJ},
+	keywords = {Science / Chemistry / Physical \& Theoretical, Science / Physics / Condensed Matter, Science / Physics / General, Science / Physics / Quantum Theory, Technology \& Engineering / Electrical, Technology \& Engineering / Electronics / General, Technology \& Engineering / Materials Science, Technology \& Engineering / Nanotechnology \& MEMS},
+	file = {Many-body quantum theory in_condensed matter physics_Henrik Bruus and Karsten Flensberg.pdf:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/9B5JP3KC/Many-body quantum theory in_condensed matter physics_Henrik Bruus and Karsten Flensberg.pdf:application/pdf}
+}
+
+@incollection{guardiola_monte_1998,
+	series = {Lecture {Notes} in {Physics}},
+	title = {Monte carlo methods in quantum many-body theories},
+	isbn = {978-3-540-64471-2 978-3-540-69787-9},
+	url = {https://link.springer.com/chapter/10.1007/BFb0104529},
+	abstract = {This is an introduction of Monte Carlo methods for beginners and their application to some quantum many-body problems. Special emphasis is done on the methodology and the general characteristics of Monte Carlo calculations. An introduction to the applications to many-body physics, specifically the Variational Monte Carlo and the Green Function Monte Carlo, is also included.},
+	language = {en},
+	urldate = {2017-07-05},
+	booktitle = {Microscopic {Quantum} {Many}-{Body} {Theories} and {Their} {Applications}},
+	publisher = {Springer, Berlin, Heidelberg},
+	author = {Guardiola, Rafael},
+	year = {1998},
+	note = {DOI: 10.1007/BFb0104529},
+	pages = {269--336},
+	file = {Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/IIMISPST/Guardiola - 1998 - Monte carlo methods in quantum many-body theories.pdf:application/pdf;Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/RB3FGIVE/10.html:text/html}
+}
+
+@book{schiesser2012numerical,
+  title={The numerical method of lines: integration of partial differential equations},
+  author={Schiesser, William E},
+  year={2012},
+  publisher={Elsevier}
+}
+
+@article{mirhosseini_analytical_2016,
+	title = {Analytical {Solution} of {Laplace} and {Poisson} {Equations} {Using} {Conformal} {Mapping} and {Kronecker} {Products}},
+	volume = {14},
+	issn = {1735-0522, 2383-3874},
+	url = {https://link.springer.com/article/10.1007/s40999-016-0037-y},
+	doi = {10.1007/s40999-016-0037-y},
+	abstract = {In this paper, using the eigenvalues and eigenvectors of symmetric block diagonal matrices with infinite dimension and numerical method of finite difference, a closed-form solution for exact solution of Laplace equation is presented. The method of this paper has applications in different states of boundary conditions like Neumann, Dirichlet, and other mixed boundary conditions. Using the method of this paper, a mathematical model for the exact solution of the Poisson equation is derived. Since these equations have many applications in engineering problems, in each part of this paper, examples, like water seepage problem through the soil and torsion of prismatic bars, are presented. Finally, a method is provided for torsion problem of prismatic bars with non-circular and non-rectangular cross-sections utilizing conformal mapping.},
+	language = {en},
+	number = {6},
+	urldate = {2017-07-25},
+	journal = {Int J Civ Eng},
+	author = {Mirhosseini, S. M. and Rahami, H. and Kaveh, A.},
+	month = sep,
+	year = {2016},
+	pages = {369--377},
+	file = {Full Text PDF:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\AC3WENDK\\Mirhosseini et al. - 2016 - Analytical Solution of Laplace and Poisson Equatio.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\WV8ZW3IU\\s40999-016-0037-y.html:text/html}
+}
+
+@article{canuto_decay_2014,
+	title = {On the decay of the inverse of matrices that are sum of {Kronecker} products},
+	volume = {452},
+	issn = {0024-3795},
+	url = {http://www.sciencedirect.com/science/article/pii/S0024379514001736},
+	doi = {10.1016/j.laa.2014.03.029},
+	abstract = {Decay patterns of matrix inverses have recently attracted considerable interest, due to their relevance in numerical analysis, and in applications requiring matrix function approximations. In this paper we analyze the decay pattern of the inverse of banded matrices of the form S=M⊗In+In⊗M where M is tridiagonal, symmetric and positive definite, In is the identity matrix, and ⊗ stands for the Kronecker product. It is well known that the inverses of banded matrices exhibit an exponential decay pattern away from the main diagonal. However, the entries in S−1 show a non-monotonic decay, which is not caught by classical bounds. By using an alternative expression for S−1, we derive computable upper bounds that closely capture the actual behavior of its entries. We also show that similar estimates can be obtained when M has a larger bandwidth, or when the sum of Kronecker products involves two different matrices. Numerical experiments illustrating the new bounds are also reported.},
+	urldate = {2017-07-25},
+	journal = {Linear Algebra and its Applications},
+	author = {Canuto, C. and Simoncini, V. and Verani, M.},
+	month = jul,
+	year = {2014},
+	keywords = {Banded matrices, Exponential decay, Kronecker products, Sparsity pattern},
+	pages = {21--39},
+	file = {1-s2.0-S0024379514001736-main.pdf:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\VN8SAB37\\1-s2.0-S0024379514001736-main.pdf:application/pdf;ScienceDirect Snapshot:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\QEGN5P8J\\S0024379514001736.html:text/html}
+}
+
+
+@article{moler_nineteen_2003,
+	title = {Nineteen {Dubious} {Ways} to {Compute} the {Exponential} of a {Matrix}, {Twenty}-{Five} {Years} {Later}},
+	volume = {45},
+	issn = {0036-1445},
+	url = {http://epubs.siam.org/doi/abs/10.1137/S00361445024180},
+	doi = {10.1137/S00361445024180},
+	abstract = {In principle, the exponential of a matrix could be computed in many ways. Methods involving approximation theory, differential equations, the matrix eigenvalues, and the matrix characteristic polynomial have been proposed. In practice, consideration of computational stability and efficiency indicates that some of the methods are preferable to others but that none are completely satisfactory.Most of this paper was originally published in 1978. An update, with a separate bibliography, describes a few recent developments.},
+	number = {1},
+	urldate = {2017-07-25},
+	journal = {SIAM Rev.},
+	author = {Moler, C. and Van Loan, C.},
+	month = jan,
+	year = {2003},
+	pages = {3--49},
+	file = {Full Text PDF:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\7662IVJJ\\Moler and Van Loan - 2003 - Nineteen Dubious Ways to Compute the Exponential o.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\FZ9PGMZS\\S00361445024180.html:text/html}
+}
+
+@book{golub2012matrix,
+  title={Matrix computations},
+  author={Golub, Gene H and Van Loan, Charles F},
+  volume={3},
+  year={2012},
+  publisher={JHU Press}
+}
+
+
+@book{caliari_comparison_nodate,
+	title = {Comparison of various methods for computing the action of the matrix exponential},
+	publisher = {submitted},
+	author = {Caliari, Marco and Kandol, P and Ostermann, Alexander and Rainer, Stefan},
+	file = {Comparison of various methods for computing the action of the matrix exponential.pdf:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\4X6IHK5G\\Comparison of various methods for computing the action of the matrix exponential.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\WSDT937W\\38e1a07e5b898a9830934aabb3352805b0507ed5.html:text/html}
+}
+
+@article{al-mohy_computing_2011,
+	title = {Computing the {Action} of the {Matrix} {Exponential}, with an {Application} to {Exponential} {Integrators}},
+	volume = {33},
+	issn = {1064-8275},
+	url = {http://epubs.siam.org/doi/abs/10.1137/100788860},
+	doi = {10.1137/100788860},
+	abstract = {A new algorithm is developed for computing \$e{\textasciicircum}\{tA\}B\$, where A is an \$n{\textbackslash}times n\$ matrix and B is \$n{\textbackslash}times n\_0\$ with \$n\_0 {\textbackslash}ll n\$. The algorithm works for any A, its computational cost is dominated by the formation of products of A with \$n{\textbackslash}times n\_0\$ matrices, and the only input parameter is a backward error tolerance. The algorithm can return a single matrix \$e{\textasciicircum}\{tA\}B\$ or a sequence \$e{\textasciicircum}\{t\_kA\}B\$ on an equally spaced grid of points \$t\_k\$. It uses the scaling part of the scaling and squaring method together with a truncated Taylor series approximation to the exponential. It determines the amount of scaling and the Taylor degree using the recent analysis of Al-Mohy and Higham [SIAM J. Matrix Anal. Appl., 31 (2009), pp. 970–989], which provides sharp truncation error bounds expressed in terms of the quantities \${\textbackslash}{\textbar}A{\textasciicircum}k{\textbackslash}{\textbar}{\textasciicircum}\{1/k\}\$ for a few values of k, where the norms are estimated using a matrix norm estimator. Shifting and balancing are used as preprocessing steps to reduce the cost of the algorithm. Numerical experiments show that the algorithm performs in a numerically stable fashion across a wide range of problems, and analysis of rounding errors and of the conditioning of the problem provides theoretical support. Experimental comparisons with MATLAB codes based on Krylov subspace, Chebyshev polynomial, and Laguerre polynomial methods show the new algorithm to be sometimes much superior in terms of computational cost and accuracy. An important application of the algorithm is to exponential integrators for ordinary differential equations. It is shown that the sums of the form \${\textbackslash}sum\_\{k=0\}{\textasciicircum}p {\textbackslash}varphi\_k(A)u\_k\$ that arise in exponential integrators, where the \${\textbackslash}varphi\_k\$ are related to the exponential function, can be expressed in terms of a single exponential of a matrix of dimension \$n+p\$ built by augmenting A with additional rows and columns, and the algorithm of this paper can therefore be employed.},
+	number = {2},
+	urldate = {2017-07-25},
+	journal = {SIAM J. Sci. Comput.},
+	author = {Al-Mohy, A. and Higham, N.},
+	month = jan,
+	year = {2011},
+	pages = {488--511},
+	file = {Full Text PDF:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\37P95D5J\\Al-Mohy and Higham - 2011 - Computing the Action of the Matrix Exponential, wi.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\537qkpu7.default\\zotero\\storage\\TMRK46UT\\100788860.html:text/html}
+}
+
+@article{grebenkov_laplacian_2008,
+	title = {Laplacian eigenfunctions in {NMR}. {I}. {A} numerical tool},
+	volume = {32A},
+	issn = {1552-5023},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/cmr.a.20117/abstract},
+	doi = {10.1002/cmr.a.20117},
+	abstract = {A geometrical confinement considerably affects the diffusive motion of the nuclei and the consequent signal attenuation under inhomogeneous magnetic fields. In this article, we illustrate the use of Laplacian eigenfunctions to describe this effect. Starting from the classical Bloch-Torrey equation, we obtain the free induction decay (FID) and the spin-echo or gradient-echo signal in a compact matrix form. Each attenuation mechanism (restricted diffusion, gradient dephasing, surface or bulk relaxation) is represented by a matrix which is constructed from the Laplace operator eigenbasis and thus depending only on the geometry of the confinement. In turn, the physical parameters (free diffusion coefficient, gradient intensity, surface or bulk relaxivity) characterize the “strengths” of the underlying attenuation mechanisms and naturally appear as coefficients in front of these matrices. Once the Laplacian eigenfunctions for a given confinement are found (analytically or numerically), further computation of the macroscopic signal is more accurate and much faster than by using conventional simulation methods. The matrix technique is actually a simple numerical tool to deal with arbitrary gradient waveforms, including simple or stimulated, single or multiple spin echoes. We illustrate its efficiency by considering restricted diffusion in simple domains: a slab, a cylinder, and a sphere. In a companion paper, we shall focus on theoretical advances achieved by using Laplacian eigenfunctions. © 2008 Wiley Periodicals, Inc. Concepts Magn Reson Part A 32A: 277–301, 2008.},
+	language = {en},
+	number = {4},
+	urldate = {2017-08-01},
+	journal = {Concepts Magn. Reson.},
+	author = {Grebenkov, Denis S.},
+	month = jul,
+	year = {2008},
+	keywords = {Bloch-Torrey equation, confinement, eigenfunction, eigenvalue, gradient echo, Laplace operator, matrix formalism, NMR, (reflected) Brownian motion, restricted diffusion, spin echo},
+	pages = {277--301},
+	file = {Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/526VTCZD/Grebenkov - 2008 - Laplacian eigenfunctions in NMR. I. A numerical to.pdf:application/pdf;Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/4AGIFXJV/abstract.html:text/html}
+}
+
+@article{ziener_spin_2012,
+	title = {Spin dephasing in a magnetic dipole field},
+	volume = {85},
+	url = {https://link.aps.org/doi/10.1103/PhysRevE.85.051908},
+	doi = {10.1103/PhysRevE.85.051908},
+	abstract = {Transverse relaxation by dephasing in an inhomogeneous field is a general mechanism in physics, for example, in semiconductor physics, muon spectroscopy, or nuclear magnetic resonance. In magnetic resonance imaging the transverse relaxation provides information on the properties of several biological tissues. Since the dipole field is the most important part of the multipole expansion of the local inhomogeneous field, dephasing in a dipole field is highly important in relaxation theory. However, there have been no analytical solutions which describe the dephasing in a magnetic dipole field. In this work we give a complete analytical solution for the dephasing in a magnetic dipole field which is valid over the whole dynamic range.},
+	number = {5},
+	urldate = {2017-12-12},
+	journal = {Phys. Rev. E},
+	author = {Ziener, C. H. and Kampf, T. and Reents, G. and Schlemmer, H.-P. and Bauer, W. R.},
+	month = may,
+	year = {2012},
+	pages = {051908},
+	file = {APS Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\D6YNBD4W\\PhysRevE.85.html:text/html;PhysRevE.85.051908.pdf:C\:\\Users\\Jonathan\\Zotero\\storage\\X59TMJ4Z\\PhysRevE.85.051908.pdf:application/pdf}
+}
+
+@article{ziener_spin_2009,
+	title = {Spin dephasing in the dipole field around capillaries and cells: {Numerical} solution},
+	volume = {80},
+	shorttitle = {Spin dephasing in the dipole field around capillaries and cells},
+	url = {https://link.aps.org/doi/10.1103/PhysRevE.80.046701},
+	doi = {10.1103/PhysRevE.80.046701},
+	abstract = {We numerically solve the Bloch-Torrey equation by discretizing the differential operators in real space using finite differences. The differential equation is either solved directly in time domain as initial-value problem or in frequency domain as boundary-value problem. Especially the solution in time domain is highly efficient and suitable for arbitrary domains and dimensions. As examples, we calculate the average magnetization and the frequency distribution for capillaries and cells which are idealized as cylinders and spheres, respectively. The solution is compared with the commonly used Gaussian approximation and the strong-collision approximation. While these approximations become exact in limiting cases (small or large diffusion coefficient), they strongly deviate from the numerical solution for intermediate values of the diffusion coefficient.},
+	number = {4},
+	urldate = {2017-12-12},
+	journal = {Phys. Rev. E},
+	author = {Ziener, C. H. and Glutsch, S. and Jakob, P. M. and Bauer, W. R.},
+	month = oct,
+	year = {2009},
+	pages = {046701},
+	file = {APS Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\TWA5CA7H\\PhysRevE.80.html:text/html;Full Text PDF:C\:\\Users\\Jonathan\\Zotero\\storage\\MKMZHIPE\\Ziener et al. - 2009 - Spin dephasing in the dipole field around capillar.pdf:application/pdf}
+}
+
+@article{moler_nineteen_1978,
+	title = {Nineteen {Dubious} {Ways} to {Compute} the {Exponential} of a {Matrix}},
+	volume = {20},
+	issn = {0036-1445},
+	url = {http://epubs.siam.org/doi/abs/10.1137/1020098},
+	doi = {10.1137/1020098},
+	abstract = {In principle, the exponential of a matrix could be computed in many ways. Methods involving approximation theory, differential equations, the matrix eigenvalues, and the matrix characteristic polynomial have been proposed. In practice, consideration of computational stability and efficiency indicates that some of the methods are preferable to others, but that none are completely satisfactory.},
+	number = {4},
+	urldate = {2017-07-25},
+	journal = {SIAM Rev.},
+	author = {Moler, C. and Van Loan, C.},
+	month = oct,
+	year = {1978},
+	pages = {801--836},
+	file = {Full Text PDF:C\:\\Users\\Jonathan\\Zotero\\storage\\RZATFJGT\\Moler and Van Loan - 1978 - Nineteen Dubious Ways to Compute the Exponential o.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\QUCX347U\\1020098.html:text/html}
+}
+
+@article{meier-ruge_stereological_1980,
+	title = {Stereological changes in the capillary network and nerve cells of the aging human brain},
+	volume = {14},
+	issn = {0047-6374},
+	url = {http://www.sciencedirect.com/science/article/pii/0047637480901232},
+	doi = {10.1016/0047-6374(80)90123-2},
+	abstract = {Stereologic parameters of the capillaries and nerve cells of the brain cortex and putamen were investigated. Thirty-eight brains from subjects aged between 19 and 94 years were examined. All cases were free of metabolic, neurologic and psychiatric diseases. It is demonstrated that the capillary diameter remains unchanged during aging in both brain cortex and putamen. However, in the putamen the total capillary length per unit volume and the capillary volume fraction increase (∼60\%) progressively with age. Consequently the mean inter-capillary distances in the putamen decrease (∼15\%). These age-induced changes in the putamen indicate shrinking of subcortical brain structures. In contrast to those of the putamen, the morphometric data of the capillaries in the cortex remain unchanged during the aging process. Stereologic investigations of nerve cells in the brain cortex and putamen revealed that only in brains over 85 years of age can a significant decrease in nerve cell size be demonstrated. A correlation of all the data by a correspondence analytical procedure showed that only the surface/volume ratio of the capillaries correlates with the nerve cell size. This observation suggests a functional interaction between the nerve cells and the capillaries. From the data presented it becomes apparent that the shrinkage of the gyri in the aging brain is not a change in the volume of the cortex, but is a decrease in the volume of subcortical structures.},
+	number = {1},
+	urldate = {2018-02-07},
+	journal = {Mechanisms of Ageing and Development},
+	author = {Meier-Ruge, W. and Hunziker, O. and Schulz, U. and Tobler, H. -J. and Schweizer, A.},
+	month = sep,
+	year = {1980},
+	pages = {233--243},
+	file = {ScienceDirect Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/ZQSGS9QA/Meier-Ruge et al. - 1980 - Stereological changes in the capillary network and.pdf:application/pdf;ScienceDirect Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/L3SL7MFX/0047637480901232.html:text/html}
+}
+
+@article{denk_influence_2011,
+	title = {The influence of white matter fibre orientation on {MR} signal phase and decay},
+	volume = {24},
+	issn = {1099-1492},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/nbm.1581/abstract},
+	doi = {10.1002/nbm.1581},
+	abstract = {MRI phase images of the brain exhibit excellent contrast and high signal-to-noise ratio. It has been shown recently that the phase contrast not only depends on a tissue's magnetic susceptibility but also on its architecture, which offers new ways of studying biological tissues in vivo. We combined diffusion tensor imaging and multi-echo susceptibility-weighted imaging to investigate the relationship between white matter fibre orientation and gradient-echo phase and magnitude. The local angle between white matter fibres and the main magnetic field was computed from the principal diffusion direction. The phase and signal decay of the gradient-echo images revealed a characteristic relationship with fibre orientation. The phase is in agreement with a recently reported model of cerebral white matter phase contrast in MRI. Copyright © 2010 John Wiley \& Sons, Ltd.},
+	language = {en},
+	number = {3},
+	urldate = {2017-05-10},
+	journal = {NMR Biomed.},
+	author = {Denk, Christian and Torres, Enedino Hernandez and MacKay, Alex and Rauscher, Alexander},
+	month = apr,
+	year = {2011},
+	keywords = {diffusion tensor imaging, R2*, MRI phase contrast, susceptibility-weighted phase imaging, Brain, White matter},
+	pages = {246--252},
+	file = {Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/HGJJ3WIC/Denk et al. - 2011 - The influence of white matter fibre orientation on.pdf:application/pdf;Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/X7JRQJPD/abstract.html:text/html}
+}
+
+@article{lee_t2*-based_2011,
+	title = {T2*-based fiber orientation mapping},
+	volume = {57},
+	issn = {1095-9572},
+	doi = {10.1016/j.neuroimage.2011.04.026},
+	abstract = {Recent MRI studies at high field have observed that, in certain white matter fiber bundles, the signal in T(2)*-weighted MRI (i.e. MRI sensitized to apparent transverse relaxivity) is dependent on fiber orientation θ relative to B(0). In this study, the characteristics of this dependency are quantitatively investigated at 7 T using ex-vivo brain specimens, which allowed a large range of rotation angles to be measured. The data confirm the previously suggested variation of R(2)* (=1/T(2)*) with θ and also indicate that this dependency takes the shape of a combination of sin2θ and sin4θ functions, with modulation amplitudes (=ΔR(2)*) reaching 6.44±0.15 Hz (or ΔT(2)*=2.91±0.33 ms) in the major fiber bundles of the corpus callosum. This particular dependency can be explained by a model of local, sub-voxel scale magnetic field changes resulting from magnetic susceptibility sources that are anisotropic. As an illustration of a potential use of the orientation dependence of R(2)*, the feasibility of generating fiber orientation maps from R(2)* data is investigated.},
+	language = {eng},
+	number = {1},
+	journal = {Neuroimage},
+	author = {Lee, Jongho and van Gelderen, Peter and Kuo, Li-Wei and Merkle, Hellmut and Silva, Afonso C. and Duyn, Jeff H.},
+	month = jul,
+	year = {2011},
+	pmid = {21549203},
+	pmcid = {PMC3119254},
+	keywords = {Humans, Magnetic Resonance Imaging, Adult, Brain Mapping, Anisotropy, Image Processing, Computer-Assisted},
+	pages = {225--234}
+}
+
+@article{wharton_fiber_2012,
+	title = {Fiber orientation-dependent white matter contrast in gradient echo {MRI}},
+	volume = {109},
+	issn = {0027-8424},
+	url = {https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3494918/},
+	doi = {10.1073/pnas.1211075109},
+	abstract = {Recent studies have shown that there is a direct link between the orientation of the nerve fibers in white matter (WM) and the contrast observed in magnitude and phase images acquired using gradient echo MRI. Understanding the origin of this link is of great interest because it could offer access to a new diagnostic tool for investigating tissue microstructure. Since it has been suggested that myelin is the dominant source of this contrast, creating an accurate model for characterizing the effect of the myelin sheath on the evolution of the NMR signal is an essential step toward fully understanding WM contrast. In this study, we show by comparison of the results of simulations and experiments carried out on human subjects at 7T, that the magnitude and phase of signals acquired from WM in vivo can be accurately characterized by (i) modeling the myelin sheath as a hollow cylinder composed of material having an anisotropic magnetic susceptibility that is described by a tensor with a radially oriented principal axis, and (ii) adopting a two-pool model in which the water in the sheath has a reduced T2 relaxation time and spin density relative to its surroundings, and also undergoes exchange. The accuracy and intrinsic simplicity of the hollow cylinder model provides a versatile framework for future exploitation of the effect of WM microstructure on gradient echo contrast in clinical MRI.},
+	number = {45},
+	urldate = {2017-11-24},
+	journal = {Proc Natl Acad Sci U S A},
+	author = {Wharton, Samuel and Bowtell, Richard},
+	month = nov,
+	year = {2012},
+	pmid = {23091011},
+	pmcid = {PMC3494918},
+	pages = {18559--18564},
+	file = {PubMed Central Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/K7UHKC6V/Wharton and Bowtell - 2012 - Fiber orientation-dependent white matter contrast .pdf:application/pdf}
+}
+
+@article{markuerkiaga_cortical_2016,
+	title = {A cortical vascular model for examining the specificity of the laminar {BOLD} signal},
+	volume = {132},
+	issn = {1053-8119},
+	url = {http://www.sciencedirect.com/science/article/pii/S1053811916001919},
+	doi = {10.1016/j.neuroimage.2016.02.073},
+	abstract = {Blood oxygenation level dependent (BOLD) functional MRI has been used for inferring layer specific activation in humans. However, intracortical veins perpendicular to the cortical surface are suspected to degrade the laminar specificity as they drain blood from the microvasculature and BOLD signal is carried over from lower to upper cortical layers on its way to the pial surface. In this work, a vascular model of the cortex is developed to investigate the laminar specificity of the BOLD signal for Spin Echo (SE) and Gradient Echo (GE) following the integrative model presented by Uludağ et al. (2009). The results of the simulation show that the laminar point spread function (PSF) of the BOLD signal presents similar features across all layers. The PSF for SE is highly localised whereas for GE there is a flat tail running to the pial surface, with amplitude less than a quarter of the response from the layer itself. Consequently the GE response at any layer will also contain a contribution accumulated from all lower layers.},
+	urldate = {2018-02-08},
+	journal = {NeuroImage},
+	author = {Markuerkiaga, Irati and Barth, Markus and Norris, David G.},
+	month = may,
+	year = {2016},
+	keywords = {Gradient echo, Layer specific BOLD fMRI, Spatial specificity, Spin echo, Vascular cortical model},
+	pages = {491--498},
+	file = {ScienceDirect Full Text PDF:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/DAZR7CEU/Markuerkiaga et al. - 2016 - A cortical vascular model for examining the specif.pdf:application/pdf;ScienceDirect Snapshot:/home/coopar7/.zotero/zotero/s6m2bw0d.default/zotero/storage/USC2UEGI/S1053811916001919.html:text/html}
+}
+
+@article{cheng_limitations_2009,
+	title = {Limitations of {Calculating} {Field} {Distributions} and {Magnetic} {Susceptibilities} in {MRI} using a {Fourier} {Based} {Method}},
+	volume = {54},
+	issn = {0031-9155},
+	url = {http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2962550/},
+	doi = {10.1088/0031-9155/54/5/005},
+	abstract = {A discrete Fourier based method for calculating field distributions and local magnetic susceptibility in MRI is carefully studied. Simulations suggest that the method based on discrete Greens functions in both 2D and 3D spaces has less error than the method based on continuous Greens functions. The 2D field calculations require the correction of the “Lorentz disk, which is similar to the Lorentz sphere term in the 3D case. A standard least squares fit is proposed for the extraction of susceptibility for a single object from MR images. Simulations and a phantom study confirm both the discrete method and the feasibility of the least squares fit approach. Finding accurate susceptibility values of local structures in the brain from MR images may be possible with this approach in the future.},
+	number = {5},
+	urldate = {2016-11-30},
+	journal = {Phys Med Biol},
+	author = {Cheng, Yu-Chung N. and Neelavalli, Jaladhar and Haacke, E. Mark},
+	month = mar,
+	year = {2009},
+	pmid = {19182322},
+	pmcid = {PMC2962550},
+	pages = {1169--1189},
+	file = {PubMed Central Full Text PDF:C\:\\Users\\Jonathan\\Zotero\\storage\\SGJBHVDA\\Cheng et al. - 2009 - Limitations of Calculating Field Distributions and.pdf:application/pdf}
+}
+
+
+@book{evans10,
+  abstract = {"This is the second edition of the now definitive text on partial differential equations (PDE). It offers a comprehensive survey of modern techniques in the theoretical study of PDE with particular emphasis on nonlinear equations. Its wide scope and clear exposition make it a great text for a graduate course in PDE. For this edition, the author has made numerous changes, including: a new chapter on nonlinear wave equations, more than 80 new exercises, several new sections, and a significantly expanded bibliography."--Publisher's description.},
+  added-at = {2015-07-29T08:37:26.000+0200},
+  address = {Providence, R.I.},
+  author = {Evans, Lawrence C.},
+  biburl = {https://www.bibsonomy.org/bibtex/2f5b120723ea78913e7e700ddd1a99301/ytyoun},
+  interhash = {59982ce44cc43813ccb14c0d647a59ee},
+  intrahash = {f5b120723ea78913e7e700ddd1a99301},
+  isbn = {9780821849743 0821849743},
+  keywords = {partial.differential.equations pde textbook},
+  publisher = {American Mathematical Society},
+  refid = {465190110},
+  timestamp = {2015-07-29T08:37:26.000+0200},
+  title = {Partial differential equations},
+  year = 2010
+}
+
+@incollection{macnamara_operator_2016,
+	series = {Scientific {Computation}},
+	title = {Operator {Splitting}},
+	isbn = {978-3-319-41587-1 978-3-319-41589-5},
+	url = {https://link.springer.com/chapter/10.1007/978-3-319-41589-5_3},
+	abstract = {Operator splitting is a numerical method of computing the solution to a differential equation. The splitting method separates the original equation into two parts over a time step, separately computes the solution to each part, and then combines the two separate solutions to form a solution to the original equation. A canonical example is splitting of diffusion terms and convection terms in a convection-diffusion partial differential equation. Related applications of splitting for reaction-diffusion partial differential equations in chemistry and in biology are emphasized here. The splitting idea generalizes in a natural way to equations with more than two operators. In all cases, the computational advantage is that it is faster to compute the solution of the split terms separately, than to compute the solution directly when they are treated together. However, this comes at the cost of an error introduced by the splitting, so strategies have been devised to control this error. This chapter introduces splitting methods and surveys recent developments in the area. An interesting perspective on absorbing boundary conditions in wave equations comes via Toeplitz-plus-Hankel splitting. One recent development, balanced splitting, deserves and receives special mention: it is a new splitting method that correctly captures steady state behavior.},
+	language = {en},
+	urldate = {2017-12-20},
+	booktitle = {Splitting {Methods} in {Communication}, {Imaging}, {Science}, and {Engineering}},
+	publisher = {Springer, Cham},
+	author = {MacNamara, Shev and Strang, Gilbert},
+	year = {2016},
+	doi = {10.1007/978-3-319-41589-5_3},
+	pages = {95--114},
+	file = {ch3-macnamara-strang.pdf:C\:\\Users\\Jonathan\\Zotero\\storage\\RUUXTTLI\\ch3-macnamara-strang.pdf:application/pdf;Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\FPMXALWE\\978-3-319-41589-5_3.html:text/html}
+}
+
+@article{strang_construction_1968,
+	title = {On the {Construction} and {Comparison} of {Difference} {Schemes}},
+	volume = {5},
+	issn = {0036-1429},
+	url = {http://epubs.siam.org/doi/abs/10.1137/0705041},
+	doi = {10.1137/0705041},
+	number = {3},
+	urldate = {2017-12-20},
+	journal = {SIAM J. Numer. Anal.},
+	author = {Strang, G.},
+	month = sep,
+	year = {1968},
+	pages = {506--517},
+	file = {Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\PZXQIIK4\\0705041.html:text/html;Strang1968.pdf:C\:\\Users\\Jonathan\\Zotero\\storage\\SC3EMTND\\Strang1968.pdf:application/pdf}
+}
+
+@article{Ger31,
+title =  {\"Uber die Abgrenzung der Eigenwerte einer Matrix},
+author = {S.~Gerschgorin},
+journal = {Bulletin de l'Acad\'emie des Sciences de l'URSS. Classe des sciences math\'ematiques et na},
+year = {1931},
+volume = {6},
+pages = {749--754},
+url = {http://mi.mathnet.ru/izv5235}
+}
+
+@article{eriksson_k_adaptive_2004,
+	series = {Major {Reference} {Works}},
+	title = {Adaptive {Computational} {Methods} for {Parabolic} {Problems}},
+	issn = {9780470091357},
+	url = {https://onlinelibrary.wiley.com/doi/full/10.1002/0470091355.ecm021},
+	doi = {10.1002/0470091355.ecm021},
+	abstract = {Abstract We present a unified methodology for the computational solution of parabolic systems of differential equations with adaptive selection of discretization in space and time, based on a posteriori error estimates involving residuals of computed solutions and stability factors/weights, obtained by solving an associated linearized dual problem. We define parabolicity as boundedness in time (up to logarithmic factors) of a certain strong stability factor measuring the L1(L2)?norm in time?space of the time derivative of the dual solution with L2?normalized initial data.},
+	urldate = {2018-04-12},
+	journal = {Encyclopedia of Computational Mechanics},
+	author = {{Eriksson K.} and {Johnson C.} and {Logg A.}},
+	month = nov,
+	year = {2004},
+	keywords = {a posteriori error estimate, a priori error estimate, adaptive error control, convection–diffusion reaction, dual linearized problem, finite elements, Galerkin method, parabolic, space–time discretization, stability factor/weight, stiff, time step control},
+	file = {Adaptive Computational Methods for Parabolic Problems K. Eriksson, C. Johnson and A. Logg.ps:C\:\\Users\\Jonathan\\Zotero\\storage\\RIVTHZK2\\Adaptive Computational Methods for Parabolic Problems K. Eriksson, C. Johnson and A. Logg.ps:application/postscript;Snapshot:C\:\\Users\\Jonathan\\Zotero\\storage\\Y826SZQ4\\0470091355.html:text/html}
+}
+
+@inproceedings{kuttler2011reaction,
+  title={Reaction-diffusion equations with applications},
+  author={Kuttler, Christina},
+  booktitle={Internet Seminar},
+  year={2011}
+}
+
+@book{liu_elementary_2009,
+	title = {Elementary {Feedback} {Stabilization} of the {Linear} {Reaction}-{Convection}-{Diffusion} {Equation} and the {Wave} {Equation}},
+	isbn = {978-3-642-04613-1},
+	abstract = {Unlike abstract approaches to advanced control theory, this volume presents key concepts through concrete examples. Once the basic fundamentals are established, readers can apply them to solve other control problems of partial differential equations.},
+	language = {en},
+	publisher = {Springer Science \& Business Media},
+	author = {Liu, Weijiu},
+	month = dec,
+	year = {2009},
+	note = {Google-Books-ID: YobRZn1HLhYC},
+	keywords = {Mathematics / Applied, Mathematics / Differential Equations / General, Mathematics / Mathematical Analysis, Technology \& Engineering / Automation}
+}

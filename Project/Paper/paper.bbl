@@ -1,0 +1,86 @@
+\begin{thebibliography}{10}
+
+\bibitem{torrey_bloch_1956}
+H.~C. Torrey, ``Bloch {Equations} with {Diffusion} {Terms},'' {\em Phys. Rev.},
+  vol.~104, pp.~563--565, Nov. 1956.
+
+\bibitem{cheng_limitations_2009}
+Y.-C.~N. Cheng, J.~Neelavalli, and E.~M. Haacke, ``Limitations of {Calculating}
+  {Field} {Distributions} and {Magnetic} {Susceptibilities} in {MRI} using a
+  {Fourier} {Based} {Method},'' {\em Phys Med Biol}, vol.~54, pp.~1169--1189,
+  Mar. 2009.
+
+\bibitem{kuttler2011reaction}
+C.~Kuttler, ``Reaction-diffusion equations with applications,'' in {\em
+  Internet Seminar}, 2011.
+
+\bibitem{liu_elementary_2009}
+W.~Liu, {\em Elementary {Feedback} {Stabilization} of the {Linear}
+  {Reaction}-{Convection}-{Diffusion} {Equation} and the {Wave} {Equation}}.
+\newblock Springer Science \& Business Media, Dec. 2009.
+\newblock Google-Books-ID: YobRZn1HLhYC.
+
+\bibitem{nguyen_finite_2014}
+D.~V. Nguyen, J.-R. Li, D.~Grebenkov, and D.~Le~Bihan, ``A finite elements
+  method to solve the {Bloch}–{Torrey} equation applied to diffusion magnetic
+  resonance imaging,'' {\em Journal of Computational Physics}, vol.~263,
+  pp.~283--302, Apr. 2014.
+
+\bibitem{moler_nineteen_1978}
+C.~Moler and C.~Van~Loan, ``Nineteen {Dubious} {Ways} to {Compute} the
+  {Exponential} of a {Matrix},'' {\em SIAM Rev.}, vol.~20, pp.~801--836, Oct.
+  1978.
+
+\bibitem{caliari_comparison_nodate}
+M.~Caliari, P.~Kandol, A.~Ostermann, and S.~Rainer, {\em Comparison of various
+  methods for computing the action of the matrix exponential}.
+\newblock submitted.
+
+\bibitem{moler_nineteen_2003}
+C.~Moler and C.~Van~Loan, ``Nineteen {Dubious} {Ways} to {Compute} the
+  {Exponential} of a {Matrix}, {Twenty}-{Five} {Years} {Later},'' {\em SIAM
+  Rev.}, vol.~45, pp.~3--49, Jan. 2003.
+
+\bibitem{al-mohy_computing_2011}
+A.~Al-Mohy and N.~Higham, ``Computing the {Action} of the {Matrix}
+  {Exponential}, with an {Application} to {Exponential} {Integrators},'' {\em
+  SIAM J. Sci. Comput.}, vol.~33, pp.~488--511, Jan. 2011.
+
+\bibitem{Ger31}
+S.~Gerschgorin, ``\"uber die abgrenzung der eigenwerte einer matrix,'' {\em
+  Bulletin de l'Acad\'emie des Sciences de l'URSS. Classe des sciences
+  math\'ematiques et na}, vol.~6, pp.~749--754, 1931.
+
+\bibitem{strang_construction_1968}
+G.~Strang, ``On the {Construction} and {Comparison} of {Difference}
+  {Schemes},'' {\em SIAM J. Numer. Anal.}, vol.~5, pp.~506--517, Sept. 1968.
+
+\bibitem{macnamara_operator_2016}
+S.~MacNamara and G.~Strang, ``Operator {Splitting},'' in {\em Splitting
+  {Methods} in {Communication}, {Imaging}, {Science}, and {Engineering}},
+  Scientific {Computation}, pp.~95--114, Springer, Cham, 2016.
+
+\bibitem{guardiola_monte_1998}
+R.~Guardiola, ``Monte carlo methods in quantum many-body theories,'' in {\em
+  Microscopic {Quantum} {Many}-{Body} {Theories} and {Their} {Applications}},
+  Lecture {Notes} in {Physics}, pp.~269--336, Springer, Berlin, Heidelberg,
+  1998.
+\newblock DOI: 10.1007/BFb0104529.
+
+\bibitem{eriksson_k_adaptive_2004}
+{Eriksson K.}, {Johnson C.}, and {Logg A.}, ``Adaptive {Computational}
+  {Methods} for {Parabolic} {Problems},'' {\em Encyclopedia of Computational
+  Mechanics}, Nov. 2004.
+
+\bibitem{ursell_diffusion_2007}
+T.~S. Ursell, ``The {Diffusion} {Equation} {A} {Multi}-dimensional
+  {Tutorial},'' {\em California Institute of Technology, Pasadena, Tech. Rep},
+  2007.
+
+\bibitem{holz_temperature-dependent_2000}
+M.~Holz, S.~R. Heil, and A.~Sacco, ``Temperature-dependent self-diffusion
+  coefficients of water and six selected molecular liquids for calibration in
+  accurate 1h {NMR} {PFG} measurements,'' {\em Phys. Chem. Chem. Phys.},
+  vol.~2, pp.~4740--4742, Jan. 2000.
+
+\end{thebibliography}
