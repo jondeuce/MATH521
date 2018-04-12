@@ -4,7 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{newunicodechar}
-\usepackage[margin=0.6in]{geometry}
+\usepackage[margin=0.6in,heightrounded]{geometry}
 \usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{amssymb}
@@ -33,6 +33,16 @@
 %\usepackage{textpos} %for positioning logo
 %\usepackage{animate} %for animated gif
 \usepackage{xcolor,xspace,soul} % Colour, spacing, and highlighting
+\usepackage{calc}
+
+% Spacing
+\setlength{\footskip}{\paperheight-(1.0in+\voffset+\topmargin+\headheight+\headsep+\textheight)-0.3in}
+\AtBeginDocument{%
+ \abovedisplayskip=8pt
+ \abovedisplayshortskip=8pt
+ \belowdisplayskip=8pt
+ \belowdisplayshortskip=8pt
+}
 
 % ************************************************
 % ***************** NEW COMMANDS *****************

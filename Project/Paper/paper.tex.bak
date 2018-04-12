@@ -31,6 +31,7 @@
 
 %TODO Abstract
 \vspace{-0.63cm}
+\TODO{final spacing}
 \textbf{In magnetic resonance imaging, insight into different imaging modalities can be gained through the simulation of the magnetic resonance signal measured by the scanner.
 This signal is modelled as the solution of the parabolic Bloch-Torrey partial differential equation.
 In this work, I compare various numerical techniques for solving the Bloch-Torrey equation in the presence of highly discontinuous data with the goal of optimising the trade-off between solution accuracy and computation time.}
@@ -57,7 +58,7 @@ In the continuum limit, the net magnetization \MM{} within a given region is mod
 \begin{equation}\label{BTreal}
 \begin{cases}
 \ddt{u} = D \Laplacian{u} - R u + \omega v\\%, \qquad u(\v{x},0) = M_x(\v{x},0) \\
-\hspace{0.5pt}\ddt{v} = D \Laplacian{v} - R v - \omega u\\%, \qquad \hspace{1pt} v(\v{x},0) = M_y(\v{x},0).
+\hspace{0.8pt}\ddt{v} = D \Laplacian{v} - R v - \omega u\\%, \qquad \hspace{1pt} v(\v{x},0) = M_y(\v{x},0).
 \end{cases}
 \end{equation}
 %
@@ -122,11 +123,15 @@ where $0 < R_{\text{tissue}} < R_{\text{blood}}$ are positive constants.
 \subsection*{Static solution}
 
 If $D = 0$, solutions to~\eqref{BTcplx} are simply complex exponentials
-\begin{equation}
+\begin{equation}\label{BTstatic_cplx}
 \Mxy(\v{x},t) = \Mxy_0 e^{-\CDecay(\v{x}) t} \\
 = \left(e^{-\rr{} t} \ab{\Mxy_0}\right) e^{i(\phi_0 - \ww{} t)},
 \end{equation}
 where we have written $\Mxy_0 = \ab{\Mxy_0} e^{i\phi_0}$ in polar form.
+Equivalently, the static solution may be written
+\begin{equation}\label{BTstatic_real}
+\Mt{} = e^{-\rr{} t} \Norm{\Mt{}_0} \begin{pmatrix} \cos(\phi_0 - \ww{}t) \\ \sin(\phi_0 - \ww{}t) \end{pmatrix}.
+\end{equation}
 In this form, it is clear to see that the magnitude $\ab{\Mxy} = \Norm{\Mt{}}$ of the transverse magnetization is exponentially damped at rate \rr{} and that the initial phase $\phi_0$ changes at the constant rate \ww{}, which can be interpreted as the transverse magnetization rotating about \Bo{} at a constant angular velocity at each point in space.
 
 \subsection*{Relation to the heat equation}
@@ -134,6 +139,20 @@ If $\CDecay = 0$, then~\eqref{BTreal} reduces to two uncoupled heat equations in
 This is equivalent to the limit as the magnetic field $B_0 \rightarrow 0$, as the magnetic moments of the spins are not forced to realign with an external field and instead are free to diffuse unhindered.
 
 Mathematically, we should expect that solutions to the Bloch-Torrey equation exhibit some of the same properties as solutions of the heat equation, such as exponential suppression of high frequency eigenmodes.
+
+\subsection*{Relation to the reaction-diffusion equation}
+The two-component reaction-diffusion equation, which models for example how the concentrations $u$ and $v$ of two chemicals change over time within a medium, is given by
+\begin{equation}\label{RxnDiff}
+\begin{cases}
+\ddt{u} = D \Laplacian{u} + F(u,v)\\
+\hspace{0.8pt}\ddt{v} = D \Laplacian{v} + G(u,v)\\
+\end{cases}
+\end{equation}
+where $F$ and $G$ govern local chemical reactions which may increase or decrease the concentrations $u$ and $v$ depending on whether they are being produced or consumed.
+
+The reaction-diffusion equation~\eqref{RxnDiff} corresponds directly to the Bloch-Torrey equation in the case of linear reaction terms $F = - R u + \omega v$ and $G = - R v - \omega u$.
+In this interpretation, \rr{} represents the local rate at which $u$ and $v$ are reacted away into waste products, and \ww{} represents the local rate at which $u$ reacts into $v$ and vice versa. 
+\TODO{double check this interpretation}
 
 \subsection*{Weak form}
 The coupled system of PDEs~\eqref{BTreal} can be written as
@@ -151,11 +170,11 @@ where $\uu{} = [u,v]^T$ and
     \end{pmatrix}.
 \end{align}
 
-Now, consider the vector test function $\v{v} = [w,z]^T$ where $w,z \in H^1$.
+Now, consider the vector test function $\v{v} = [w,z]^T$ where $w,z \in V = H^1$.
 Then, the weak form of~\eqref{BTvec} is given by
 \begin{align}\label{BTweak}
 \langle \v{v}, \ddt{\uu{}} \rangle
-&= - \langle \v{v}, A \uu{} \rangle, \quad \forall \v{v} \in H^1 \times H^1
+&= - \langle \v{v}, A \uu{} \rangle, \quad \forall \v{v} \in V\!\times V
 \end{align}
 where
 \begin{align*}
@@ -210,9 +229,11 @@ By linearity, we have that $\v{w}$ solves
 \hspace{3.2pt}\v{w} = \v{0} \qquad\hspace{8.3pt} \text{ in }\Omega,\quad t = 0.
 \end{cases}
 \end{align*}
-Now, we have that $\LTwoNorm{\v{w}} = 0$, and since we have shown that $\LTwoNorm{\uu{}}$ is non-increasing for all solutions \uu{} to~\eqref{BTvec}, it must be that $\LTwoNorm{\v{w}} \equiv 0$ for all time and therefore $\uu{}_1$ must equal $\uu{}_2$ almost everywhere for all time, a contradiction.
+Now, we have that $\LTwoNorm{\v{w}(t=0)} = 0$, and since we have shown that $\LTwoNorm{\uu{}}$ is non-increasing for all solutions \uu{} to~\eqref{BTvec}, it must be that $\LTwoNorm{\v{w}} \equiv 0$ for all time and therefore $\uu{}_1$ must equal $\uu{}_2$ almost everywhere for all time, a contradiction.
 
-%\subsection*{Existence}
+\subsection*{Existence and continuous dependence on data}
+Existence and continuous dependence on data of (weak) solutions to the Bloch-Torrey equation~\eqref{BTreal} follows directly from the analogy with the linear reaction-diffusion equations~\eqref{RxnDiff}.
+Such results are greatly detailed in many texts, such as for example~\cite{kuttler2011reaction} and ~\cite{liu_elementary_2009}, and I will not go into further details here, except to say that~\eqref{BTreal} is indeed well posed with Neumann boundary conditions on $\partial\Omega$.
 %\paragraph*{Theorem (Existence of Weak Solutions):}
 %Let $V,H$, be Hilbert spaces such that $V \subset H = H^* \subset V^*$ are dense inclusions, and let $A(\cdot,\cdot)$ be a continuous and coercive bilinear form on $V$.
 %Then the parabolic problem
@@ -222,9 +243,6 @@ Now, we have that $\LTwoNorm{\v{w}} = 0$, and since we have shown that $\LTwoNor
 %\end{align*}
 %for almost all $t \in ]0,T[$ admits a solution $u \in W(0,T,V) = \left\{ u \in L^2(0,T,V) \,\vert\, \partial_t u \in L^2(0,T,V^*)\right\}$ .
 %\paragraph*{Proof:} Theorem $7.1.3$ in~\cite{evans10}.
-
-\subsection*{Continuous dependence on data}
-\TODO{this}
 
 \section*{Methods}
 
@@ -243,22 +261,22 @@ Additionally, $\CDecay$ is discretised to the diagonal matrix operator $\CDecay^
 What results is the discrete system 
 %
 \begin{align}
-    \frac{\partial}{\partial t} \Mxy^h(t) &= -A^h \, \Mxy^h(t)\label{ImagSchrod_MatrixOdeSys} \\
+    \frac{\partial}{\partial t} \Mxy^h(t) &= -A^h \, \Mxy^h(t)\label{BT_FD} \\
     \Rightarrow \Mxy^h(t) &= e^{-A^ht} \, \Mxy^h(0),
- \label{ImagSchrod_MatrixExpSoln}
+ \label{BT_FDsoln}
 \end{align}
 %
 where $A^h = -D \Delta^h + \CDecay^h$ and the notation $e^{-A^ht}$ represents the \textit{matrix exponential}~\cite{moler_nineteen_1978} of the matrix $-A^ht$.
-In our case, although $A^h \in \mathbb{C}^{N^3\times N^3}$ where $N$ may be large, we need only compute the matrix exponential vector product - also known as the \textit{action} of the matrix exponential - and not $\exp(-A^ht)$ itself, which is in general full despite $A^h$ being
+In our case, although $A^h \in \mathbb{C}^{N^3\times N^3}$ where $N$ may be large, we need only compute the matrix exponential vector product -- also known as the \textit{action} of the matrix exponential -- and not $e^{-A^h t}$ itself, which is in general full despite $A^h$ being
 sparse~\cite{moler_nineteen_1978}.
 Algorithms for computing the action of the matrix exponential are known~\cite{caliari_comparison_nodate,moler_nineteen_2003}.
 I use the algorithm described by Higham et al.\@ in~\cite{al-mohy_computing_2011}, as well as their \textsc{Matlab}
 code \textit{expmv}.
 
 Note that although the periodic Laplacian operator $\Delta^h$ is singular due to the fact that the constant solution has eigenvalue zero, adding $\CDecay^h$ shifts the positive constant diagonal $6/h^2$ up by $R(\v{x}_i) + i \omega(\v{x}_i)$, thereby making the matrix $A^h$ strongly diagonally dominant and therefore non-singular by the Gershgorin circle theorem~\cite{Ger31}.
-Therefore, the solution~\eqref{ImagSchrod_MatrixExpSoln} to the system~\eqref{ImagSchrod_MatrixOdeSys} exists and is unique.
+Therefore, the solution~\eqref{BT_FDsoln} to the system~\eqref{BT_FD} exists and is unique.
 
-The resulting signal $S^h(T)$ is computed by integrating the discrete solution $\Mxy^h(T) = e^{-A^h T}\Mxy^h_0$ using the trapezoidal rule.
+The resulting signal $S^h(T)$ is computed by integrating the discrete solution $\Mxy^h(T) = e^{-A^h T}\Mxy^h_0$ using the trapezoidal rule and taking the absolute value of the result.
 
 \subsection*{Operator splitting methods}
 
@@ -278,10 +296,8 @@ where the approximation errors are incurred due to the fact that $T$ and $V$ are
 Were they to commute, both of these approximations would be exact.
 
 In our case, from equation~\eqref{BTcplx} we may take $A = T + V$ where $T = -D \Laplacian{}$ with periodic boundary conditions, and $V = \CDecay$.
-Then, the action of the evolution operators $e^{Dt\Delta}$ and
-$e^{-\CDecay t}$ in
-approximations~\eqref{EvolSplit_Order2}~and~\eqref{EvolSplit_Order3} are
-known~\cite{guardiola_monte_1998}
+Then, the action of the evolution operators $e^{Dt\Delta}$ and $e^{-\CDecay t}$ in approximations~\eqref{EvolSplit_Order2}~and~\eqref{EvolSplit_Order3} are
+known~\cite{guardiola_monte_1998}:
 %
 \begin{alignat}{2}
     e^{Dt\Delta} \Mxy_0(\v{x}) &= \Phi(\v{x},t) \conv \Mxy_0(\v{x}) \label{Evolution_Kinetic} \\
@@ -294,12 +310,12 @@ where $\Phi(\v{x},t)$ is the Gaussian kernel defined as
 \end{equation}
 %
 and $\conv$ denotes the convolution over space.
-Note that, as opposed to the solution~\eqref{ImagSchrod_MatrixExpSoln}, the solution~\eqref{Evolution_Kinetic} and~\eqref{Evolution_Potential} is extremely fast to compute.
+Note that, as opposed to the solution~\eqref{BT_FDsoln}, the solution~\eqref{Evolution_Kinetic} and~\eqref{Evolution_Potential} is extremely fast to compute.
 Equation~\eqref{Evolution_Kinetic} simply convolves the initial state with the Gaussian kernel,% (or equivalently, it applies uniform smoothing of width $\sigma = \sqrt{2Dt}$).
 which can be computed efficiently using the Fast Fourier Transform (FFT), since the boundary conditions are periodic.
 Equation~\eqref{Evolution_Potential} only involves exponentiation and multiplication, and thus is even faster to compute.
 
-The resulting signal $S^h(T)$, as in the case of the finite differences, is computed by integrating the resulting discrete solution $M^h(T)$ using the trapezoidal rule.
+The resulting signal $S^h(T)$, as in the case of the finite differences, is computed by integrating the resulting discrete solution $M^h(T)$ using the trapezoidal rule and taking the absolute value of the result.
 %The approximate solutions given by equations~\eqref{EvolSplit_Order2}
 %and~\eqref{EvolSplit_Order3} can be thought of as follows: instead of
 %allowing decay and diffusion to occur simultaneously using $\hat{A}$,
@@ -309,20 +325,149 @@ The resulting signal $S^h(T)$, as in the case of the finite differences, is comp
 %reached.
 
 \subsection*{Finite element methods}
+The weak form~\eqref{BTweak} of the Bloch-Torrey equation is discretised using the method of lines and linear finite elements to obtain
+\begin{align}\label{BTweak}
+\langle \v{v}^h, \ddt{\uu{}}^h \rangle
+&= - \langle \v{v}^h, A^h \uu{}^h \rangle, \quad \forall \v{v}^h \in V^h\!\times V^h
+\end{align}
+where $V^h \subset V = H^1$ is the space of linear finite elements on $\Omega^h \subset \Omega$.
+Note that $\Omega^h$ is only a proper subset of $\Omega$ when the cylinder interior is included in the domain.
+Otherwise, the discretisation is non-conforming.
+
+Writing $\uu{}^h = \begin{pmatrix} u^h \\ v^h \end{pmatrix}$ with $u^h, v^h$ the vectors of nodal values of each PDE, the resulting linear system is
+\begin{align}\label{BTfem}
+M^h \ddt{\uu{}}^h = -A^h \uu{}^h
+\end{align}
+where
+\vspace*{-0.3cm}
+\begin{gather*}
+A^h = DK^h + R^h + W^h \\
+M^h =
+\begin{pmatrix}
+m^h & 0 \\ 
+0 & m^h
+\end{pmatrix} \quad
+K^h =
+\begin{pmatrix}
+k^h & 0 \\ 
+0 & k^h
+\end{pmatrix}\\
+R^h =
+\begin{pmatrix}
+r^h & 0 \\ 
+0 & r^h
+\end{pmatrix} \quad
+W^h =
+\begin{pmatrix}
+0 & -w^h \\ 
+w^h & 0
+\end{pmatrix}
+\end{gather*}
+where $m^h$ and $k^h$ are the usual mass and stiffness matrices for each of the coupled PDEs, and
+\begin{equation*}
+r^h_{ij} \coloneqq \int_\Omega R \,\phi_i \,\phi_j \dx{x}, \quad w^h_{ij} \coloneqq \int_\Omega \omega \,\phi_i \,\phi_j \dx{x}.
+\end{equation*}
+Since \rr{} is strictly positive, $r^h$ is symmetric positive definite as
+\begin{align*}
+(\uu{}^h)^T r^h \uu{}^h
+&= \sum_{i,j} \uu{}^h_i \left( \int_\Omega R \, \phi_i \, \phi_j \dx{x} \right) \uu{}^h_j \\
+&= \int_\Omega R \left( \textstyle\sum_{i} \uu{}^h_i \, \phi_i\right)^2 \dx{x}
+\geq 0.
+\end{align*}
+Although $w^h$ is not positive definite and $A^h$ is not symmetric, $A^h$ is still positive definite in the sense that
+\begin{align*}
+(\uu{}^h)^T A^h \uu{}^h = D (\uu{}^h)^T K^h \uu{}^h +(\uu{}^h)^T R^h \uu{}^h \geq 0
+\end{align*}
+by the positive definiteness of $K^h$ and $R^h$.
+This is the analogous property to the coercivity of $\langle \uu{}, A \uu{} \rangle$ in the weak form~\eqref{Acoercive}.
+
+\subsubsection*{Time stepping for finite element methods}
+Asymmetric positive definite matrices do not in general have real eigenvalues.
+However the real part of their eigenvalues are all strictly positive.
+Therefore, time stepping methods for the system~\eqref{BTfem} should be chosen to be at least strongly $A$-stable so that iterates of the numerical solution decay at an exponential rate.
+The two time stepping methods which will be implemented are the $L$-stable backward Euler scheme and the $A$-stable \textsc{TRBDF-2} method with parameter $\alpha = 2-\sqrt{2}$.
+Additionally, the backward Euler scheme was chosen for its simplicity of implementation, and the \textsc{TRBDF-2} method was chosen for its second order accuracy in time.
+
+\paragraph*{Backward Euler method:} discretising the system~\eqref{BTfem} in time with the backward Euler method results in the time stepping iteration
+\begin{equation}\label{BEtimestep}
+\left(M^h + \delta t A^h \right) \uu{}_+ = M^h \uu{}_0
+\end{equation}
+
+\paragraph*{\textsc{TRBDF-2} method:} discretising the system~\eqref{BTfem} in time with the \textsc{TRBDF-2} method with parameter $\alpha = 2-\sqrt{2}$ results in the time stepping scheme
+\begin{align}\label{TRtimestep}
+\left(M^h + c_0 \delta t A^h \right) \uu{}_{\alpha} &= M^h \uu{}_0 - c_0 \delta t A^h \uu{}_0\\
+\left(M^h + c_0 \delta t A^h \right) \uu{}_+ &= c_+ M^h\uu{}_\alpha + c_- M^h \uu{}_0
+\end{align}
+where $c_0 = 1-1/\sqrt{2}, c_\pm = (1\pm\sqrt{2})/2$.
+
+For both time stepping methods, the resulting signal $S^h(T)$ is computed by integrating the final discrete $x$- and $y$-solution components $u^h(T)$ and $v^h(T)$ and taking the magnitude of the resulting vector $S^h(T) = \Norm{[S_x^h(T),\,S_y^h(T)]^T}$.
+
+\subsubsection*{Adaptive finite elements for the backward Euler method}
+For the backward Euler method, I will employ a simple \textit{a-posteriori} error estimate for the $y$-component of the signal $S_y(T)$ in order to create error indicators $\eta_{\mathcal{T}}$ on each tetrahedron $\mathcal{T}$ for use in adaptive finite elements.
+This simple estimate will consider only errors due to the time stepping scheme, and not errors due to the discretisation itself.
+The $y$-component is used as opposed to the full signal due to the fact that $S(T)$ is a non-linear functional of the solution, whereas $S_y(T)$ is a linear functional.
+Moreover, since we take $(u_0,v_0) = (0,1)$, in practice the magnitude of $S_y(T)$ remains much larger than that of $S_x(T)$ for the simulation time $T$, and so the error in $S_y(T)$ is a good estimate for the error in $S(T)$.
+
+Consider the linear system of ODEs
+\begin{equation}\label{LinODE}
+\begin{cases}
+\hspace{9pt}\ddt{u} = B u\quad \text{for}\; 0 < t \leq T \\
+u(0) = u_0
+\end{cases}
+\end{equation}
+and the corresponding time-reversed dual problem
+\begin{equation}\label{LinODEdual}
+\begin{cases}
+\hspace{3.5pt}-\ddt{\phi} = B^T \phi\quad \text{for}\; 0 \leq t < T \\
+\phi(T) = \phi_0,
+\end{cases}
+\end{equation}
+and suppose we are interested in bounding the error of a quantity of interest $Q$ which is a linear functional of the solution at time $T$, taking the form $$Q(T) = \psi \cdot u(T)$$ where $\psi$ is a known constant vector.
+
+Then, let equation~\eqref{LinODE} be solved using the backward Euler method, with unequal time steps allowed, and discretise $u$ in time using the $\dx{G}(0)$ discontinuous Galerkin method of order zero, which results in the discrete solution $u^h$ being left-continuous piecewise constant on each time interval $(t_{n-1},t_n]$.
+
+Defining $e(T) = Q(T) - Q^h(T)$, it is shown in Section 4 of~\cite{eriksson_k_adaptive_2004} that if $\phi_0$ is set to equal $\psi$ then
+\begin{align}\label{Serrbound}
+\ab{e(T)\cdot\psi} \leq E_u \int_0^T \Norm{\ddt{\phi}}dt
+\leq E_u \sqrt{T \int_0^T \Norm{\ddt{\phi}}^2 dt}
+\end{align}
+where the second inequality follows from the Cauchy-Schwarz inequality and $E_u \coloneqq \max_{n} \Norm{u^h(t_n) - u^h(t_{n-1})}$.
+Note also that $\ddt{\phi}=-B^T\phi$ may be used in computing the time integral of $\Norm{\ddt{\phi}}$.
+
+The integral over $\Norm{\ddt{\phi}}^2$ may be split into a sum of integrals over the components $(\ddt{\phi})_i^2$; define the root mean square of the derivative components $q_i \coloneqq \sqrt{\frac{1}{T}\int_0^T (\ddt{\phi})_i^2 \, dt}$.
+Then, identifying the nodal values $q_i$ with an appropriately defined interpolated function $q(\v{x})$, the error indicator $\eta_{\mathcal{T}}$ is chosen to be
+\begin{align}\label{error_ind}
+\eta_{\mathcal{T}} = \frac{1}{\ab{{\mathcal{T}}}} \int_{\mathcal{T}} E_u \, T \, q(\v{x}) \dx{x}.
+\end{align}
+In order to use this estimate for the weak form of the Bloch-Torrey equation~\eqref{BTfem} with the goal of estimating the error in $Q(T)=S_y(T)$, $\psi = \v{w}_{v^h}$ is set to be the vector of quadrature weights for the numerical integration of the $y$-component $v^h$ of $\uu{}^h$, and $B$ is set to $-(M^h)^{-1}A^h$.
+
+Then, the change of variables $\phi = M^h \Phi$ results in the time-reversed dual problem
+\begin{equation}\label{BTfemdual}
+\begin{cases}
+-M^h\ddt{\Phi} = -(A^h)^T \Phi\qquad \text{for}\; 0 \leq t < T \\
+\hspace{12.2pt}\Phi(T) = (M^h)^{-1} \v{w}_{v^h}
+\end{cases}
+\end{equation}
+which may be solved with any time stepping method.
+Note additionally that $\ddt{\phi} = M^h\ddt{\Phi} = (A^h)^T\Phi$ is still inexpensive to compute.
 
 \section*{Numerical experiments}
 
-\section*{Results}
+\subsection*{Gold standard solution}
+As the Bloch-Torrey equation has no closed form solution, even for this simple geometry, the solution signal $S(T)$ which will be used for comparison will simply be the finite element solution computed from the system~\eqref{BTfem} on a fine mesh with small time steps\TODO{how fine and how small?}.
+In fact, two different gold standard signals $S(T)$ will be computed: first, with the cylinder interior excluded from the domain and Neumann boundary conditions imposed on the cylinder wall, $S_{\textsc{hollow}}(T)$; second, with the interior of the cylinder included in the domain and no boundary conditions imposed on the cylinder wall, $S_{\textsc{union}}(T)$.
 
-\section*{Discussion}
+\subsection*{Error bound efficiency}
+\TODO{make plot of error bound vs. true error and discuss}
 
-We are now in a position to solve the Bloch-Torrey equation
-efficiently. We begin by discretizing the
+\section*{Results and discussion}
+
+We are now in a position to solve the Bloch-Torrey equation efficiently. We begin by discretizing the
 $3\times 3\times \SI{3}{\milli\meter^3}$
 voxel into $N^3$ subvoxels. The subvoxels need to be
 small enough that diffusion effects can be captured during each time
 step, but large enough that solving the system is still
-computationally feasible. The root mean square distance travelled by a
+computationally feasible. The root mean square (RMS) distance travelled by a
 freely diffusing particle in $n$-dimensions
 is~\cite{ursell_diffusion_2007}
 %
@@ -340,6 +485,17 @@ capturing diffusion effects while being computationally feasible.
 Algorithm~\ref{fig:algorithm1} details how to compute the signal at
 time TE using the approximate evolution equation
 \eqref{EvolSplit_Order2}.
+
+\subsection*{Boundary conditions}
+Intuitively, periodic vs.\@ Neumann boundary conditions on the boundary of the cubic $\Omega$ should have little effect on the resulting signal $S(T)$.
+Firstly, because the RMS diffusion distance~\eqref{RMS_Distance} is much smaller than the size of the domain, and therefore only a small fraction of the signal $S(T)$ should be affected.
+Secondly, diffusing particles being reflected off of the boundary (the Neumann boundary condition) could similarly be intepreted as a particle from the other side of the domain diffusing into the region (periodic boundary conditions).
+So, as long \rr{} and \ww{} do not change significantly from one boundary edge to the other, the choice of boundary condition should be minimal.
+This intuitive result is seen in figure \TODO{figure ref + explanation}
+
+This argument does not apply to the cylinder boundary, where \rr{} and \ww{} vary discontinuously.
+In this case, unless the vessel is sufficiently small so as to have minimal contribution to the total signal, one should expect that the Neumann boundary conditions on the cylinder wall in the FEM case vs.\@ no boundary conditions applied in the finite differences case should have a non-negligible effect.
+
 
 %
 %In the brain's white matter these simulations are challenging to perform due to structures such as blood vessels and capillaries having different magnetic properties than the surrounding tissue, causing \rr{} and \ww{} to be only piecewise smooth with sharp changes at blood-tissue boundaries.
@@ -482,16 +638,8 @@ Acknowledgements
 \begin{minipage}{1.0\textwidth}
     \centering
     \includegraphics[keepaspectratio=true,width=1.0\textwidth]{spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv}
-    \caption{Comparison between solving the Bloch-Torrey equation
-          exactly using the method of lines in conjunction with
-          Higham's \textit{expmv}
-          integrator~\cite{al-mohy_computing_2011}, and solving the
-          Bloch-Torrey equation approximately using the two-step
-          approximate solution as described in
-          Algorithm~\ref{fig:algorithm1}. The signal decay through
-          time calculation shows strong agreement between the two
-          methods, with error values of 0.064\% +/- 0.045\%; the
-          maximum error value of 0.14\% occurs at $\unit[60]{ms}$.}
+    \caption{Comparison between solving the Bloch-Torrey equation exactly using the method of lines in conjunction with Higham's \textit{expmv} integrator~\cite{al-mohy_computing_2011}, and solving the Bloch-Torrey equation approximately using the two-step approximate solution as described in Algorithm~\ref{fig:algorithm1}.
+    The signal decay through time calculation shows strong agreement between the two methods, with error values of 0.064\% +/- 0.045\%; the maximum error value of 0.14\% occurs at $\unit[60]{ms}$.}
     \label{fig:comparison}
 \end{minipage}
 \end{figure}
