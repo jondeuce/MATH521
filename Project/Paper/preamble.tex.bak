@@ -38,10 +38,10 @@
 % Spacing
 \setlength{\footskip}{\paperheight-(1.0in+\voffset+\topmargin+\headheight+\headsep+\textheight)-0.3in}
 \AtBeginDocument{%
- \abovedisplayskip=8pt
- \abovedisplayshortskip=8pt
- \belowdisplayskip=8pt
- \belowdisplayshortskip=8pt
+ \abovedisplayskip=7.2pt
+ \abovedisplayshortskip=7.2pt
+ \belowdisplayskip=7.2pt
+ \belowdisplayshortskip=7.2pt
 }
 
 % ************************************************

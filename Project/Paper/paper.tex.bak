@@ -30,26 +30,25 @@
 %{\let\thefootnote\relax\footnote{{\textsuperscript{†}e-mail: jdoucette@phas.ubc.ca}}}
 
 %TODO Abstract
-\vspace{-0.63cm}
-\TODO{final spacing}
+\vspace{-0.64cm}
 \textbf{In magnetic resonance imaging, insight into different imaging modalities can be gained through the simulation of the magnetic resonance signal measured by the scanner.
 This signal is modelled as the solution of the parabolic Bloch-Torrey partial differential equation.
-In this work, I compare various numerical techniques for solving the Bloch-Torrey equation in the presence of highly discontinuous data with the goal of optimising the trade-off between solution accuracy and computation time.}
+In this work, I compare various numerical techniques for solving the Bloch-Torrey equation in the presence of highly discontinuous data, with the goal of optimising the trade-off between solution accuracy and computation time.}
 
 \section*{Introduction}
-In magnetic resonance imaging (MRI), insight into different imaging modalities can be gained through the simulation of the magnetic resonance (MR) signal from first principles.
-The MR signal which is measured by an MRI scanner within a given region  is directly proportional to the magnitude of the net magnetization vector \MM{} within that region.
+In magnetic resonance imaging (MRI), the magnetic resonance (MR) signal within a given region which is measured by an MRI scanner is directly proportional to the magnitude of the net magnetization vector \MM{} within that region.
 In tissue, \MM{} arises due to the superposition of the magnetic moments of water molecules, also known as \textit{spins} in MRI nomenclature.
-Ordinarily, \MM{} is zero in tissue as spins are randomly oriented and therefore their vector sum is zero on the average.
-In MRI, however, there is a large and constant external magnetic field $\v{B_0} = B_0 \uv{z}$ which forces the alignment of the magnetized spins with $\v{B_0}$, taken here to be along the $z$-direction.
+Ordinarily, \MM{} is zero in tissue, as spins are randomly oriented and therefore their vector sum is zero on the average.
+In MRI, however, there is a large and constant external magnetic field $\Bo{}$ which forces the alignment of the magnetized spins with $\v{B_0}$.
 This allows for the measurement, and importantly, the manipulation of the otherwise negligible net magnetization \MM{} of the spins.
 
-In one common type of MRI scan, a \textit{gradient echo} scan, \MM{} is initially flipped into the $xy$-plane through the application of a radio frequency (RF) magnetic pulse.
+In one common type of MRI scan, a \textit{gradient echo} scan, \MM{} is initially flipped into the transverse plane through the application of a radio frequency (RF) magnetic pulse.
 Immediately, \MM{} begins to realign with $\v{B_0}$ exponentially quickly.
-The rate \rr{} at which this realignment occurs, however, depends on local tissue properties. % and therefore the realignment occurs at different rates at different locations in space.
+The rate \rr{} at which this realignment occurs, however, depends on local tissue properties.
+% and therefore the realignment occurs at different rates at different locations in space.
 Additionally, there is a characteristic precession of \MM{} about $\v{B_0}$ as it realigns.
-This precession occurs at a rate \ww{} which, too, depends on the magnetic properties of the environment.
-Lastly, spins are free to diffuse within their environment while realigning, which means that they will see varying \rr{} and \ww{} as they move through the tissue.
+This precession occurs at a rate \ww{} which, too, depends on local tissue properties.
+Lastly, spins are free to diffuse within their environment while realigning, meaning they will see varying \rr{} and \ww{} as they move through the tissue.
 
 \subsection*{The Bloch-Torrey equation}
 
@@ -96,21 +95,21 @@ For a cylinder of radius $a$, we have that
 \begin{equation}\label{omega}
 \ww{} = 
 \begin{cases}
-\frac{\chi B_0}{2}\sin^2\theta \frac{a^2}{x^2+y^2} \frac{y^2-x^2}{x^2+y^2}, \hspace{0.17cm} \text{outside cylinder}\\
-\frac{\chi B_0}{6} \left(3\cos^2\theta - 1\right), \qquad \text{inside cylinder}
+\frac{\chi\gamma B_0}{2}\sin^2\theta \frac{a^2}{x^2+y^2} \frac{y^2-x^2}{x^2+y^2}, \hspace{0.17cm} \text{outside cylinder}\\
+\frac{\chi\gamma B_0}{6} \left(3\cos^2\theta - 1\right), \qquad \text{inside cylinder}
 \end{cases}
 \end{equation}
 %
-where $\theta$ is the angle between the cylinder axis and \Bo{}.
-An example cross section of \ww{} can be seen in Figure~\ref{fig:geometry}.
-Note that $\ww{}$ is constant within the cylinder, and jumps discontinuously to a smooth solution outside of the cylinder.
+where $\theta$ is the angle between the cylinder axis and \Bo{}, and the transverse coordinates $x$ and $y$ are measured with respect to the cylinder axis.
+Example cross sections of \ww{} for varying $\theta$ can be seen in Figure~\ref{fig:geometry}.
+Note that $\ww{}$ is constant within the cylinder, and jumps discontinuously to an otherwise smooth function outside of the cylinder.
 
-The transverse relaxation rate \rr{} is taken to be piecewise constant values inside and outside of the cylinder,
+The transverse relaxation rate \rr{} is piecewise constant, taking separate values inside and outside of the cylinder:
 \begin{equation}\label{r2decay}
 \rr{} = 
 \begin{cases}
 R_{\text{tissue}}, \quad \text{outside cylinder} \\
-R_{\text{blood}}, \quad\hspace{0.02cm} \text{inside cylinder.}
+R_{\text{blood}}, \quad\hspace{0.02cm} \text{inside cylinder,}
 \end{cases}
 \end{equation}
 where $0 < R_{\text{tissue}} < R_{\text{blood}}$ are positive constants.
@@ -134,11 +133,11 @@ Equivalently, the static solution may be written
 \end{equation}
 In this form, it is clear to see that the magnitude $\ab{\Mxy} = \Norm{\Mt{}}$ of the transverse magnetization is exponentially damped at rate \rr{} and that the initial phase $\phi_0$ changes at the constant rate \ww{}, which can be interpreted as the transverse magnetization rotating about \Bo{} at a constant angular velocity at each point in space.
 
-\subsection*{Relation to the heat equation}
-If $\CDecay = 0$, then~\eqref{BTreal} reduces to two uncoupled heat equations in the transverse magnetization components $u$ and $v$.
-This is equivalent to the limit as the magnetic field $B_0 \rightarrow 0$, as the magnetic moments of the spins are not forced to realign with an external field and instead are free to diffuse unhindered.
-
-Mathematically, we should expect that solutions to the Bloch-Torrey equation exhibit some of the same properties as solutions of the heat equation, such as exponential suppression of high frequency eigenmodes.
+%\subsection*{Relation to the heat equation}
+%If $\CDecay = 0$, then~\eqref{BTreal} reduces to two uncoupled heat equations in the transverse magnetization components $u$ and $v$.
+%This is equivalent to the limit as the magnetic field $B_0 \rightarrow 0$, as the magnetic moments of the spins are not forced to realign with an external field and instead are free to diffuse unhindered.
+%
+%Mathematically, we should expect that solutions to the Bloch-Torrey equation exhibit some of the same properties as solutions of the heat equation, such as exponential suppression of high frequency eigenmodes.
 
 \subsection*{Relation to the reaction-diffusion equation}
 The two-component reaction-diffusion equation, which models for example how the concentrations $u$ and $v$ of two chemicals change over time within a medium, is given by
@@ -152,7 +151,7 @@ where $F$ and $G$ govern local chemical reactions which may increase or decrease
 
 The reaction-diffusion equation~\eqref{RxnDiff} corresponds directly to the Bloch-Torrey equation in the case of linear reaction terms $F = - R u + \omega v$ and $G = - R v - \omega u$.
 In this interpretation, \rr{} represents the local rate at which $u$ and $v$ are reacted away into waste products, and \ww{} represents the local rate at which $u$ reacts into $v$ and vice versa. 
-\TODO{double check this interpretation}
+%\TODO{double check this interpretation}
 
 \subsection*{Weak form}
 The coupled system of PDEs~\eqref{BTreal} can be written as
@@ -257,7 +256,8 @@ It should be noted that this second order consistency will not actually be obser
 
 Boundary conditions are taken to be periodic on the boundaries of the unit cube~\cite{nguyen_finite_2014}, as opposed to Neumann boundary conditions on the boundary of the cube and cylinder.
 This is due to simplicity of implementation and the inherent limitations of finite differences methods on irregular domains.
-Additionally, $\CDecay$ is discretised to the diagonal matrix operator $\CDecay^h$ such that $\CDecay^h_{ii}$ = $\CDecay(\v{x_i})$, where $\v{x_i}$ is a point on the discretised grid.
+
+$\CDecay$ is discretised to the diagonal matrix operator $\CDecay^h$ such that $\CDecay^h_{ii}$ = $\CDecay(\v{x_i})$, where $\v{x_i}$ is a point on the discretised grid.
 What results is the discrete system 
 %
 \begin{align}
@@ -281,10 +281,10 @@ The resulting signal $S^h(T)$ is computed by integrating the discrete solution $
 \subsection*{Operator splitting methods}
 
 Operator splitting methods for parabolic PDEs are useful when a differential operator has no closed form operator exponential, but can be split into a sum of operators which do.
-The operator exponential is the formal equivalent of the matrix exponential for differential operators, namely it is the operator defined such that $\uu{}(\v{x},t) = e^{-At}\uu{}_0(\v{x})$, where $\partial_t\uu(\v{x}) = -A\uu{}(\v{x})$ with $\uu{}_0(\v{x})$ given.
+The operator exponential is the formal equivalent of the matrix exponential for differential operators, namely it is the operator defined such that $\uu{}(\v{x},t) = e^{-At}\uu{}_0(\v{x})$ when $\partial_t\uu(\v{x}) = -A\uu{}(\v{x})$ with $\uu{}_0(\v{x})$ given.
 
 Suppose a differential operator $A = T + V$ is given such that the action of the operator exponential $e^{-A t}\uu{}$ has no closed form, but the actions $e^{-T t}\uu{}$ and $e^{-V t}\uu{}$ do.
-Then, one can use the so-called \textit{Strang splitting}~\cite{strang_construction_1968,macnamara_operator_2016} to approximate the action of the operator exponential of $A$ with that of $T$ and $V$:
+Then, one can use \textit{Strang splitting}~\cite{strang_construction_1968,macnamara_operator_2016} to approximate the action of the operator exponential of $A$ with that of $T$ and $V$:
 %
 \begin{align}
     e^{-A\delta t} &= e^{-(T + V)\delta t} \label{Evol_NoSplit} \\
@@ -311,9 +311,7 @@ where $\Phi(\v{x},t)$ is the Gaussian kernel defined as
 %
 and $\conv$ denotes the convolution over space.
 Note that, as opposed to the solution~\eqref{BT_FDsoln}, the solution~\eqref{Evolution_Kinetic} and~\eqref{Evolution_Potential} is extremely fast to compute.
-Equation~\eqref{Evolution_Kinetic} simply convolves the initial state with the Gaussian kernel,% (or equivalently, it applies uniform smoothing of width $\sigma = \sqrt{2Dt}$).
-which can be computed efficiently using the Fast Fourier Transform (FFT), since the boundary conditions are periodic.
-Equation~\eqref{Evolution_Potential} only involves exponentiation and multiplication, and thus is even faster to compute.
+The convolution in equation~\eqref{Evolution_Kinetic} can be computed efficiently using the Fast Fourier Transform (FFT), since the boundary conditions are periodic, and equation~\eqref{Evolution_Potential} only involves exponentiation and multiplication.
 
 The resulting signal $S^h(T)$, as in the case of the finite differences, is computed by integrating the resulting discrete solution $M^h(T)$ using the trapezoidal rule and taking the absolute value of the result.
 %The approximate solutions given by equations~\eqref{EvolSplit_Order2}
@@ -394,16 +392,16 @@ Additionally, the backward Euler scheme was chosen for its simplicity of impleme
 \end{equation}
 
 \paragraph*{\textsc{TRBDF-2} method:} discretising the system~\eqref{BTfem} in time with the \textsc{TRBDF-2} method with parameter $\alpha = 2-\sqrt{2}$ results in the time stepping scheme
-\begin{align}\label{TRtimestep}
-\left(M^h + c_0 \delta t A^h \right) \uu{}_{\alpha} &= M^h \uu{}_0 - c_0 \delta t A^h \uu{}_0\\
-\left(M^h + c_0 \delta t A^h \right) \uu{}_+ &= c_+ M^h\uu{}_\alpha + c_- M^h \uu{}_0
+\begin{align}
+\left(M^h + c_0 \delta t A^h \right) \uu{}_{\alpha} &= M^h \uu{}_0 - c_0 \delta t A^h \uu{}_0\label{TRtimestepOne}\\
+\left(M^h + c_0 \delta t A^h \right) \uu{}_+ &= c_+ M^h\uu{}_\alpha + c_- M^h \uu{}_0\label{TRtimestepTwo}
 \end{align}
 where $c_0 = 1-1/\sqrt{2}, c_\pm = (1\pm\sqrt{2})/2$.
 
 For both time stepping methods, the resulting signal $S^h(T)$ is computed by integrating the final discrete $x$- and $y$-solution components $u^h(T)$ and $v^h(T)$ and taking the magnitude of the resulting vector $S^h(T) = \Norm{[S_x^h(T),\,S_y^h(T)]^T}$.
 
 \subsubsection*{Adaptive finite elements for the backward Euler method}
-For the backward Euler method, I will employ a simple \textit{a-posteriori} error estimate for the $y$-component of the signal $S_y(T)$ in order to create error indicators $\eta_{\mathcal{T}}$ on each tetrahedron $\mathcal{T}$ for use in adaptive finite elements.
+For the backward Euler method, I will employ a simple \textit{a posteriori} error estimate for the $y$-component of the signal $S_y(T)$ in order to create error indicators $\eta_{\mathcal{T}}$ on each tetrahedron $\mathcal{T}$ for use in adaptive finite elements.
 This simple estimate will consider only errors due to the time stepping scheme, and not errors due to the discretisation itself.
 The $y$-component is used as opposed to the full signal due to the fact that $S(T)$ is a non-linear functional of the solution, whereas $S_y(T)$ is a linear functional.
 Moreover, since we take $(u_0,v_0) = (0,1)$, in practice the magnitude of $S_y(T)$ remains much larger than that of $S_x(T)$ for the simulation time $T$, and so the error in $S_y(T)$ is a good estimate for the error in $S(T)$.
@@ -448,53 +446,78 @@ Then, the change of variables $\phi = M^h \Phi$ results in the time-reversed dua
 \hspace{12.2pt}\Phi(T) = (M^h)^{-1} \v{w}_{v^h}
 \end{cases}
 \end{equation}
-which may be solved with any time stepping method.
+which may be solved using any time stepping method.
 Note additionally that $\ddt{\phi} = M^h\ddt{\Phi} = (A^h)^T\Phi$ is still inexpensive to compute.
 
 \section*{Numerical experiments}
 
 \subsection*{Gold standard solution}
-As the Bloch-Torrey equation has no closed form solution, even for this simple geometry, the solution signal $S(T)$ which will be used for comparison will simply be the finite element solution computed from the system~\eqref{BTfem} on a fine mesh with small time steps\TODO{how fine and how small?}.
+As the Bloch-Torrey equation has no closed form solution, even for this simple geometry, the solution signal $S(T)$ which will be used for comparison will simply be the finite element solution computed from the system~\eqref{BTfem} on a fine mesh of approximately $250^3$ degrees of freedom and small time steps of \SI{0.125}{\milli\second} until the final simulation time of \SI{40}{\milli\second}.
 In fact, two different gold standard signals $S(T)$ will be computed: first, with the cylinder interior excluded from the domain and Neumann boundary conditions imposed on the cylinder wall, $S_{\textsc{hollow}}(T)$; second, with the interior of the cylinder included in the domain and no boundary conditions imposed on the cylinder wall, $S_{\textsc{union}}(T)$.
 
-\subsection*{Error bound efficiency}
-\TODO{make plot of error bound vs. true error and discuss}
+%\subsection*{Error bound efficiency}
+%\TODO{make plot of error bound vs. true error and discuss?}
+
+%\subsection*{Example indicator function}
+%\TODO{make figure of indicator function}
+
+\subsection*{Finite differences vs.\@ finite elements}
+Four methods of solving the Bloch-Torrey PDE will be investigated in this experiement.
+For finite differences, the Strang splitting method~\eqref{EvolSplit_Order3} and the exponential matrix method~\eqref{BT_FDsoln} in conjunction with Higham's \textit{expmv} integrator~\cite{al-mohy_computing_2011} will be performed.
+For finite element methods, time stepping of the weak form~\eqref{BTfem} with both the backward Euler method~\eqref{BEtimestep} and the \textsc{TRBDF-2} method~\eqref{TRtimestepOne}/~\eqref{TRtimestepTwo} will be performed.
+The total simulation time for all simulations is chosen to be $T=\SI{40}{\milli\second}$, a typical echo time for a gradient echo MRI scan.
+The direct solution via \textit{expmv} was computed to machine precision in time for grid sizes ranging from $50\!\times\!50\!\times\!50$ to $250\!\times\!250\!\times\!250$.
+Time steps were varied from $\SI{8}{\milli\second}$ down to $\SI{0.25}{\milli\second}$, in powers of two, for both the splitting method and the finite element methods.
+A uniform grid of $250\!\times\!250\!\times\!250$ elements is used for finite differences, and a mesh with approximately $250^3$ degrees of freedom was used for the finite element methods.
+The interior of the cylinder was included in this experiment, and no boundary conditions were imposed on the cylinder walls.
+The gold standard value $S_{\textsc{UNION}}$ is used for calculating error values.
+
+\section*{Boundary conditions on the cylinder}
+In this experiment, the affect of including the interior of the cylinder in $\Omega$ and not applying boundary conditions on the wall will be compared with excluding the interior of the cylinder, and applying zero Neumann boundary conditions on the cylinder wall.
+The missing signal from the interior of the domain is corrected for analytically in order to compare with the interior included case: since \rr{} and \ww{} are both constant within the cylinder walls, and because the interior of the domain is separated from the exterior with reflective Neumann boundary conditions, $\Mxy$ is given simply by the static solution~\eqref{BTstatic_cplx} on the interior of the cylinder.
+The analytically corrected $S_\textsc{hollow}(T)$ gold standard signal is used for error computations.
+
+\section*{Adaptive finite element methods}
+In this experiment, the efficiency of the finite element method with adaptive mesh refinement is investigated.
+The interior of the cylinder is excluded from the domain, and zero Neumann boundary conditions are imposed on the cylinder wall.
+Time stepping for both the forward and dual problems is performed with either the backward Euler method~\eqref{BEtimestep} or the \textsc{TRBDF-2} method~\eqref{TRtimestepOne}/~\eqref{TRtimestepTwo}.
+Note that the \textit{a posteriori} error estimate~\eqref{Serrbound} was derived assuming backward Euler time stepping; nevertheless, the error indicators $\eta_{\mathcal{T}}$ will be tested using the \textsc{TRBDF-2} method, as well.
+    The non-adaptive time stepping will use a fixed mesh with approximately $250^3$ degrees of freedom; time steps will vary from $\SI{8}{\milli\second}$ down to $\SI{0.25}{\milli\second}$.
+    The adaptive mesh refinement will use a time step of $\SI{1}{\milli\second}$ and an initial mesh with approximately $10^3$ degrees of freedoms, with four subsequent mesh refinements performed in which the cells in the top $1/3$ of error values, as indicated by $\eta_{\mathcal{T}}$, will be refined.
+The gold standard value $S_\textsc{hollow}(T)$ is used for error computations.
 
 \section*{Results and discussion}
 
-We are now in a position to solve the Bloch-Torrey equation efficiently. We begin by discretizing the
-$3\times 3\times \SI{3}{\milli\meter^3}$
-voxel into $N^3$ subvoxels. The subvoxels need to be
-small enough that diffusion effects can be captured during each time
-step, but large enough that solving the system is still
-computationally feasible. The root mean square (RMS) distance travelled by a
-freely diffusing particle in $n$-dimensions
-is~\cite{ursell_diffusion_2007}
-%
-\begin{equation}\label{RMS_Distance}
-    d_{rms} = \sqrt{2 n D \delta t}.
-\end{equation}
-%
-If we choose $\delta t$ = TE/30 = $\unit[2]{ms}$ and the diffusion
-constant D = 3.037
-$\mu\text{m}^2$/ms~\cite{holz_temperature-dependent_2000}, the mean
-free diffusion distance in $n=3$ dimensions is $d$ = 6.04
-$\mu$m. Choosing $N$ = 512 gives a subvoxel size of 5.86 $\mu$m,
-capturing diffusion effects while being computationally feasible.
+\paragraph*{Boundary conditions:}
+The root mean square (RMS) distance travelled by a freely diffusing particle in $n$-dimensions is $d_{\textsc{rms}} = \sqrt{2 n D T}$~\cite{ursell_diffusion_2007}.
+With $T = \SI{40}{\milli\second}$ and diffusion constant $D = \SI{3.037}{\micro \meter^2/\milli\second}$~\cite{holz_temperature-dependent_2000}, the mean free diffusion distance in $n=3$ dimensions is $d_{\textsc{rms}} = \SI{27.0}{\micro\meter}$.
+When compared to the $\SI{3}{mm} = \SI{3000}{\micro\meter}$ edge length of the cubic domain $\Omega$ and the $\SI{250}{\micro\meter}$ radius of the cylinder, it is apparent that diffusing spins do not travel far on the average.
 
-Algorithm~\ref{fig:algorithm1} details how to compute the signal at
-time TE using the approximate evolution equation
-\eqref{EvolSplit_Order2}.
+Intuitively, then, periodic vs.\@ Neumann boundary conditions on the boundary of the cubic domain $\Omega$ should have little effect on the resulting signal $S(T)$ due to the relatively small volume boundary volume within the RMS diffusion distance of particles within the domain.
+Additionally, a diffusing particle being reflected off of the boundary could similarly be intepreted as a particle from the other side of the domain diffusing into the region.
+So, as long \rr{} and \ww{} do not change significantly from one boundary edge to the other, the effect of the choice of boundary condition should be minimal.
 
-\subsection*{Boundary conditions}
-Intuitively, periodic vs.\@ Neumann boundary conditions on the boundary of the cubic $\Omega$ should have little effect on the resulting signal $S(T)$.
-Firstly, because the RMS diffusion distance~\eqref{RMS_Distance} is much smaller than the size of the domain, and therefore only a small fraction of the signal $S(T)$ should be affected.
-Secondly, diffusing particles being reflected off of the boundary (the Neumann boundary condition) could similarly be intepreted as a particle from the other side of the domain diffusing into the region (periodic boundary conditions).
-So, as long \rr{} and \ww{} do not change significantly from one boundary edge to the other, the choice of boundary condition should be minimal.
-This intuitive result is seen in figure \TODO{figure ref + explanation}
+This intuition is verified in Figure~\ref{fig:CompareFEM}.
+The finite difference methods converge to a signal $S(T)$ which is within a fraction of a percent from that of the finite element solution.
 
-This argument does not apply to the cylinder boundary, where \rr{} and \ww{} vary discontinuously.
+Now, this argument does not directly apply to the cylinder boundary, where \rr{} and \ww{} vary discontinuously.
 In this case, unless the vessel is sufficiently small so as to have minimal contribution to the total signal, one should expect that the Neumann boundary conditions on the cylinder wall in the FEM case vs.\@ no boundary conditions applied in the finite differences case should have a non-negligible effect.
+
+However, Figure~\ref{fig:CompareUnionVsHollow} shows otherwise.
+Indeed, whether or not the cylinder boundary is included in the domain, the finite element methods converge to effectively the same value.
+This effect is likely due to the small diffusion distance, as well, as in the limit that $D\rightarrow 0$ both topologies will converge to the static solution on the whole domain.
+Therefore, with sufficiently small $d_\textsc{RMS}$, it is reasonable to expect that differences in signal will become negligible.
+
+\paragraph*{Speed, and adaptive finite elements:}
+The aim of this study is to determine the optimal trade-off between accuracy and speed for the Bloch-Torrey equation.
+In comparing the powerful but expensive finite element methods with the straightforward but limited finite difference method, the only manner in which finite element methods might keep up with finite difference methods is through using a considerably smaller number of degrees of freedom while maintaining solution accuracy.
+This is due to the fact that solving the system~\eqref{BTfem} involves solving linear systems at each time step, whereas the splitting methods~\eqref{EvolSplit_Order2} and~\eqref{EvolSplit_Order3} and the matrix exponential method~\eqref{BT_FDsoln} with \textit{expmv} only require matrix multiplications and the Fast Fourier Transform.
+
+In comparing Figures~\ref{fig:CompareFEM} and~\ref{fig:CompareAdaptiveFEM}, it appears that adaptive finite element methods can in fact compete with finite difference methods.
+The effect of the error indicators $\eta_\mathcal{T}$ can be seen in Figure~\ref{fig:hollow_adaptive_combined_iters}.
+
+Generation of meshes with finite element methods was much slower in these experiments, however, and was not including the timing.
+Therefore, if the meshes need to be simulated often enough, finite difference methods may still be considerably less expensive.
 
 
 %
@@ -517,11 +540,21 @@ In this case, unless the vessel is sufficiently small so as to have minimal cont
 %based on the equivalence of the BT equation and the imaginary-time Schrödinger equation(6). %TODO ref
 %These methods are fast and simple to implement, but still require a very fine grid on which to compute the solution.
 
-\section*{Conclusion}
-Conclusion
+\section*{Conclusion and future work}
+Finite difference methods have been compared and contrasted with finite elements for their use in solving the Bloch-Torrey equation.
+It has been shown that the powerful and flexible framework of finite element methods need not necessarily sacrifice speed, particularly when the quantity of interest is a linear functional of the partial differential equation solution.
 
-\section*{Acknowledgements}
-Acknowledgements
+Adaptive finite elements through the use of a simple \textit{a posteriori} error estimate allowed for a drastic decrease in the required number of degrees of freedom for computing the signal $S(T)$ resulting from the finite element solution to the Bloch-Torrey equation, leading to solution speeds which are competitive with finite difference methods.
+
+There is still much improvement to be made, however.
+In this simple method, discretisation error was not considered in the \textit{a posteriori} bound.
+Additionally, as \rr{} and \ww{} are discontinuous at the cylinder boundary, a more sophisticated finite element basis -- such as discontinuous Galerkin finite elements -- would conceivably be ideal for this problem.
+Lastly, geometry generation was limited to a simple cylinder.
+In practical simulations with tissue compartment boundaries and other domain discontinuities, geometry generation is significantly more difficult.
+
+
+%\section*{Acknowledgements}
+%Acknowledgements
 
 %% REFERENCES
 %\bibliographystyle{abbrv}
@@ -538,30 +571,16 @@ Acknowledgements
     \centering
     \begin{minipage}{\textwidth}
     \centering
-    \includegraphics[keepaspectratio=true,width=\textwidth]{spin_echo/voxelgeo_domega_2x2}
-    \caption{ The top-left figure shows an example voxel geometry.
+    \includegraphics[keepaspectratio=true,width=\textwidth]{figures/Geometry}
+    \caption{The top-left figure shows the geometry of the domain $\Omega$.
       The $3\times 3\times \SI{3}{\milli\meter^3}$
-      voxel is populated with an
-      isotropic vascular bed and $L=5$ anisotropic large vessels in
-      the $z$-direction. The total volume occupied by the blood
-      vessels is determined by the blood volume fraction BVF. The
-      relative fraction of blood contained in the isotropic vascular
-      bed is determined by the isotropic relative blood volume
-      fraction iRBVF, and the amount of blood contained in the
-      anisotropic vessels is then $\text{aRBVF} = 1 - \text{iRBVF}$.
-      The magnetic field generated by this configuration is computed
-      by the convolution of the susceptibility map with the unit
-      dipole kernel. Example cross-sections of the frequency shift
-      map $\delta\omega$ are shown for $\alpha = 0\degree$ (top
-      right), $45 \degree$ (bottom left), and $90 \degree$ (bottom
-      right).  It can be easily observed that near large vessels, the
-      resonance frequency (i.e. the magnetic field) remains locally
-      relatively constant compared to the resonance frequency near
-      small vessels, which changes rapidly over short distances.  Note
-      also the increase in strength and range of inhomogeneities
-      around the large anisotropic vessels as $\alpha$ increases,
-      introducing the dependence on the angle $\alpha$ into the
-      simulations.}
+      cubic domain is populated with a single cylinder -- representing a cerebral blood vessel -- parallel to the $z$-direction.
+      The radius of the cylinder is $\SI{250}{\micro\meter}$.
+      The frequency map \ww{} generated by this configuration is computed according to equation~\eqref{omega}.
+      Example cross-sections in the $z$-direction of \ww{} are shown for $\theta = \SI{0}{\degree}$, (top
+      right), $\SI{45}{\degree}$ (bottom left), and $\SI{90}{\degree}$ (bottom right).
+      All simulations in this study were performed with $\theta = \SI{90}{\degree}$.
+      It can be easily observed that the magnitude of \ww{} is largest near the cylinder wall, decays to zero far from the cylinder axis, and is constant within the cylinder.}
     \label{fig:geometry}
     \end{minipage}
 \end{figure}
@@ -570,65 +589,13 @@ Acknowledgements
 \begin{figure}[H]
 \centering
 \begin{minipage}{1.0\textwidth}
-
-\centering
-%\begin{minipage}{0.7\textwidth}
-\begin{minipage}{1.0\textwidth}
-\begin{algorithm}[H]
-\setstretch{2.0}
-\fontsize{16}{16}
-\begin{algorithmic}[1]
-    \algsetup{linenosize=\LARGE}
-    \algsetup{indent=3em}
-    \vspace{0.25cm}
-    \STATE \text{\LARGE{}Initialize:} $\Mxy_0 \coloneqq i$,
-    $\delta t \coloneqq \text{TE}/30$, $k \coloneqq 0$
-
-    \WHILE{ $k \delta t < \text{TE}$ }
-    
-    \STATE $\Mxy_{k+\frac{1}{2}} \coloneqq 
-    e^{-\CDecay(\v{x}) \delta t} \, \Mxy_k$
-    %\COMMENT{$\delta t \rightarrow \delta t/2$}
-
-    \STATE $\Mxy_{k+1} \coloneqq 
-    \Phi(\v{x},\delta t) \conv \Mxy_{k+\frac{1}{2}}$
-    %\COMMENT{$\Mxy_{k+1} \rightarrow \Mxy_{k+\frac{1}{2}}$}
-
-    %\STATE \Comment{$\Mxy_{k+1} \coloneqq
-    %e^{-\CDecay(\v{x}) \delta t/2} \Mxy_{k+\frac{1}{2}}$}
-
-    \IF{ $(k+1) \delta t = \text{TE}/2$ }
-    \STATE $\Mxy_{k+1} \coloneqq \conj{\Mxy}_{k+1}$
-    \ENDIF
-    
-    \STATE $k \coloneqq k + 1$
-    
-    \ENDWHILE
-    
-    \STATE $S(\text{TE}) \coloneqq \int \Mxy_k \, d^3\v{x}$
-\end{algorithmic}
-\captionsetup{strut=off}
-\caption*{\Large{}\textbf{Magnetization Propagation Algorithm}}
-\end{algorithm}
-\end{minipage}
-
-%\captionsetup{font=small,skip=0pt}
-\addtocounter{figure}{-1} %Want this to be labelled as the first Algorithm
-\renewcommand{\figurename}{Algorithm}
-\caption{Magnetization propagation algorithm used to simulate the signal
-    $S(\text{TE})$ for a given set of free parameters 
-    $\text{CA}_{\text{PEAK}}$, BVF, iBVF, and $L$. 
-    All four free parameters are encoded solely in the complex decay rate 
-    $\CDecay(\v{x})$; the rest of the algorithm does not depend on them.
-    The notation $\Mxy_\nu$ is shorthand for 
-    $\Mxy(\v{x},\nu \delta t)$ throughout the algorithm.
-    If the $\mathcal{O}(\delta t^3)$ order evolution 
-    equation~\eqref{EvolSplit_Order3} were used instead,
-    line 3 should be modified to decay for only a half time step $\delta t/2$,
-    line 4 should perform the Gaussian convolution in-place,
-    and an extra line should be added directly following the convolution which
-    decays for another half time step $\delta t/2$.}
-    \label{fig:algorithm1}
+    \centering
+    \includegraphics[keepaspectratio=true,width=1.0\textwidth]{figures/CompareFEM}
+    \caption{Comparison between solving the Bloch-Torrey equation with four methods: finite differences with the Strang splitting method~\eqref{EvolSplit_Order3}, finite differences with the exponential matrix method~\eqref{BT_FDsoln} in conjunction with Higham's \textit{expmv} integrator~\cite{al-mohy_computing_2011}, and finite element methods with the interior of the cylinder included in the domain, time stepping with both the backward Euler method~\eqref{BEtimestep} and the \textsc{TRBDF-2} method~\eqref{TRtimestepOne}/~\eqref{TRtimestepTwo}.
+    The total simulation time was $T=\SI{40}{\milli\second}$.
+    Time steps were varied from $\SI{8}{\milli\second}$ down to $\SI{0.25}{\milli\second}$ for the splitting method and the FEM time stepping methods, with grid sizes of $250\!\times\!250\!\times\!250$ for the finite difference methods, and approximately the same number of degrees of freedom for the FEM methods.
+    The direct solution via \textit{expmv} was computed to machine precision for grid sizes ranging from $50\!\times\!50\!\times\!50$ to $250\!\times\!250\!\times\!250$.}
+    \label{fig:CompareFEM}
 \end{minipage}
 \end{figure}
 
@@ -637,10 +604,46 @@ Acknowledgements
 \centering
 \begin{minipage}{1.0\textwidth}
     \centering
-    \includegraphics[keepaspectratio=true,width=1.0\textwidth]{spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv}
-    \caption{Comparison between solving the Bloch-Torrey equation exactly using the method of lines in conjunction with Higham's \textit{expmv} integrator~\cite{al-mohy_computing_2011}, and solving the Bloch-Torrey equation approximately using the two-step approximate solution as described in Algorithm~\ref{fig:algorithm1}.
-    The signal decay through time calculation shows strong agreement between the two methods, with error values of 0.064\% +/- 0.045\%; the maximum error value of 0.14\% occurs at $\unit[60]{ms}$.}
-    \label{fig:comparison}
+    \includegraphics[keepaspectratio=true,width=1.0\textwidth]{figures/CompareUnionVsHollow}
+    \caption{Comparison between including and excluding the interior of the cylinder in the domain $\Omega$ when solving the Bloch-Torrey equation with FEM, time stepping with both the backward Euler method~\eqref{BEtimestep} and the \textsc{TRBDF-2} method~\eqref{TRtimestepOne}/\!~\eqref{TRtimestepTwo}.
+    The missing signal from the interior of the domain is corrected for analytically; \rr{} and \ww{} are both constant within the cylinder walls, and so $\Mxy$ is given simply by the static solution~\eqref{BTstatic_cplx}.
+    %The total simulation time was $T=\SI{40}{\milli\second}$.
+    %Time steps were varied from $\SI{8}{\milli\second}$ down to $\SI{0.25}{\milli\second}$ for the splitting method and the FEM time stepping methods, with grid sizes of $250\!\times\!250\!\times\!250$ for the finite difference methods, and approximately the same number of degrees of freedom for the FEM methods.
+    Interestingly, the Neumann boundary conditions on the cylinder walls appear to have little effect on the total signal.}
+    \label{fig:CompareUnionVsHollow}
+\end{minipage}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\begin{minipage}{1.0\textwidth}
+    \centering
+    \includegraphics[keepaspectratio=true,width=1.0\textwidth]{figures/hollow_adaptive_combined_iters}
+    \caption{Example cross sections of the indicator functions $\eta_\mathcal{T}$ from equation~\eqref{error_ind} formed when solving the Bloch-Torrey equation with FEM and adaptive mesh refinement.
+    The mesh is iteratively refined three times, starting with the mesh (a) with approximately $10^3$ degrees of freedom, through to mesh (d).
+    The interior of the cylinder was excluded from the domain, and time stepping for the forward and dual problems was performed using the backward Euler method~\eqref{BEtimestep}.
+    It can be seen that initially, the mesh is refined nearest to the cylinder wall.
+    The final mesh is more refined in the interior compared to the exterior, as may be expected.
+    Additionally, (c) and (d) show that large tetrahedra at the boundary are eventually refined, too.}
+    \label{fig:hollow_adaptive_combined_iters}
+\end{minipage}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\begin{minipage}{1.0\textwidth}
+    \centering
+    \includegraphics[keepaspectratio=true,width=1.0\textwidth]{figures/CompareAdaptiveFEM}
+    \caption{Comparison between adaptive mesh refinement and fixed mesh solving of the Bloch-Torrey equation using FEM.
+    The interior of the cylinder was excluded from the domain, and time stepping for the forward and dual problems was performed with either the backward Euler method~\eqref{BEtimestep} or the \textsc{TRBDF-2} method~\eqref{TRtimestepOne}/~\eqref{TRtimestepTwo}.
+    The total simulation time was $T=\SI{40}{\milli\second}$.
+    The non-adaptive time stepping used a fixed mesh with approximately $250^3$ degrees of freedom; time steps were varied from $\SI{8}{\milli\second}$ down to $\SI{0.25}{\milli\second}$.
+    The adaptive mesh refinement used a time step of $\SI{1}{\milli\second}$ and an initial mesh with approximately $10^3$ degrees of freedoms.
+    Four mesh refinements were performed, refining the top $1/3$ of cells as indicated by $\eta_{\mathcal{T}}$ each iteration.
+    Note that the \textit{a posteriori} error estimate~\eqref{Serrbound} was derived assuming backward Euler time stepping; nevertheless, the error indicators $\eta_{\mathcal{T}}$ performed well empirically for the \textsc{TRBDF-2} method, as well.}
+    \label{fig:CompareAdaptiveFEM}
 \end{minipage}
 \end{figure}
 

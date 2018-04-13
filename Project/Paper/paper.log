@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2018.4.10)  12 APR 2018 12:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2018.4.10)  12 APR 2018 23:49
 entering extended mode
 **./paper.tex
 (paper.tex
@@ -1307,7 +1307,7 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 29.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    Try loading font information for U+eus on input line 71.
+LaTeX Font Info:    Try loading font information for U+eus on input line 70.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueus.fd"
 File: ueus.fd 2013/01/14 v3.01 Euler Script
@@ -1317,171 +1317,153 @@ File: ueus.fd 2013/01/14 v3.01 Euler Script
 
 
 ]
-Underfull \vbox (badness 1596) has occurred while \output is active []
-
- [2]
-Overfull \hbox (2.51483pt too wide) detected at line 210
+Overfull \hbox (2.51483pt too wide) detected at line 209
 \OMS/cmsy/m/n/10 h\OT1/cmr/bx/n/10 u[]\OML/cmm/m/it/10 ; [][]\OMS/cmsy/m/n/10 i
  \OT1/cmr/m/n/10 = [][] \OML/cmm/m/it/10 uu[] \OT1/cmr/m/n/10 + \OML/cmm/m/it/1
 0 vv[] []  x \OT1/cmr/m/n/10 = [][] [][] \OML/cmm/m/it/10 u[] \OT1/cmr/m/n/10 +
  \OML/cmm/m/it/10 v[] []  x \OT1/cmr/m/n/10 = [][] [][] \OML/cmm/m/it/10 ;
  []
 
-[3] [4] [5] (paper.bbl
+[2]
+Underfull \vbox (badness 1107) has occurred while \output is active []
+
+ [3]
+[4] [5]
+Underfull \hbox (badness 1389) in paragraph at lines 492--495
+\T1/cmr/m/n/10 dis-tance trav-elled by a freely dif-fus-ing par-ti-cle in $\OML
+/cmm/m/it/10 n$\T1/cmr/m/n/10 -
+ []
+
+(paper.bbl [6]
 Underfull \hbox (badness 2932) in paragraph at lines 18--22
 []\T1/cmr/m/n/8 W. Liu, \T1/cmr/m/it/8 El-e-men-tary Feed-back Sta-bi-liza-tion
  of the Lin-ear
  []
 
-) [6]
-<spin_echo/voxelgeo_domega_2x2.pdf, id=50, 525.10393pt x 415.5522pt>
-File: spin_echo/voxelgeo_domega_2x2.pdf Graphic file (type pdf)
-<use spin_echo/voxelgeo_domega_2x2.pdf>
-Package pdftex.def Info: spin_echo/voxelgeo_domega_2x2.pdf  used on input line 
-541.
-(pdftex.def)             Requested size: 527.57014pt x 417.5295pt.
+) [7
 
-Overfull \hbox (268.78508pt too wide) in paragraph at lines 539--567
- []$[]$ 
- []
+]
+<figures/Geometry.pdf, id=55, 1218.1533pt x 1025.81743pt>
+File: figures/Geometry.pdf Graphic file (type pdf)
+<use figures/Geometry.pdf>
+Package pdftex.def Info: figures/Geometry.pdf  used on input line 574.
+(pdftex.def)             Requested size: 527.57014pt x 444.2704pt.
 
-[7
-
-
- <./spin_echo/voxelgeo_domega_2x2.pdf>]
-LaTeX Font Info:    Calculating math sizes for size <16> on input line 584.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OT1/cmtt/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `TS1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 584.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 585.
-
-
-LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 587.
-
-
-Overfull \hbox (268.78508pt too wide) in paragraph at lines 572--633
+Overfull \hbox (268.78508pt too wide) in paragraph at lines 572--586
  []$[]$ 
  []
 
 [8
 
 
-]
-<spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv.pdf, id=96, 411.00551pt x 283.55
-937pt>
-File: spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv.pdf Graphic file (type pdf)
+ <./figures/Geometry.pdf>]
+<figures/CompareFEM.pdf, id=71, 678.03313pt x 534.47678pt>
+File: figures/CompareFEM.pdf Graphic file (type pdf)
+<use figures/CompareFEM.pdf>
+Package pdftex.def Info: figures/CompareFEM.pdf  used on input line 593.
+(pdftex.def)             Requested size: 527.57014pt x 415.88708pt.
 
-<use spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv.pdf>
-Package pdftex.def Info: spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv.pdf  use
-d on input line 640.
-(pdftex.def)             Requested size: 527.57014pt x 363.9802pt.
-
-Overfull \hbox (268.78508pt too wide) in paragraph at lines 638--645
+Overfull \hbox (268.78508pt too wide) in paragraph at lines 591--600
  []$[]$ 
  []
 
 [9
 
 
- <./spin_echo/SE_Signal_vs_Time_ConvDiff_vs_Expmv.pdf>] (paper.aux)
+ <./figures/CompareFEM.pdf>]
+<figures/CompareUnionVsHollow.pdf, id=84, 713.94733pt x 529.72906pt>
+File: figures/CompareUnionVsHollow.pdf Graphic file (type pdf)
+<use figures/CompareUnionVsHollow.pdf>
+Package pdftex.def Info: figures/CompareUnionVsHollow.pdf  used on input line 6
+07.
+(pdftex.def)             Requested size: 527.57014pt x 391.44373pt.
 
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 1.28pt have occurred.
+Overfull \hbox (268.78508pt too wide) in paragraph at lines 605--615
+ []$[]$ 
+ []
 
+[10
+
+
+ <./figures/CompareUnionVsHollow.pdf>]
+<figures/hollow_adaptive_combined_iters.pdf, id=97, 911.36438pt x 998.9227pt>
+File: figures/hollow_adaptive_combined_iters.pdf Graphic file (type pdf)
+<use figures/hollow_adaptive_combined_iters.pdf>
+Package pdftex.def Info: figures/hollow_adaptive_combined_iters.pdf  used on in
+put line 622.
+(pdftex.def)             Requested size: 527.57014pt x 578.27812pt.
+
+Overfull \hbox (268.78508pt too wide) in paragraph at lines 620--631
+ []$[]$ 
+ []
+
+[11
+
+
+ <./figures/hollow_adaptive_combined_iters.pdf>]
+<figures/CompareAdaptiveFEM.pdf, id=117, 687.06688pt x 539.00371pt>
+File: figures/CompareAdaptiveFEM.pdf Graphic file (type pdf)
+<use figures/CompareAdaptiveFEM.pdf>
+Package pdftex.def Info: figures/CompareAdaptiveFEM.pdf  used on input line 638
+.
+(pdftex.def)             Requested size: 527.57014pt x 413.87448pt.
+
+Overfull \hbox (268.78508pt too wide) in paragraph at lines 636--648
+ []$[]$ 
+ []
+
+[12
+
+
+ <./figures/CompareAdaptiveFEM.pdf>] (paper.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 17758 strings out of 493311
- 338899 string characters out of 3138889
- 377734 words of memory out of 3000000
- 21016 multiletter control sequences out of 15000+200000
- 578830 words of font info for 168 fonts, out of 3000000 for 9000
+ 17681 strings out of 493311
+ 338144 string characters out of 3138889
+ 377761 words of memory out of 3000000
+ 20942 multiletter control sequences out of 15000+200000
+ 569224 words of font info for 135 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,50p,10395b,904s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,19n,56p,10395b,1139s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
-00\ecbx1728.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
+00\ecti0800.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
 appen\ec\dpi600\tcrm1000.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\
-pk\ljfour\jknappen\ec\dpi600\ecti0800.pk> <C:\Users\Jonathan\AppData\Local\MiKT
-eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\eccc0700.pk> <C:\Users\Jonathan\AppDa
-ta\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1000.pk> <C:\Users\J
-onathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1000.pk
+pk\ljfour\jknappen\ec\dpi600\eccc0700.pk> <C:\Users\Jonathan\AppData\Local\MiKT
+eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1000.pk> <C:\Users\Jonathan\AppDa
+ta\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1000.pk> <C:\Users\J
+onathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0700.pk
 > <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi60
-0\ecrm0700.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkna
+0\ectt0800.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkna
 ppen\ec\dpi600\ecbx1200.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\p
-k\ljfour\jknappen\ec\dpi600\ectt0800.pk> <C:\Users\Jonathan\AppData\Local\MiKTe
-X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk> <C:\Users\Jonathan\AppDat
-a\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Jo
-nathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk>
+k\ljfour\jknappen\ec\dpi600\ecti1000.pk> <C:\Users\Jonathan\AppData\Local\MiKTe
+X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Jonathan\AppDat
+a\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\Jo
+nathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk>
  <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecbx1000.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknap
-pen\ec\dpi600\ecti0900.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk
-\ljfour\jknappen\ec\dpi600\ecrm0600.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX
-\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\Jonathan\AppData
-\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\Jon
-athan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><
-C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Progr
-am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Program Files/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pf
-b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/euler/eusm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/eu
-ler/eusm7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/
-msbm10.pfb>
-Output written on paper.pdf (9 pages, 1336489 bytes).
+\ecti0900.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknap
+pen\ec\dpi600\ecrm0600.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX\2.9\fonts\pk
+\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\Jonathan\AppData\Local\MiKTeX
+\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\Jonathan\AppData
+\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10
+.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/euler/eusm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/euler/eusm7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/symbols/msbm10.pfb>
+Output written on paper.pdf (12 pages, 560622 bytes).
 PDF statistics:
- 706 PDF objects out of 1000 (max. 8388607)
+ 693 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
