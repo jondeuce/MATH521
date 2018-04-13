@@ -38,8 +38,6 @@ MinorArterialFrac = 1/3; % Fraction of minor vessels which are arteries
 rng('default'); seed = rng;
 
 %% Calculate Geometry
-% GammaSettings = Geometry.ComplexDecaySettings('Angle_Deg', 90, 'B0', -3);
-GammaSettings = Geometry.ComplexDecaySettings('Angle_Deg', 90, 'B0', -7);
 Geom = Geometry.CylindricalVesselFilledVoxel( ...
     'iBVF', iBVF, 'aBVF', aBVF, ...
     'VoxelSize', Vsize, 'GridSize', Gsize, 'VoxelCenter', [0,0,0], ...
@@ -50,6 +48,8 @@ Geom = Geometry.CylindricalVesselFilledVoxel( ...
     'PopulateIdx', true, 'seed', seed );
 
 %% Calculate ComplexDecay
+GammaSettings = Geometry.ComplexDecaySettings('Angle_Deg', 90, 'B0', -3);
+% GammaSettings = Geometry.ComplexDecaySettings('Angle_Deg', 90, 'B0', -7);
 Gamma = CalculateComplexDecay(GammaSettings, Geom);
 dGamma = {};
 
