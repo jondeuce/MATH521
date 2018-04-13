@@ -549,8 +549,8 @@ def run_bt():
 
 def run_adaptive_bt():
     # isvesselunionlist = [True]
-    # isvesselunionlist = [False]
-    isvesselunionlist = [True, False]
+    isvesselunionlist = [False]
+    # isvesselunionlist = [True, False]
 
     # Nlist, nslicelist = [10,25,50,100], [8,16,32,32]
     # Nlist, nslicelist = [10,25,50], [8,16,32]
@@ -567,28 +567,30 @@ def run_adaptive_bt():
     # N_exlist, nslice_exlist = [100], [32]
     # N_exlist, nslice_exlist = [50], [32]
     # N_exlist, nslice_exlist = [100], [32]
-    N_exlist, nslice_exlist = [250], [64]
+    N_exlist, nslice_exlist = [200], [64]
+    # N_exlist, nslice_exlist = [250], [64]
     # N_exlist, nslice_exlist = [100, 200], [32, 64]
 
-    # stepper_list = ['be']
-    stepper_list = ['be', 'trbdf2']
+    stepper_list = ['be']
+    # stepper_list = ['be', 'trbdf2']
 
-    # dt_list = [1.0e-3] # [s]
+    dt_list = [1.0e-3] # [s]
     # dt_list = [0.5e-3, 0.25e-3] # [s]
-    dt_list = [4.0e-3, 2.0e-3, 1.0e-3]
+    # dt_list = [4.0e-3, 2.0e-3, 1.0e-3]
 
-    vesselradius_list = [250.0, 125.0] # [μm]
+    # vesselradius_list = [250.0, 125.0] # [μm]
+    vesselradius_list = [250.0] # [μm]
     Dcoeff_list = [3037.0] # [mm²/s]
     T_list = [40.0e-3] # [s]
 
-    parent_foldname = 'bt/adapt/results'
-    # parent_foldname = 'bt/adapt/tmp'
+    # parent_foldname = 'bt/adapt/results'
+    parent_foldname = 'bt/adapt/tmp'
     max_mesh_refinements = 4
-    refine_percentile = 70.0 # cutoff percentile above which cell is refined
+    refine_percentile = 100.0*(2.0/3) # cutoff percentile above which cell is refined
     refine_thresh = 1e-4 * (3000.0)**3
 
-    compute_high_accuracy = True # High accuracy solution to compare to
-    skip_last_dual = True # skip last dual iteration (won't print last |e⋅ψ|/S)
+    compute_high_accuracy = False # High accuracy solution to compare to
+    skip_last_dual = False # skip last dual iteration (won't print last |e⋅ψ|/S)
     exactprnt = True
     forwprnt = True
     dualprnt = True
@@ -599,7 +601,7 @@ def run_adaptive_bt():
     save_forw_mag = False
     save_dual_mag = False
     save_highprec_mag = False
-    save_eta_y = False
+    save_eta_y = True
 
     def print_u_detailed(U,S0=1.0):
         Sx, Sy, S = S_signal(U)

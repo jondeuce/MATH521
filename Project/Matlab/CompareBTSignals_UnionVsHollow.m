@@ -3,17 +3,21 @@ function [tr_u_data, be_u_data] = CompareBTSignals_UnionVsHollow(rootpath)
 
 if nargin < 1; rootpath = '/home/jon/Documents/MATH521/Project'; end
 
-[tr_u_data, be_u_data, tr_h_data, be_h_data, exact_data] = loadAllSignals(rootpath);
+[tr_u_data, be_u_data, tr_h_data, be_h_data, expmv_data, sp_data, exact_data] = loadAllSignals(rootpath);
 
 vec = @(x) x(:);
 lastEntry = @(d,f) vec(cellfun(@(x)x(end),{d.(f)}));
 
 s_tr_u = lastEntry(tr_u_data,'S');
 s_be_u = lastEntry(be_u_data,'S');
+s_mv = lastEntry(expmv_data,'S');
+s_sp = lastEntry(sp_data,'S');
 t_tr_u = lastEntry(tr_u_data,'walltime');
 t_be_u = lastEntry(be_u_data,'walltime');
 t_tr_h = lastEntry(tr_h_data,'walltime');
 t_be_h = lastEntry(be_h_data,'walltime');
+t_mv = lastEntry(expmv_data,'walltime');
+t_sp = lastEntry(sp_data,'walltime');
 
 % since initial signal is constant (0,1), volume of interior is equal to difference in initial signals
 InteriorVolume = be_u_data(1).Sy(1) - be_h_data(1).Sy(1);
@@ -38,6 +42,8 @@ err_be_u = abs(s_be_u - exact_signal)/exact_signal;
 err_tr_u = abs(s_tr_u - exact_signal)/exact_signal;
 err_tr_h = abs(s_tr_h - exact_signal)/exact_signal;
 err_be_h = abs(s_be_h - exact_signal)/exact_signal;
+err_mv = abs(s_mv - exact_signal)/exact_signal;
+err_sp = abs(s_sp - exact_signal)/exact_signal;
 
 % ---- plot figures ---- %
 close all force; figure
@@ -46,7 +52,10 @@ h1 = loglog(t_tr_h, err_tr_h, plotargs{:}); hold on
 h2 = loglog(t_be_h, err_be_h, plotargs{:});
 h3 = loglog(t_tr_u, err_tr_u, plotargs{:});
 h4 = loglog(t_be_u, err_be_u, plotargs{:});
-leg = legend('Hollow: TRBDF-2','Hollow: Backward Euler','Union: TRBDF-2','Union: Backward Euler');
+h5 = loglog(t_mv, err_mv, plotargs{:});
+h6 = loglog(t_sp, err_sp, plotargs{:});
+leg = legend('Hollow: TRBDF-2','Hollow: Backward Euler',...
+    'Union: TRBDF-2','Union: Backward Euler', 'Union: expmv', 'Union: Splitting Method');
 
 fontprops = {'fontsize', 30};
 set(leg, fontprops{:});
@@ -55,7 +64,7 @@ ylabel('Relative Error (Total Signal)', fontprops{:});
 
 end
 
-function [S_tr_u, S_be_u, S_tr_h, S_be_h, S_exact] = loadAllSignals(rootpath)
+function [S_tr_u, S_be_u, S_tr_h, S_be_h, S_expmv, S_sp, S_exact] = loadAllSignals(rootpath)
 
 % ---- TRBDF2 data (union) ---- %
 tr_u_dt = {8e-3, 4e-3, 2e-3, 1e-3, 5e-4, 2.5e-4, 1.25e-4};
@@ -88,6 +97,27 @@ dir_fun = @(dt) ['/Fenics/bt/results/hollow/cylinder_N200_ns64_r250/be/dt_', ...
 be_h_files = cellfun(dir_fun,be_h_dt,'uniformoutput',false);
 be_h_files = strcat(rootpath, be_h_files);
 S_be_h = loadSignals(be_h_files, be_h_dt);
+
+% ---- Expmv data ---- %
+S_expmv = [];
+for N = 50:50:300
+    sp_path = [rootpath, '/Matlab/FiniteDifferences/expmv_results/N', num2str(N), '_r250/double'];
+    s_sp = load([sp_path, '/sigdata.mat']);
+    S_expmv = cat(2, S_expmv, s_sp.sigdata);
+end
+
+% ---- Splitting data ---- %
+sp_dt = {40e-3, 20e-3, 8e-3, 4e-3, 2e-3, 1e-3};
+dir_fun = @(dt) ['/Matlab/FiniteDifferences/split_results/N200_r250_Order2/dt_', strrep(num2str(dt),'.','p'), '/sigdata.mat'];
+sp_files = cellfun(dir_fun,sp_dt,'uniformoutput',false);
+sp_files = strcat(rootpath, sp_files);
+
+% S_sp = loadSignals(sp_files, sp_dt)
+S_sp = [];
+for f = sp_files
+    s_sp = load(f{1});
+    S_sp = cat(2, S_sp, s_sp.sigdata(end));
+end
 
 % ---- Exact solution data ---- %
 % exact_path = [rootpath, '/Fenics/bt/adapt/results/union/trbdf2/cylinder_N10_ns64_r250/Forw/dt_0p00025/iter4/signal.csv'];
