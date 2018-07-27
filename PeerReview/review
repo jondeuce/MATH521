@@ -1,0 +1,35 @@
+1. Give a brief synopsis of the objectives, the methodology and the significance of the work in your own words to show that you have read the work properly.
+
+For his project, Bastien aims to model the physics of the up-and-coming sport "slacklining" in which one is meant to balance on a thin (one inch wide) webbing/wire which spans a certain distance and is fixed at each end. In particular, Bastien aims to be able to predict the "walkability" of a slackline, which essentially describes how difficult it is to walk across.
+
+In order to define this rather non-specific notion of walkability, Bastien considers a model problem. In this problem, a "mistake" is modeled as an impulse at the center of the slackline. Here, a sinusoidal mistake is modeled, occurring for 0.1 seconds, with amplitude equal to ten percent of the weight of the slackline.
+
+Modeling this slackline physically results in a non-linear wave equation in time. Simulations are performed using this model using finite element analysis in Fenics for a simulation time of four seconds, which is assumed long enough to see the effect of the mistake. The magnitude of the solution displacement compared to the initial "mistake" amplitude determines the "walkability".
+
+
+2. What is your overall impression?
+
+Very intriguing and truly novel project! It shows a lot of ingenuity and inventiveness to create your own model for a sport which you are interested in. The math is well thought out and correct so far as I can tell, and the python code is excellent as well. Additionally, as a physicist, I have a bit of a soft spot for modeling physical problems in inventive ways! This was a pleasure to read.
+
+
+3. Comment on anything that you think deserves special praise or that requires attention. Is there anything you disagree with? Anything you did not understand? You may refer to the rubric for the paper or poster for guiding questions so that you know what you could look out for.
+
+The derivation of the strong and weak form is beautifully clear, with very illustrative figures (e.g. figure 1 and 2)! These are arguments I have seen before, so perhaps it helps that I am already familiar with them, but the formulation of the relatively complex physical problem was made crystal clear (e.g. section 2.2, and indeed the weak form derivation as well in section 2.3).
+
+The analysis of the choice of the midpoint rule for time stepping was perhaps a little bit hand wavy (start of section 3.1), but it was easy to understand and intuitively it seems to be accurate.
+
+It is not clear to me why Newton's method for solving the non-linear problem fails for a zero initial guess (second paragraph, section 3.2); this could have used a bit more explanation, perhaps with reference to the physics of the problem (zero tension is indeed non-physical, so perhaps this is why).
+
+The choice to investigate mesh refinement around the location of the slackliner was clever, and it is evident in the comment (second last paragraph, section 3.2) that refining the mesh around the slackliner alone produces as accurate of a solution as uniform mesh refinement, thus resulting in a faster to compute solution.
+
+Lastly, I believe that the modeling assumptions were reasonable (linear stress/strain relationship, "mistake" model) and the fact that realistic parameters were used makes the results much more intuitive as well.
+
+4. Remember to be specific (refer to line numbers, equation numbers, paragraphs or cite what you are commenting on) and constructive (state why you think some aspect is particularly effective or make a suggestion on how it could be improved).
+
+(see above)
+
+5. Final comment: What did you find most interesting? Or do you have any additional idea for future research or possible applications?
+
+I'm sure there is much possible future research! All thing considered this model is relatively straightforward, and I'm sure additional complexities such as non-linear stress/strain relationships or more complex "mistake" models would improve results. Perhaps one could even incorporate real world data as measured while actually slacklining, and use these "mistake" patterns as inputs for the model.
+
+As I'm sure is clear by now, I really enjoyed the uniqueness of this work, and I hope you get to keep playing with this toy model! It was certainly fun to learn about.
